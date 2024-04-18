@@ -2,15 +2,14 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="newt"
-PKG_VERSION="0.52.25"
-PKG_SHA256="ef0ca9ee27850d1a5c863bb7ff9aa08096c9ed312ece9087b30f3a426828de82"
+PKG_VERSION="0.52.24"
+PKG_SHA256="5ded7e221f85f642521c49b1826c8de19845aa372baf5d630a51774b544fbdbb"
 PKG_LICENSE="GPL"
 PKG_SITE="https://pagure.io/newt"
 PKG_URL="https://releases.pagure.org/newt/${PKG_NAME}-${PKG_VERSION}.tar.gz"
 PKG_DEPENDS_TARGET="toolchain slang popt"
 PKG_LONGDESC="Newt is a programming library for color text mode, widget based user interfaces."
 PKG_TOOLCHAIN="autotools"
-PKG_BUILD_FLAGS="-cfg-libs"
 
 PKG_CONFIGURE_OPTS_TARGET="--disable-nls \
                            --without-python \

@@ -22,7 +22,7 @@ case "${PROJECT}" in
     PKG_SHA256="91b9fa499919ff2b8db8046202279188ad0f7798638798ddbbb6d279ff2db820"
     PKG_URL="https://github.com/jc-kynesim/rpi-ffmpeg/archive/${PKG_VERSION}.tar.gz"
     ;;
-  Generic)
+  Generic|Amlogic-ce)
     PKG_FFMPEG_REQUEST_DISABLE=""
     PKG_FFMPEG_REQUEST_ENABLE=""
     ;;
@@ -32,7 +32,7 @@ case "${PROJECT}" in
         PKG_PATCH_DIRS+=" v4l2-request v4l2-drmprime vf-deinterlace-v4l2m2m"
         ;;
       RK356X|RK3576|RK3588)
-        PKG_PATCH_DIRS+=" v4l2-request detlev v4l2-drmprime vf-deinterlace-v4l2m2m"
+        PKG_PATCH_DIRS+=" detlev v4l2-request v4l2-drmprime vf-deinterlace-v4l2m2m"
         ;;
     esac
     ;;
@@ -41,7 +41,6 @@ case "${PROJECT}" in
     PKG_PATCH_DIRS+=" rpi"
     ;;
   *)
-    PKG_PATCH_DIRS+=" v4l2-request v4l2-drmprime"
     case "${PROJECT}" in
       Allwinner | Rockchip)
         PKG_PATCH_DIRS+=" vf-deinterlace-v4l2m2m"
@@ -65,6 +64,7 @@ get_graphicdrivers
 PKG_FFMPEG_HWACCEL="--enable-hwaccels"
 
 if [ "${V4L2_SUPPORT}" = "yes" ]; then
+  PKG_PATCH_DIRS+=" v4l2-request v4l2-drmprime"
   PKG_DEPENDS_TARGET+=" libdrm"
   PKG_NEED_UNPACK+=" $(get_pkg_directory libdrm)"
   PKG_FFMPEG_V4L2="--enable-v4l2_m2m --enable-libdrm"

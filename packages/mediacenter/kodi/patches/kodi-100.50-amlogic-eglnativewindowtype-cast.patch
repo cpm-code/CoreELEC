@@ -1,0 +1,14 @@
+diff --git a/xbmc/windowing/amlogic/WinSystemAmlogicGLESContext.cpp b/xbmc/windowing/amlogic/WinSystemAmlogicGLESContext.cpp
+index 67e69c67d3..7f8355e3dc 100644
+--- a/xbmc/windowing/amlogic/WinSystemAmlogicGLESContext.cpp
++++ b/xbmc/windowing/amlogic/WinSystemAmlogicGLESContext.cpp
+@@ -155,7 +155,7 @@ bool CWinSystemAmlogicGLESContext::CreateNewWindow(const std::string& name,
+     return false;
+   }
+
+-  if (!m_pGLContext.CreateSurface(static_cast<EGLNativeWindowType>(m_nativeWindow)))
++  if (!m_pGLContext.CreateSurface(reinterpret_cast<EGLNativeWindowType>(m_nativeWindow)))
+   {
+     return false;
+   }
+ 	}

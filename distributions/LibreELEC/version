@@ -1,8 +1,8 @@
 # VERSION: set full version, use "devel" for development version
-  DISTRO_VERSION="devel"
+  LIBREELEC_VERSION=""
 
 # OS_VERSION: OS Version
   OS_VERSION="13.0"
 
 # ADDON_VERSION: Addon version
-  ADDON_VERSION="12.80.5"
+  ADDON_VERSION="12.80.1"

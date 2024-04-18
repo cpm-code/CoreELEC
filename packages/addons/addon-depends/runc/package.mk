@@ -1,9 +1,10 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
+# Copyright (C) 2009-2016 Lukas Rusak (lrusak@libreelec.tv)
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="runc"
-PKG_VERSION="1.4.0"
-PKG_SHA256="94d566d8b017d6cdffc684560a4f069bb87f86534976c41d768711c85e194884"
+PKG_VERSION="1.1.13"
+PKG_SHA256="789d5749a08ef1fbe5d1999b67883206a68a4e58e6ca0151c411d678f3480b25"
 PKG_LICENSE="APL"
 PKG_SITE="https://github.com/opencontainers/runc"
 PKG_URL="https://github.com/opencontainers/runc/archive/v${PKG_VERSION}.tar.gz"
@@ -12,7 +13,7 @@ PKG_LONGDESC="A CLI tool for spawning and running containers according to the OC
 PKG_TOOLCHAIN="manual"
 
 # Git commit of the matching release https://github.com/opencontainers/runc/releases
-export PKG_GIT_COMMIT="8bd78a9977e604c4d5f67a7415d7b8b8c109cdc4"
+export PKG_GIT_COMMIT="58aa9203c123022138b22cf96540c284876a7910"
 
 pre_make_target() {
   go_configure

@@ -26,7 +26,8 @@
   # Kernel target
     KERNEL_TARGET="Image"
 
-  # Graphic drivers to use
+  # Mali GPU family
+    MALI_FAMILY="450"
     GRAPHIC_DRIVERS="lima"
 
   # kernel serial console

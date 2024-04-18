@@ -1,5 +1,7 @@
 all: release
 
+export DEVICE PROJECT DISTRO ARCH
+
 system:
 	./scripts/image
 

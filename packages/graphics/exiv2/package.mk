@@ -2,8 +2,8 @@
 # Copyright (C) 2024-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="exiv2"
-PKG_VERSION="0.28.7"
-PKG_SHA256="5e292b02614dbc0cee40fe1116db2f42f63ef6b2ba430c77b614e17b8d61a638"
+PKG_VERSION="0.28.3"
+PKG_SHA256="1315e17d454bf4da3cc0edb857b1d2c143670f3485b537d0f946d9ed31d87b70"
 PKG_LICENSE="GPL-2.0-or-later"
 PKG_SITE="https://exiv2.org"
 PKG_URL="https://github.com/Exiv2/exiv2/archive/refs/tags/v${PKG_VERSION}.tar.gz"

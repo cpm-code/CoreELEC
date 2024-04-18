@@ -8,17 +8,18 @@ PKG_SHA256="3311dff32e746499f4df0d5df04d7eb396382d7e108bb9250e7b519b837043a4"
 PKG_LICENSE="GPL"
 PKG_SITE="http://www.busybox.net"
 PKG_URL="https://busybox.net/downloads/${PKG_NAME}-${PKG_VERSION}.tar.bz2"
-PKG_DEPENDS_TARGET="toolchain hdparm dosfstools e2fsprogs zip usbutils parted procps-ng libtirpc"
+PKG_DEPENDS_HOST="toolchain:host"
+PKG_DEPENDS_TARGET="toolchain hdparm hd-idle dosfstools e2fsprogs zip usbutils parted procps-ng libtirpc cryptsetup"
 PKG_DEPENDS_INIT="toolchain libtirpc"
 PKG_LONGDESC="BusyBox combines tiny versions of many common UNIX utilities into a single small executable."
-PKG_BUILD_FLAGS="-parallel +lto"
+PKG_BUILD_FLAGS="-parallel"
 
 # nano text editor
 if [ "${NANO_EDITOR}" = "yes" ]; then
   PKG_DEPENDS_TARGET+=" nano"
 fi
 
-if [ "${TARGET_ARCH}" = "x86_64" ]; then
+if [ "${DEVICE}" = "Amlogic-ne" -o "${DEVICE}" = "Amlogic-no" ]; then
   PKG_DEPENDS_TARGET+=" pciutils"
 fi
 
@@ -103,8 +104,8 @@ makeinstall_target() {
       cp ${PKG_DIR}/scripts/update-bootloader-edid-rpi ${INSTALL}/usr/bin/update-bootloader-edid
       cp ${PKG_DIR}/scripts/getedid-drm ${INSTALL}/usr/bin/getedid
     fi
-    if [ "${PROJECT}" = "Amlogic" ] || [ "${PROJECT}" = "Rockchip" ]; then
-      cp ${PKG_DIR}/scripts/update-bootloader-edid-extlinux ${INSTALL}/usr/bin/getedid
+    if [ "${PROJECT}" = "Amlogic" ]; then
+      cp ${PKG_DIR}/scripts/update-bootloader-edid-amlogic ${INSTALL}/usr/bin/getedid
     fi
     cp ${PKG_DIR}/scripts/createlog ${INSTALL}/usr/bin/
     cp ${PKG_DIR}/scripts/dthelper ${INSTALL}/usr/bin
@@ -120,6 +121,8 @@ makeinstall_target() {
       sed -e "s/@DISTRONAME@-@OS_VERSION@/${DISTRONAME}-${OS_VERSION}/g" \
           -i ${INSTALL}/usr/bin/pastebinit
       ln -sf pastebinit ${INSTALL}/usr/bin/paste
+    cp ${PKG_DIR}/scripts/convert_dtname ${INSTALL}/usr/bin
+    cp ${PKG_DIR}/scripts/vfd-clock ${INSTALL}/usr/bin/
 
   mkdir -p ${INSTALL}/usr/sbin
     cp ${PKG_DIR}/scripts/kernel-overlays-setup ${INSTALL}/usr/sbin
@@ -149,6 +152,11 @@ makeinstall_target() {
 
   # create /etc/hostname
     ln -sf /proc/sys/kernel/hostname ${INSTALL}/etc/hostname
+
+  # remove bash symbolic link because we use real bash
+  rm ${INSTALL}/usr/bin/bash
+  # also remove default shell symbolic link which will be set to bash
+  rm ${INSTALL}/usr/bin/sh
 }
 
 post_install() {
@@ -165,9 +173,10 @@ post_install() {
   enable_service fs-resize.service
   enable_service ledfix.service
   enable_service shell.service
-  enable_service show-version.service
+  enable_service vfd-clock.service
   enable_service var.mount
   enable_service locale.service
+  enable_service restore-storage-permissions.service
 
   # cron support
   if [ "${CRON_SUPPORT}" = "yes" ]; then

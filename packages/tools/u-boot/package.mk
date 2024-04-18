@@ -3,26 +3,16 @@
 # Copyright (C) 2017-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="u-boot"
+PKG_VERSION="2024.07"
+PKG_SHA256="f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f"
 PKG_ARCH="arm aarch64"
 PKG_LICENSE="GPL"
 PKG_SITE="https://www.denx.de/wiki/U-Boot"
+PKG_URL="https://ftp.denx.de/pub/u-boot/${PKG_NAME}-${PKG_VERSION}.tar.bz2"
 PKG_DEPENDS_TARGET="toolchain openssl:host pkg-config:host Python3:host swig:host pyelftools:host"
 PKG_LONGDESC="Das U-Boot is a cross-platform bootloader for embedded systems."
 
 PKG_STAMP="${UBOOT_SYSTEM} ${UBOOT_TARGET}"
-
-case ${PROJECT} in
-  Rockchip)
-    PKG_VERSION="2025.10" # plus Kwiboo changes for RK3576 support
-    PKG_SHA256="b4f032848e56cc8f213ad59f9132c084dbbb632bc29176d024e58220e0efdf4a"
-    PKG_URL="https://ftp.denx.de/pub/u-boot/${PKG_NAME}-${PKG_VERSION}.tar.bz2"
-    ;;
-  *)
-    PKG_VERSION="2025.10"
-    PKG_SHA256="b4f032848e56cc8f213ad59f9132c084dbbb632bc29176d024e58220e0efdf4a"
-    PKG_URL="https://ftp.denx.de/pub/u-boot/${PKG_NAME}-${PKG_VERSION}.tar.bz2"
-    ;;
-esac
 
 [ -n "${KERNEL_TOOLCHAIN}" ] && PKG_DEPENDS_TARGET+=" gcc-${KERNEL_TOOLCHAIN}:host"
 

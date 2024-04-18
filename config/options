@@ -21,10 +21,13 @@ DISTRO_DIR="${ROOT}/distributions"
 PROJECT_DIR="${ROOT}/projects"
 
 # determines DISTRO, if not forced by user
-DISTRO="${DISTRO:-LibreELEC}"
+DISTRO="${DISTRO:-CoreELEC}"
 
 # determines PROJECT, if not forced by user
-export PROJECT="${PROJECT:-Generic}"
+export PROJECT="${PROJECT:-Amlogic-ce}"
+
+# determines DEVICE, if not forced by user
+export DEVICE="${DEVICE:-Amlogic-ng}"
 
 # default to Generic device if building Generic project without device set
 if [ "${PROJECT}" = "Generic" -a -z "${DEVICE}" ]; then
@@ -32,7 +35,8 @@ if [ "${PROJECT}" = "Generic" -a -z "${DEVICE}" ]; then
 fi
 
 # determines TARGET_ARCH, if not forced by user
-export ARCH="${ARCH:-x86_64}"
+export ARCH="${ARCH:-aarch64}"
+
 TARGET_ARCH="${ARCH}"
 
 # include helper functions
@@ -118,13 +122,13 @@ if [ -z "$ADDON_URL" ]; then
 fi
 
 # read local persistent options from $ROOT if available
-if [ -f "${ROOT}/.libreelec/options" ]; then
-  . "${ROOT}/.libreelec/options"
+if [ -f "${ROOT}/.coreelec/options" ]; then
+  . "${ROOT}/.coreelec/options"
 fi
 
 # read global persistent options from $HOME if available
-if [ -f "${HOME}/.libreelec/options" ]; then
-  . "${HOME}/.libreelec/options"
+if [ -f "${HOME}/.coreelec/options" ]; then
+  . "${HOME}/.coreelec/options"
 fi
 
 if [ "${LOCAL_CCACHE_SUPPORT}" = "yes" ] && [ -z "${CCACHE_DISABLE}" ]; then

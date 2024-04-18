@@ -1,0 +1,5 @@
+# Ensure a stable Mali device node name for proprietary libMali userspace.
+# Some userspace expects /dev/mali while the kernel may expose /dev/mali0.
+KERNEL=="mali0", SYMLINK+="mali", GROUP="video", MODE="0660"
+KERNEL=="mali", GROUP="video", MODE="0660"
+KERNEL=="mali[0-9]*", GROUP="video", MODE="0660"

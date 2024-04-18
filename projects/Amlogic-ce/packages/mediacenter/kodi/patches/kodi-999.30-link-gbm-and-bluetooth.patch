@@ -1,0 +1,29 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -482,1 +482,6 @@
+ unset(_MAIN_LIBRARIES)
++
++# Ensure libbluetooth is linked after libkodi.a (needed with --as-needed)
++if(DEFINED bluetooth_FOUND AND bluetooth_FOUND)
++  target_link_libraries(${APP_NAME_LC} bluetooth)
++endif()
+--- a/xbmc/windowing/amlogic/CMakeLists.txt
++++ b/xbmc/windowing/amlogic/CMakeLists.txt
+@@ -14,1 +14,7 @@
+ core_add_library(windowing_Amlogic)
++
++if(TARGET ${APP_NAME_LC}::GBM)
++  target_link_libraries(${CORE_LIBRARY} PUBLIC ${APP_NAME_LC}::GBM)
++else()
++  target_link_libraries(${CORE_LIBRARY} PUBLIC gbm)
++endif()
+--- a/xbmc/windowing/gbm/CMakeLists.txt
++++ b/xbmc/windowing/gbm/CMakeLists.txt
+@@ -26,1 +26,7 @@
+ core_add_library(windowing_gbm)
++
++if(TARGET ${APP_NAME_LC}::GBM)
++  target_link_libraries(${CORE_LIBRARY} PUBLIC ${APP_NAME_LC}::GBM)
++else()
++  target_link_libraries(${CORE_LIBRARY} PUBLIC gbm)
++endif()

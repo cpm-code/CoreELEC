@@ -3,12 +3,12 @@
 # Copyright (C) 2017-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="kodi"
-PKG_VERSION="929344495c9ede095c3f2ccd8197d2b8141e3a4b"
-PKG_SHA256="7a965fde85ad976f01d8eefa7668f37b1ba2a7862db3545dcccddadb0f93a523"
+PKG_VERSION="db813bfaec3b3bd510e084158fec3ad7be7557a2"
+PKG_SHA256="984844c44f0092fcb6caf114567dfcce04480d066c3fd50a27ab601a5ca6c08b"
 PKG_LICENSE="GPL"
 PKG_SITE="http://www.kodi.tv"
 PKG_URL="https://github.com/xbmc/xbmc/archive/${PKG_VERSION}.tar.gz"
-PKG_DEPENDS_TARGET="toolchain JsonSchemaBuilder:host TexturePacker:host Python3 zlib systemd lzo pcre2 swig:host libass curl exiv2 fontconfig fribidi tinyxml tinyxml2 libjpeg-turbo freetype libcdio taglib libxml2 libxslt nlohmann-json sqlite ffmpeg crossguid libdvdnav libfmt lirc libfstrcmp flatbuffers:host flatbuffers libudfread spdlog libxkbcommon"
+PKG_DEPENDS_TARGET="toolchain JsonSchemaBuilder:host TexturePacker:host Python3 zlib systemd lzo pcre2 swig:host libass curl exiv2 fontconfig fribidi tinyxml tinyxml2 libjpeg-turbo freetype libcdio taglib libxml2 libxslt rapidjson sqlite ffmpeg crossguid libdvdnav libfmt lirc libfstrcmp flatbuffers:host flatbuffers libudfread spdlog"
 PKG_DEPENDS_UNPACK="commons-lang3 commons-text groovy"
 PKG_DEPENDS_HOST="toolchain"
 PKG_LONGDESC="A free and open source cross-platform media player."
@@ -58,24 +58,6 @@ configure_package() {
                    -DAPP_RENDER_SYSTEM=gles \
                    -DWAYLANDPP_SCANNER=${TOOLCHAIN}/bin/wayland-scanner++ \
                    -DWAYLANDPP_PROTOCOLS_DIR=${SYSROOT_PREFIX}/usr/share/waylandpp/protocols"
-  else # GBM
-    if [ ! "${KODIPLAYER_DRIVER}" = "default" ]; then
-      PKG_DEPENDS_TARGET+=" ${KODIPLAYER_DRIVER}"
-    fi
-    PKG_DEPENDS_TARGET+=" libinput libdisplay-info"
-    KODI_PLATFORM="-DCORE_PLATFORM_NAME=gbm"
-    if [ ! "${OPENGL}" = "no" ]; then
-      KODI_PLATFORM+=" -DAPP_RENDER_SYSTEM=gl"
-    else
-      KODI_PLATFORM+=" -DAPP_RENDER_SYSTEM=gles"
-    fi
-    CFLAGS+=" -DEGL_NO_X11"
-    CXXFLAGS+=" -DEGL_NO_X11"
-    if [ "${PROJECT}" = "Generic" ]; then
-      PKG_APPLIANCE_XML="${PKG_DIR}/config/appliance-gbm-generic.xml"
-    else
-      PKG_APPLIANCE_XML="${PKG_DIR}/config/appliance-gbm.xml"
-    fi
   fi
 
   if [ ! "${OPENGL}" = "no" ]; then
@@ -155,11 +137,11 @@ configure_package() {
 
   case "${KODI_MYSQL_SUPPORT}" in
     mysql)
-      PKG_DEPENDS_TARGET+=" mysql"
+      PKG_DEPENDS_TARGET="${PKG_DEPENDS_TARGET} mysql"
       KODI_MYSQL="-DENABLE_MYSQLCLIENT=ON -DENABLE_MARIADBCLIENT=OFF"
       ;;
     mariadb)
-      PKG_DEPENDS_TARGET+=" mariadb-connector-c"
+      PKG_DEPENDS_TARGET="${PKG_DEPENDS_TARGET} mariadb-connector-c"
       KODI_MYSQL="-DENABLE_MARIADBCLIENT=ON -DENABLE_MYSQLCLIENT=OFF"
       ;;
     *)
@@ -215,6 +197,13 @@ configure_package() {
     KODI_NEON=""
   fi
 
+  if [ "${VDPAU_SUPPORT}" = "yes" -a "${DISPLAYSERVER}" = "x11" ]; then
+    PKG_DEPENDS_TARGET+=" libvdpau"
+    KODI_VDPAU="-DENABLE_VDPAU=ON"
+  else
+    KODI_VDPAU="-DENABLE_VDPAU=OFF"
+  fi
+
   if [ "${VAAPI_SUPPORT}" = yes ]; then
     PKG_DEPENDS_TARGET+=" libva"
     KODI_VAAPI="-DENABLE_VAAPI=ON"
@@ -228,7 +217,21 @@ configure_package() {
     KODI_ARCH="-DWITH_ARCH=${TARGET_ARCH}"
   fi
 
-  if [ "${PROJECT}" = "Allwinner" -o "${PROJECT}" = "Rockchip" ]; then
+  if [ ! "${KODIPLAYER_DRIVER}" = "default" -a "${DISPLAYSERVER}" = "no" ]; then
+    PKG_DEPENDS_TARGET+=" ${KODIPLAYER_DRIVER} libinput libxkbcommon libdisplay-info"
+    if [ "${OPENGLES_SUPPORT}" = yes -a "${KODIPLAYER_DRIVER}" = "${OPENGLES}" ]; then
+      KODI_PLATFORM="-DCORE_PLATFORM_NAME=gbm -DAPP_RENDER_SYSTEM=gles"
+      CFLAGS+=" -DEGL_NO_X11"
+      CXXFLAGS+=" -DEGL_NO_X11"
+      if [ "${PROJECT}" = "Generic" ]; then
+        PKG_APPLIANCE_XML="${PKG_DIR}/config/appliance-gbm-generic.xml"
+      else
+        PKG_APPLIANCE_XML="${PKG_DIR}/config/appliance-gbm.xml"
+      fi
+    fi
+  fi
+
+  if [ "${PROJECT}" = "Allwinner" -o "${PROJECT}" = "Rockchip" -o "${PROJECT}" = "RPi" ]; then
     PKG_PATCH_DIRS+=" drmprime-filter"
   fi
 
@@ -247,8 +250,9 @@ configure_package() {
                          -DENABLE_INTERNAL_EXIV2=OFF \
                          -DENABLE_INTERNAL_FFMPEG=OFF \
                          -DENABLE_INTERNAL_FLATBUFFERS=OFF \
-                         -DENABLE_INTERNAL_MARIADBCLIENT=OFF \
+                         -DENABLE_INTERNAL_RapidJSON=OFF \
                          -DENABLE_INTERNAL_SPDLOG=OFF \
+                         -DENABLE_INTERNAL_UDFREAD=OFF \
                          -DENABLE_UDEV=ON \
                          -DENABLE_DBUS=ON \
                          -DENABLE_XSLT=ON \
@@ -268,6 +272,7 @@ configure_package() {
                          ${PKG_KODI_LINKER} \
                          ${KODI_ARCH} \
                          ${KODI_NEON} \
+                         ${KODI_VDPAU} \
                          ${KODI_VAAPI} \
                          ${KODI_CEC} \
                          ${KODI_PLATFORM} \
@@ -362,8 +367,8 @@ post_makeinstall_target() {
   fi
 
   # nvidia: Enable USLEEP to reduce CPU load while rendering
-  if listcontains "${GRAPHIC_DRIVERS}" "nvidia"; then
-    echo "__GL_YIELD=USLEEP" >> ${INSTALL}/usr/lib/kodi/kodi.conf
+  if listcontains "${GRAPHIC_DRIVERS}" "nvidia" || listcontains "${GRAPHIC_DRIVERS}" "nvidia-legacy"; then
+    echo "__GL_YIELD=USLEEP" >>${INSTALL}/usr/lib/kodi/kodi.conf
   fi
 
   mkdir -p ${INSTALL}/usr/sbin

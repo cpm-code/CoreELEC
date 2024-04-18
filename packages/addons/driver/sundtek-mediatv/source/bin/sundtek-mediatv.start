@@ -189,7 +189,7 @@ if [ -z "$(pidof mediasrv)" ]; then
 
       [ ! -f $KEYMAP ] && KEYMAP=""
 
-      # remove settings for this tuner
+      # remove setttings for this tuner
       awk -v val="[$SERIAL]" '$0 == val {flag=1; next} /^[^\[]|^$/{if (flag==1) next} /.*/{flag=0; print}' $SUNDTEK_CONF_TMP >${SUNDTEK_CONF_TMP}-types
       mv ${SUNDTEK_CONF_TMP}-types $SUNDTEK_CONF_TMP
       echo "" >>$SUNDTEK_CONF_TMP

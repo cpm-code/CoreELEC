@@ -3,7 +3,7 @@
 
 set -e
 
-# setup initial directories (relative to root)
+# setup initial directorys (relative to root)
   CONFIG=config
   SCRIPTS=scripts
   PACKAGES=packages
@@ -16,14 +16,10 @@ set -e
 [ -z "${HOST_NAME}" ] && export HOST_NAME="$($LOCAL_CC -dumpmachine)"
 TARGET_NAME=$TARGET_GCC_ARCH-libreelec-linux-gnu${TARGET_ABI}
 
-if [ "${DISTRO_VERSION}" = "devel" ] ; then
-  BUILD=${BUILD_ROOT}/${BUILD_BASE}.${DISTRONAME}-${DEVICE:-$PROJECT}.${TARGET_ARCH}-${OS_VERSION}-${DISTRO_VERSION}
-else
-  BUILD=${BUILD_ROOT}/${BUILD_BASE}.${DISTRONAME}-${DEVICE:-$PROJECT}.${TARGET_ARCH}-${DISTRO_VERSION}
-fi
+BUILD=${BUILD_ROOT}/${BUILD_BASE}.${DISTRONAME}-${DEVICE:-$PROJECT}.${TARGET_ARCH}-${OS_MAJOR}
 
 if [ -n "$BUILD_SUFFIX" ]; then
-  BUILD+="-${BUILD_SUFFIX}"
+  BUILD=$BUILD-$BUILD_SUFFIX
 fi
 
 THREAD_CONTROL=${BUILD}/.threads

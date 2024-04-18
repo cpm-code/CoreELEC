@@ -3,8 +3,8 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="llvm"
-PKG_VERSION="21.1.8"
-PKG_SHA256="4633a23617fa31a3ea51242586ea7fb1da7140e426bd62fc164261fe036aa142"
+PKG_VERSION="18.1.8"
+PKG_SHA256="0b58557a6d32ceee97c8d533a59b9212d87e0fc4d2833924eb6c611247db2f2a"
 PKG_LICENSE="Apache-2.0"
 PKG_SITE="http://llvm.org/"
 PKG_URL="https://github.com/llvm/llvm-project/releases/download/llvmorg-${PKG_VERSION}/llvm-project-${PKG_VERSION/-/}.src.tar.xz"
@@ -12,6 +12,10 @@ PKG_DEPENDS_HOST="toolchain:host"
 PKG_DEPENDS_TARGET="toolchain llvm:host zlib"
 PKG_LONGDESC="Low-Level Virtual Machine (LLVM) is a compiler infrastructure."
 PKG_TOOLCHAIN="cmake"
+
+if listcontains "${GRAPHIC_DRIVERS}" "iris"; then
+  PKG_DEPENDS_UNPACK="spirv-headers spirv-llvm-translator"
+fi
 
 PKG_CMAKE_OPTS_COMMON="-DLLVM_INCLUDE_TOOLS=ON \
                        -DLLVM_BUILD_TOOLS=OFF \
@@ -28,6 +32,7 @@ PKG_CMAKE_OPTS_COMMON="-DLLVM_INCLUDE_TOOLS=ON \
                        -DLLVM_ENABLE_SPHINX=OFF \
                        -DLLVM_ENABLE_OCAMLDOC=OFF \
                        -DLLVM_ENABLE_BINDINGS=OFF \
+                       -DLLVM_ENABLE_TERMINFO=OFF \
                        -DLLVM_ENABLE_ASSERTIONS=OFF \
                        -DLLVM_ENABLE_WERROR=OFF \
                        -DLLVM_ENABLE_ZLIB=OFF \
@@ -40,15 +45,11 @@ PKG_CMAKE_OPTS_COMMON="-DLLVM_INCLUDE_TOOLS=ON \
                        -DLLVM_ENABLE_RTTI=ON \
                        -DLLVM_ENABLE_UNWIND_TABLES=OFF \
                        -DLLVM_ENABLE_Z3_SOLVER=OFF \
+                       -DLLVM_SPIRV_INCLUDE_TESTS=OFF \
                        -DCMAKE_SKIP_RPATH=ON"
 
-if listcontains "${GRAPHIC_DRIVERS}" "(iris|panfrost)"; then
-  PKG_DEPENDS_UNPACK="spirv-headers spirv-llvm-translator"
-  PKG_CMAKE_OPTS_COMMON+=" -DLLVM_SPIRV_INCLUDE_TESTS=OFF"
-fi
-
 post_unpack() {
-  if listcontains "${GRAPHIC_DRIVERS}" "(iris|panfrost)"; then
+  if listcontains "${GRAPHIC_DRIVERS}" "iris"; then
     mkdir -p "${PKG_BUILD}"/llvm/projects/{SPIRV-Headers,SPIRV-LLVM-Translator}
       tar --strip-components=1 \
         -xf "${SOURCES}/spirv-headers/spirv-headers-$(get_pkg_version spirv-headers).tar.gz" \
@@ -99,25 +100,20 @@ pre_configure_host() {
 }
 
 post_make_host() {
-  ninja ${NINJA_OPTS} llc llvm-ar llvm-as llvm-config llvm-cov llvm-dis \
-                      llvm-link llvm-nm llvm-objcopy llvm-objdump \
-                      llvm-profdata llvm-readobj llvm-size llvm-strip \
-                      llvm-tblgen opt
+  ninja ${NINJA_OPTS} llvm-config llvm-tblgen
 
-  if listcontains "${GRAPHIC_DRIVERS}" "(iris|panfrost)"; then
-    ninja ${NINJA_OPTS} llvm-spirv
+  if listcontains "${GRAPHIC_DRIVERS}" "iris"; then
+    ninja ${NINJA_OPTS} llvm-as llvm-link llvm-spirv opt
   fi
 }
 
 post_makeinstall_host() {
   mkdir -p ${TOOLCHAIN}/bin
-    cp -a bin/{llc,llvm-ar,llvm-as,llvm-config,llvm-cov,llvm-dis} "${TOOLCHAIN}/bin"
-    cp -a bin/{llvm-link,llvm-nm,llvm-objcopy,llvm-objdump} "${TOOLCHAIN}/bin"
-    cp -a bin/{llvm-profdata,llvm-readobj,llvm-size,llvm-strip} "${TOOLCHAIN}/bin"
-    cp -a bin/{llvm-tblgen,opt} "${TOOLCHAIN}/bin"
+    cp -a bin/llvm-config ${TOOLCHAIN}/bin
+    cp -a bin/llvm-tblgen ${TOOLCHAIN}/bin
 
-  if listcontains "${GRAPHIC_DRIVERS}" "(iris|panfrost)"; then
-    cp -a bin/llvm-spirv "${TOOLCHAIN}/bin"
+  if listcontains "${GRAPHIC_DRIVERS}" "iris"; then
+    cp -a bin/{llvm-as,llvm-link,llvm-spirv,opt} "${TOOLCHAIN}/bin"
   fi
 }
 

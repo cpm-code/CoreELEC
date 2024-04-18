@@ -77,7 +77,7 @@ if [ -z "$(pidof userhdhomerun)" ]; then
 
         [ "$DVBMODE" = "auto" ] && DVBMODE=""
 
-        # remove settings for this tuner
+        # remove setttings for this tuner
         awk -v val="[$SERIAL]" '$0 == val {flag=1; next} /^tuner_type=|^use_full_name=|^disable=|^#|^$/{if (flag==1) next} /.*/{flag=0; print}' $DVBHDHOMERUN_CONF_TMP >${DVBHDHOMERUN_CONF_TMP}-types
         mv ${DVBHDHOMERUN_CONF_TMP}-types $DVBHDHOMERUN_CONF_TMP
         echo "" >>$DVBHDHOMERUN_CONF_TMP

@@ -3,33 +3,46 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="glib"
-PKG_VERSION="2.87.1"
-PKG_SHA256="fc2ce0f948ee163f8adc5bdde2f38612b8a3f270022aa1b0d087cb9f1f0ac5c2"
+PKG_VERSION="2.82.1"
+PKG_SHA256="478634440bf52ee4ec4428d558787398c0be6b043c521beb308334b3db4489a6"
 PKG_LICENSE="LGPL"
 PKG_SITE="https://www.gtk.org/"
 PKG_URL="https://download.gnome.org/sources/glib/$(get_pkg_version_maj_min)/${PKG_NAME}-${PKG_VERSION}.tar.xz"
 PKG_DEPENDS_HOST="libffi:host pcre2:host Python3:host meson:host ninja:host"
-PKG_DEPENDS_TARGET="meson:host ninja:host gcc:host glib:host libffi pcre2 Python3:host util-linux zlib"
+PKG_DEPENDS_TARGET="meson:host ninja:host gcc:host glib:host libffi pcre2 Python3:host util-linux zlib gobject-introspection"
 PKG_LONGDESC="A library which includes support routines for C such as lists, trees, hashes, memory allocation."
 
-PKG_MESON_OPTS_HOST="-Ddefault_library=static \
+PKG_MESON_OPTS_HOST="-Ddefault_library=shared \
                      -Dinstalled_tests=false \
                      -Dlibmount=disabled \
-                     -Dintrospection=disabled \
-                     -Dsysprof=disabled \
-                     -Dtests=false"
+                     -Dtests=false \
+                     -Dintrospection=disabled"
 
 PKG_MESON_OPTS_TARGET="-Ddefault_library=shared \
                        -Dinstalled_tests=false \
                        -Dselinux=disabled \
                        -Dxattr=true \
-                       -Ddocumentation=false \
-                       -Dman-pages=disabled \
-                       -Ddtrace=disabled \
-                       -Dsystemtap=disabled \
+                       -Dgtk_doc=false \
+                       -Dman=false \
+                       -Ddtrace=false \
+                       -Dsystemtap=false \
                        -Dbsymbolic_functions=true \
-                       -Dsysprof=disabled \
-                       -Dtests=false"
+                       -Dforce_posix_threads=true \
+                       -Dtests=false \
+                       -Dintrospection=disabled"
+
+pre_configure_target() {
+  if echo "${PKG_MESON_OPTS_TARGET}" | grep -q "-Dintrospection=enabled"; then
+    # tweak the binary names so that it picks up our
+    # wrappers which do the cross-compile with qemu
+    sed -e "s|gir_scanner = .*|gir_scanner = files('${TOOLCHAIN}/bin/g-ir-scanner-wrapper')|" \
+        -e "s|  error('Running binaries|  # error('Running binaries|" \
+        -i ${PKG_BUILD}/meson.build
+
+    sed -e "s|override_find_program('g-ir-compiler'|override_find_program('g-ir-compiler-wrapper'|" \
+        -i ${PKG_BUILD}/girepository/compiler/meson.build
+  fi
+}
 
 post_makeinstall_target() {
   rm -rf ${INSTALL}/usr/bin

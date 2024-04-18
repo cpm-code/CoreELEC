@@ -1,5 +1,5 @@
 [Unit]
-Description=Kodi Media Center
+Description=XBMC Media Center
 Requires=installer.target
 
 [Service]

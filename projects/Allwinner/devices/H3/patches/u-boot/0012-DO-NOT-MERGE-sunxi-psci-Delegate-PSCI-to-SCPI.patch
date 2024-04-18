@@ -12,7 +12,7 @@ Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
  arch/arm/cpu/armv7/Kconfig           |   1 +
  arch/arm/cpu/armv7/sunxi/Makefile    |   4 +
- arch/arm/cpu/armv7/sunxi/psci-scpi.c | 453 +++++++++++++++++++++++++++
+ arch/arm/cpu/armv7/sunxi/psci-scpi.c | 463 +++++++++++++++++++++++++++
  3 files changed, 468 insertions(+)
  create mode 100644 arch/arm/cpu/armv7/sunxi/psci-scpi.c
 
@@ -35,7 +35,7 @@ index 3e975b366c..6473b9acbd 100644
 @@ -13,8 +13,12 @@ obj-$(CONFIG_MACH_SUN6I)	+= sram.o
  obj-$(CONFIG_MACH_SUN8I)	+= sram.o
  
- ifndef CONFIG_XPL_BUILD
+ ifndef CONFIG_SPL_BUILD
 +ifdef CONFIG_MACH_SUN8I_H3
 +obj-$(CONFIG_ARMV7_PSCI)	+= psci-scpi.o
 +else
@@ -43,20 +43,21 @@ index 3e975b366c..6473b9acbd 100644
  endif
 +endif
  
- ifdef CONFIG_XPL_BUILD
+ ifdef CONFIG_SPL_BUILD
  obj-y	+= fel_utils.o
 diff --git a/arch/arm/cpu/armv7/sunxi/psci-scpi.c b/arch/arm/cpu/armv7/sunxi/psci-scpi.c
 new file mode 100644
 index 0000000000..fea51eb456
 --- /dev/null
 +++ b/arch/arm/cpu/armv7/sunxi/psci-scpi.c
-@@ -0,0 +1,453 @@
+@@ -0,0 +1,463 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (C) 2016 Chen-Yu Tsai <wens@csie.org>
 + * Copyright (C) 2018-2021 Samuel Holland <samuel@sholland.org>
 + */
 +
++#include <common.h>
 +#include <asm/arch/cpu.h>
 +#include <asm/armv7.h>
 +#include <asm/gic.h>
@@ -171,6 +172,15 @@ index 0000000000..fea51eb456
 +static bool __secure_data gic_dist_init;
 +
 +static u32 __secure_data lock;
++
++static inline u32 __secure read_mpidr(void)
++{
++	u32 val;
++
++	asm volatile ("mrc p15, 0, %0, c0, c0, 5" : "=r" (val));
++
++	return val;
++}
 +
 +static void __secure scpi_begin_command(void)
 +{

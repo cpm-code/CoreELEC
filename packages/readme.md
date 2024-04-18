@@ -32,11 +32,11 @@ To control the build behaviour of your package, use variables in the top-down or
 | PKG_SOURCE_NAME | -   | no  | Force the filename of the application sources. Used when the filename is not the basename of `PKG_URL` |
 | PKG_PATCH_DIRS | -    | no  | Patches in `./patches` are automatically applied after package unpack. Use this option to include patches from an additional folder, e.g. `./patches/$PKG_PATCH_DIRS` |
 | PKG_NEED_UNPACK | -   | no  | Space separated list of files or folders to include in package stamp calculation. If the stamp is invalidated through changes to package files or dependent files/folders the package is cleaned and rebuilt. e.g. `PKG_NEED_UNPACK="$(get_pkg_directory linux)"` will trigger clean/rebuild of a Linux kernel driver package when a change to the `linux` kernel package is detected. |
-| PKG_TOOLCHAIN | auto  | no  | Control which build toolchain is used. For detailed information, see [Reference](#toolchain-options). |
-| PKG_BUILD_FLAGS | -   | no  | A space separated list of flags with which to fine-tune the build process. Flags can be enabled or disabled with a `+` or `-` prefix. For detailed information, see [Reference](#build_flags-options). |
+| PKG_TOOLCHAIN | auto  | no  | Control which build toolchain is used. For detailed information, see [reference](#toolchain-options). |
+| PKG_BUILD_FLAGS | -   | no  | A space separated list of flags with which to fine-tune the build process. Flags can be enabled or disabled with a `+` or `-` prefix. For detailed information, see the [Reference](#build_flags-options). |
 | PKG_PYTHON_VERSION | python3.8 | no | Define the Python version to be used. |
 | PKG_IS_KERNEL_PKG | - | no  | Set to `yes` for packages that include Linux kernel modules |
-| PKG_DEPENDS_CONFIG | - | no  | Space separated list of packages to add to PKG_CONFIG_PATH. Use this to build with support for `-sysroot` packages, see [Reference](#build_flags-options). |
+| PKG_DEPENDS_CONFIG | - | no  | Space separated list of packages to add to PKG_CONFIG_PATH. Use this to build with support for `-sysroot` packages (See [reference](BUILD_FLAGS options). |
 
 #### Meson Options
 | Variable    | Default | Required |Description |
@@ -98,7 +98,7 @@ But not always. To select a specific toolchain, you only need to set the `PKG_TO
 | configure   | preconfigured [GNU Build System](https://en.wikipedia.org/wiki/GNU_Build_System) |
 | ninja       | [Ninja Build](https://ninja-build.org/) |
 | make        | [Makefile Based](https://www.gnu.org/software/make/) |
-| manual      | only runs self written build steps, see [Functions](#functions) |
+| manual      | only runs self writen build steps, see [Functions](#functions) |
 
 ###### Auto-Detection
 The auto-detections looks for specific files in the source path.
@@ -122,7 +122,8 @@ Set the variable `PKG_BUILD_FLAGS` in the `package.mk` to enable/disable the sin
 | pic:host | disabled | host, bootstrap   | see above |
 | speed    | disabled | target, init      | replaces default `-O2` compiler optimization with `-O3` (can only enable; overrules size) |
 | size     | disabled | target, init      | replaces default `-O2` compiler optimization with `-Os` (can only enable) |
-| lto      | disabled | target, init      | enable LTO (Link Time optimization) in the compiler and linker unless disabled via `LTO_SUPPORT`. Compiles non-fat LTO objects (only bytecode) and automatically determines number of threads to use for optimization at link stage |
+| lto      | disabled | target, init      | enable LTO (Link Time optimization) in the compiler and linker unless disabled via `LTO_SUPPORT`. Compiles non-fat LTO objects (only bytecode) and performs single-threaded optimization at link stage |
+| lto-parallel | disabled | target, init  | same as `lto` but enables parallel optimization at link stage. Only enable this if the package build doesn't run multiple linkers in parallel otherwise this can result in lots of parallel processes! |
 | lto-fat  | disabled | target, init      | same as `lto` but compile fat LTO objects (bytecode plus optimized assembly). This increases compile time but can be useful to create static libraries suitable both for LTO and non-LTO linking |
 | lto-off  | disabled | target, init      | explicitly disable LTO in the compiler and linker |
 | bfd      | - | target, init | `+bfd` prefers bfd linker over default linker, `-bfd` disables using bfd |
@@ -132,7 +133,6 @@ Set the variable `PKG_BUILD_FLAGS` in the `package.mk` to enable/disable the sin
 | strip    | enabled  | target | strips executables (or not) |
 | sysroot  | enabled  | target | installs the package to the sysroot folder (or not) |
 | local-cc | disabled | host | use compiler from buildhost instead of host-gcc/g++ in toolchain |
-| cfg-libs | enabled  | all | `-cfg-libs` will not append --disable-static --enable-shared to CONFIGURE_OPTS |
 
 ###### Example
 ```
@@ -158,8 +158,8 @@ Full list of overwrittable functions.
 | pre_build_\[stage]      | yes    | Runs before of the start of the build |
 | pre_configure<br>pre_configure_\[stage]<br>configure_\[stage]<br>post_configure_\[stage] | yes | Configure the package for the compile. This is only relevant for toolchain, that supports it (e.g. meson, cmake, configure, manual) |
 | make_\[stage]<br>pre_make_\[stage]<br>post_make_\[stage] | yes | Build of the package |
-| makeinstall_\[stage]<br>pre_makeinstall_\[stage]<br>post_makeinstall_\[stage] | yes | Installation of the files in the correct paths<br>host: TOOLCHAIN<br>target: SYSROOT and IMAGE<br>bootstrap and init: temporary destination
-| addon                   | -      | Copy all files together for addon creation. This is required for addons |
+| makeinstall_\[stage]<br>pre_makeinstall_\[stage]<br>post_makeinstall_\[stage] | yes | Installation of the files in the correct pathes<br>host: TOOLCHAIN<br>target: SYSROOT and IMAGE<br>bootstrap and init: temporary destination
+| addon                   | -      | Copy all files together for addon creation. This is requiered for addons |
 | post_install_addon      | -      | Post processing of installed addon files in `${INSTALL}` directory |
 
 ## Directory structure
@@ -271,7 +271,7 @@ Issue | Level | Meaning |
     * new kernel driver
     * ...
 2. Find a place in the packages tree
-    * look into the package tree structure, which is generally self explanatory.
+    * look into the package tree structure, which is generally self explaind.
     * do not place it in an existing package (directory that includes a `package.mk`)
     * when you found a place, create a directory with the name of your package (use same value for `PKG_NAME`!!)
 3. Create an initial `package.mk`
@@ -295,7 +295,7 @@ PKG_LICENSE="LGPL"
 PKG_SITE="https://mariadb.org/"
 PKG_URL="https://github.com/MariaDB/mariadb-connector-c/archive/v$PKG_VERSION.tar.gz"
 PKG_DEPENDS_TARGET="toolchain zlib openssl"
-PKG_LONGDESC="mariadb-connector: library to connect to mariadb/mysql database server"
+PKG_LONGDESC="mariadb-connector: library to conntect to mariadb/mysql database server"
 PKG_BUILD_FLAGS="-gold"
 
 PKG_CMAKE_OPTS_TARGET="-DWITH_EXTERNAL_ZLIB=ON \

@@ -1,18 +1,16 @@
-From a0739c80e2bf203c5ab2d1ae2e9958fa6e7ed1aa Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Samuel Holland <samuel@sholland.org>
 Date: Sat, 14 Dec 2019 20:52:53 -0600
-Subject: [PATCH 10/84] arm64: dts: allwinner: a64: Add SCPI protocol
+Subject: [PATCH] arm64: dts: allwinner: a64: Add SCPI protocol
 
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
  arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi | 20 +++++++++++++++++++
  1 file changed, 20 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
-index c35f8eb1b5c1..e6afe1a856c6 100644
 --- a/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
 +++ b/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
-@@ -167,6 +167,13 @@ psci {
+@@ -130,6 +130,13 @@
  		method = "smc";
  	};
  
@@ -26,7 +24,7 @@ index c35f8eb1b5c1..e6afe1a856c6 100644
  	sound: sound {
  		#address-cells = <1>;
  		#size-cells = <0>;
-@@ -397,6 +404,19 @@ syscon: syscon@1c00000 {
+@@ -344,6 +351,19 @@
  			#size-cells = <1>;
  			ranges;
  
@@ -46,6 +44,3 @@ index c35f8eb1b5c1..e6afe1a856c6 100644
  			sram_c: sram@18000 {
  				compatible = "mmio-sram";
  				reg = <0x00018000 0x28000>;
--- 
-2.43.0
-

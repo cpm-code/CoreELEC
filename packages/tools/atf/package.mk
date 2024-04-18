@@ -2,12 +2,12 @@
 # Copyright (C) 2018-present Team LibreELEC
 
 PKG_NAME="atf"
-PKG_VERSION="2.14.0"
-PKG_SHA256="b2a3bc360307c929714ffd8e7f1441c4888cd5d80531276e809c2de54db5dc16"
+PKG_VERSION="2.10.0"
+PKG_SHA256="696b8e53923aac4474532da7dd681f0bd044b329732facd65aeabea3e61adca9"
 PKG_ARCH="arm aarch64"
 PKG_LICENSE="BSD-3c"
 PKG_SITE="https://github.com/ARM-software/arm-trusted-firmware"
-PKG_URL="https://github.com/TrustedFirmware-A/trusted-firmware-a/archive/v${PKG_VERSION}.tar.gz"
+PKG_URL="https://github.com/ARM-software/arm-trusted-firmware/archive/v${PKG_VERSION}.tar.gz"
 PKG_DEPENDS_TARGET="toolchain"
 PKG_LONGDESC="ARM Trusted Firmware is a reference implementation of secure world software, including a Secure Monitor executing at Exception Level 3 and various Arm interface standards."
 PKG_TOOLCHAIN="manual"
@@ -20,14 +20,10 @@ if [ "${ATF_PLATFORM}" = "rk3399" ]; then
 fi
 
 make_target() {
-  # As of atf 2.11.0 - the supported compile for .S is gcc (not as.)
-  unset AR AS CC CPP CXX LD NM OBJCOPY OBJDUMP STRIP RANLIB
-  unset CPPFLAGS CFLAGS CXXFLAGS LDFLAGS
   if [ "${ATF_PLATFORM}" = "imx8mq" ]; then
-    CROSS_COMPILE="${TARGET_KERNEL_PREFIX}" make PLAT=${ATF_PLATFORM} LOG_LEVEL=0 bl31
+    CROSS_COMPILE="${TARGET_KERNEL_PREFIX}" LDFLAGS="" CFLAGS="" make PLAT=${ATF_PLATFORM} LOG_LEVEL=0 bl31
   else
-    # as of atf 2.12.0 - sun50i_a64 builds use LTO, include -ffat-lto-objects to support this
-    CROSS_COMPILE="${TARGET_KERNEL_PREFIX}" CFLAGS="-ffat-lto-objects" make PLAT=${ATF_PLATFORM} bl31
+    CROSS_COMPILE="${TARGET_KERNEL_PREFIX}" LDFLAGS="" CFLAGS="" make PLAT=${ATF_PLATFORM} bl31
   fi
 }
 

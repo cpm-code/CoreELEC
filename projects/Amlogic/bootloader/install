@@ -10,7 +10,7 @@ FIPDIR="$(get_build_dir amlogic-boot-fip)"
 
 case "${UBOOT_SYSTEM}" in
   box|"")
-    # no-op, use vendor bootloader
+    # no-op, use vendor booloader
     ;;
   *)
     mkdir "${DESTDIR}/tmp"

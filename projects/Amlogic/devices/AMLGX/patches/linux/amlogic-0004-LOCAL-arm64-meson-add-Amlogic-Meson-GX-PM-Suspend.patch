@@ -1,4 +1,4 @@
-From 1b5d225472f4283e37d22c41d1c5e9eed80383a7 Mon Sep 17 00:00:00 2001
+From 5f037501721e9a3be26d3ee1ae703967c40d5cea Mon Sep 17 00:00:00 2001
 From: Neil Armstrong <narmstrong@baylibre.com>
 Date: Thu, 3 Nov 2016 15:29:23 +0100
 Subject: [PATCH 04/52] LOCAL: arm64: meson: add Amlogic Meson GX PM Suspend
@@ -17,7 +17,7 @@ Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
  create mode 100644 drivers/firmware/meson/meson_gx_pm.c
 
 diff --git a/drivers/firmware/meson/Kconfig b/drivers/firmware/meson/Kconfig
-index 179f5d46d8dd..709745f52a8b 100644
+index f2fdd3756648..d3ead92ac61b 100644
 --- a/drivers/firmware/meson/Kconfig
 +++ b/drivers/firmware/meson/Kconfig
 @@ -9,3 +9,9 @@ config MESON_SM

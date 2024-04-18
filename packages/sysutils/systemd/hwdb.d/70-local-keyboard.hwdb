@@ -1,22 +1,14 @@
-# ali express g60s pro plus remote
-evdev:input:b0003v1915p1001e0201*
- KEYBOARD_KEY_c0041=enter
-
 # alfawise z1 remote
 evdev:input:b0005v2B54p1603e*
  KEYBOARD_KEY_c0041=enter
 
-# auvipal g9f remote
+# auvipal g9f
 evdev:input:b0005v045Ep0041*
  KEYBOARD_KEY_c0041=enter
  KEYBOARD_KEY_70071=l
  KEYBOARD_KEY_70070=g
  KEYBOARD_KEY_7006f=x
  KEYBOARD_KEY_7006e=i
-
-# bt250 remote
-evdev:input:b0005v1D5ApC080e0000*
- KEYBOARD_KEY_c0041=enter
 
 # buzztv bt-300/bt-400 smart remote
 evdev:input:b0005v0957p1001*
@@ -30,10 +22,6 @@ evdev:input:b0005v0957p1001*
  KEYBOARD_KEY_70045=volumeup
  KEYBOARD_KEY_70069=volumedown
 
-# foxtel remote
-evdev:input:b0005v06E7p8144*
- KEYBOARD_KEY_c0041=enter
-
 # google tv remote
 evdev:name:*Chromecast Remote*:*
  KEYBOARD_KEY_c0041=enter
@@ -46,10 +34,33 @@ evdev:input:b0005v045Ep0041e0300*
 evdev:input:b0005v2B54p1600e0000*
  KEYBOARD_KEY_c0041=enter
 
+# homatics b21
+evdev:input:b0005v0957p0006*
+# homatics b21 variant (sold with dongle g 4k)
+evdev:input:b0005v0957p0019*
+# dune b25
+evdev:input:b0005v0957p000A*
+ KEYBOARD_KEY_c0041=enter
+ KEYBOARD_KEY_c009c=up
+ KEYBOARD_KEY_c009d=down
+ KEYBOARD_KEY_c0030=s
+ KEYBOARD_KEY_c008d=e
+ KEYBOARD_KEY_c0221=o
+ KEYBOARD_KEY_c0077=a
+ KEYBOARD_KEY_c0078=l
+ KEYBOARD_KEY_c0079=n
+ KEYBOARD_KEY_c007a=q
+ KEYBOARD_KEY_c0096=v
+ KEYBOARD_KEY_c01bb=z
+
 # justboom smart remote
 evdev:input:b0003v2252p0120*
  KEYBOARD_KEY_c0041=enter
  KEYBOARD_KEY_c0040=c
+
+# nokia 8010 remotes
+evdev:input:b0005v1D5A*
+ KEYBOARD_KEY_c0041=enter
 
 # nvidia shield remotes
 evdev:input:b0005v0955p7213*
@@ -110,47 +121,17 @@ evdev:input:b0005v0508p1980*
 evdev:input:b0003v4842p0001*
  KEYBOARD_KEY_c0041=enter
 
-# xiaomi remote
+# xaomi remote
 evdev:input:b0005v2717p32B9e4A4C*
- KEYBOARD_KEY_c0041=enter
-
-# xiaomi remote 
-evdev:input:b0005v2717p32B9e4A53* 
  KEYBOARD_KEY_c0041=enter
 
 # yyykq remote
 evdev:input:b0005v0416p0300*
  KEYBOARD_KEY_c0041=enter
 
-# zidoo v10 remote
+# zidoo v10
 evdev:input:b0005v2B54p1600*
  KEYBOARD_KEY_c0041=enter
-
-# zidoo v12 remote
-evdev:input:b0005v5A44p5A44*
- KEYBOARD_KEY_7001e=one #1
- KEYBOARD_KEY_7001f=two #2
- KEYBOARD_KEY_70020=three #3
- KEYBOARD_KEY_70021=four #4
- KEYBOARD_KEY_70022=five #5
- KEYBOARD_KEY_70023=six #6
- KEYBOARD_KEY_70024=seven #7
- KEYBOARD_KEY_70025=eight #8
- KEYBOARD_KEY_70026=nine #9
- KEYBOARD_KEY_70027=zero #0
- KEYBOARD_KEY_7002a=backspace
- KEYBOARD_KEY_7003a=l #sub
- KEYBOARD_KEY_70045=m #square key with lines
- KEYBOARD_KEY_7009a=o #tv out
- KEYBOARD_KEY_700b7=power #tv out green
- KEYBOARD_KEY_c0041=enter
- KEYBOARD_KEY_c006d=c #zoom
- KEYBOARD_KEY_c00bc=repeat
- KEYBOARD_KEY_c01bd=i #info
- KEYBOARD_KEY_c01b7=leftquote #audio
- KEYBOARD_KEY_c00e2=volume_mute
- KEYBOARD_KEY_c00e9=period #vol-up
- KEYBOARD_KEY_c00ea=comma #vol-down
 
 # ZTERCR21 remote
 evdev:input:b0005v0508p0110*

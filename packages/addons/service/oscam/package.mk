@@ -2,9 +2,9 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="oscam"
-PKG_VERSION="11921"
-PKG_SHA256="1f92ffbb4de5ff82313151f666aca98104e0b9249bdc67a6b901bcb5b6db2724"
-PKG_REV="2"
+PKG_VERSION="11799"
+PKG_SHA256="10e7ffb153c66b4f29c21dd5a239d1186f988e918e8ff2673a4ea5fb9073a209"
+PKG_REV="0"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://git.streamboard.tv/common/oscam/-/wikis"
@@ -70,12 +70,7 @@ makeinstall_target() {
 }
 
 addon() {
-  mkdir -p ${ADDON_BUILD}/${PKG_ADDON_ID}/{bin,lib.private}
+  mkdir -p ${ADDON_BUILD}/${PKG_ADDON_ID}/bin
     cp -P ${PKG_BUILD}/.${TARGET_NAME}/oscam ${ADDON_BUILD}/${PKG_ADDON_ID}/bin
     cp -P ${PKG_BUILD}/.${TARGET_NAME}/utils/list_smargo ${ADDON_BUILD}/${PKG_ADDON_ID}/bin
-    cp -L $(get_install_dir pcsc-lite)/usr/lib/libpcsclite.so.1 ${ADDON_BUILD}/${PKG_ADDON_ID}/lib.private
-    cp -L $(get_install_dir pcsc-lite)/usr/lib/libpcsclite_real.so.1 ${ADDON_BUILD}/${PKG_ADDON_ID}/lib.private
-
-  patchelf --add-rpath '${ORIGIN}/../lib.private' ${ADDON_BUILD}/${PKG_ADDON_ID}/bin/oscam
-  patchelf --add-rpath '${ORIGIN}/../lib.private' ${ADDON_BUILD}/${PKG_ADDON_ID}/lib.private/libpcsclite.so.1
 }

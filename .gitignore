@@ -28,6 +28,9 @@ mkpkg-temp
 # ccache
 /.ccache/
 
+# local build logs
+/build-logs/
+
 # backup files
 *.orig
 

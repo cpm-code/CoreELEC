@@ -11,24 +11,25 @@ Subject: [PATCH 2/2] LOCAL: changes for Odroid XU3/XU4
  xbmc/windowing/Resolution.cpp                 |  2 +
  xbmc/windowing/gbm/GBMUtils.cpp               | 28 ++++----
  xbmc/windowing/gbm/WinSystemGbmEGLContext.cpp |  2 +-
- 7 files changed, 85 insertions(+), 28 deletions(-)
+ xbmc/windowing/gbm/drm/DRMUtils.cpp           |  2 +-
+ 8 files changed, 86 insertions(+), 29 deletions(-)
 
 diff --git a/cmake/modules/FindGBM.cmake b/cmake/modules/FindGBM.cmake
 index 37a26a7bc4..53cc04663e 100644
 --- a/cmake/modules/FindGBM.cmake
 +++ b/cmake/modules/FindGBM.cmake
-@@ -44,13 +44,6 @@
- 
-     set(${${CMAKE_FIND_PACKAGE_NAME}_MODULE}_COMPILE_DEFINITIONS HAVE_GBM)
- 
+@@ -48,13 +48,5 @@
+                                                                      IMPORTED_LOCATION "${GBM_LIBRARY}"
+                                                                      INTERFACE_INCLUDE_DIRECTORIES "${GBM_INCLUDE_DIR}"
+                                                                      INTERFACE_COMPILE_DEFINITIONS "HAVE_GBM")
 -    if(GBM_HAS_BO_MAP)
--      list(APPEND ${${CMAKE_FIND_PACKAGE_NAME}_MODULE}_COMPILE_DEFINITIONS HAS_GBM_BO_MAP)
+-      set_property(TARGET ${APP_NAME_LC}::${CMAKE_FIND_PACKAGE_NAME} APPEND PROPERTY
+-                                                                            INTERFACE_COMPILE_DEFINITIONS HAS_GBM_BO_MAP)
 -    endif()
 -    if(GBM_HAS_MODIFIERS)
--      list(APPEND ${${CMAKE_FIND_PACKAGE_NAME}_MODULE}_COMPILE_DEFINITIONS HAS_GBM_MODIFIERS)
+-      set_property(TARGET ${APP_NAME_LC}::${CMAKE_FIND_PACKAGE_NAME} APPEND PROPERTY
+-                                                                            INTERFACE_COMPILE_DEFINITIONS HAS_GBM_MODIFIERS)
 -    endif()
--
-     ADD_TARGET_COMPILE_DEFINITION()
    endif()
  endif()
 diff --git a/system/settings/linux.xml b/system/settings/linux.xml
@@ -201,8 +202,8 @@ index 5267c93c8f..bc0a9b1c96 100644
 +  * are no buffers available instead GEM buffers are running out, so we manually empty
 +  * the buffers here for a maximum of three
 +  */
-+  std::call_once(flag, [this]()
-+                 { CLog::Log(LOGDEBUG, "CGBMUtils - using {} buffers", MAX_SURFACE_BUFFERS); });
++  std::call_once(
++     flag, [this]() { CLog::Log(LOGDEBUG, "CGBMUtils - using {} buffers", MAX_SURFACE_BUFFERS); });
 +
 +  if (m_buffers.size() >= MAX_SURFACE_BUFFERS)
    {
@@ -211,8 +212,8 @@ index 5267c93c8f..bc0a9b1c96 100644
 -     * we have to release buffers. This means that the maximum amount of buffers had been reached.
 -     * For mesa this should be 4 buffers but it may vary across other implementations.
 -     */
--    std::call_once(flag, [this]()
--                   { CLog::Log(LOGDEBUG, "CGBMUtils - using {} buffers", m_buffers.size()); });
+-    std::call_once(
+-        flag, [this]() { CLog::Log(LOGDEBUG, "CGBMUtils - using {} buffers", m_buffers.size()); });
 -
 -    m_buffers.pop();
 +     while (!m_buffers.empty())
@@ -240,3 +241,19 @@ index 83a59413f7..dbddbbbd55 100644
    {
      return false;
    }
+diff --git a/xbmc/windowing/gbm/drm/DRMUtils.cpp b/xbmc/windowing/gbm/drm/DRMUtils.cpp
+index b424dffe80..9924756b7a 100644
+--- a/xbmc/windowing/gbm/drm/DRMUtils.cpp
++++ b/xbmc/windowing/gbm/drm/DRMUtils.cpp
+@@ -189,7 +189,7 @@ bool CDRMUtils::FindPlanes()
+     auto videoPlane = std::find_if(m_planes.begin(), m_planes.end(), [&i](auto& plane) {
+       if (plane->GetPossibleCrtcs() & (1 << i))
+       {
+-        return plane->SupportsFormat(DRM_FORMAT_NV12);
++	return (plane->SupportsFormat(DRM_FORMAT_NV12) || plane->SupportsFormat(DRM_FORMAT_XRGB8888));
+       }
+       return false;
+     });
+-- 
+2.17.1
+

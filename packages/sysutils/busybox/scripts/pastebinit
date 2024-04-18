@@ -3,7 +3,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 # Copyright (C) 2009-2016 Stephan Raue (stephan@openelec.tv)
 # Copyright (C) 2017-present Team LibreELEC (https://libreelec.tv)
+# Copyright (C) 2023-present Team CoreELEC (https://coreelec.org)
 
-token=$(echo "@DISTRONAME@-@OS_VERSION@" | sha256sum | cut -d ' ' -f 1)
-
-cat "$@" | curl https://paste.libreelec.tv -F 'file=@-' -H "Authorization: Bearer ${token}"
+cat "$@" | curl -F 'file=@-' https://paste.coreelec.org

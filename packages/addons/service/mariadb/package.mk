@@ -2,12 +2,12 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="mariadb"
-PKG_VERSION="11.8.5"
-PKG_REV="1"
-PKG_SHA256="bcb7394569c08877c283e1649869504531bee8caafa30288f078e30d99fcb9f6"
+PKG_VERSION="11.4.3"
+PKG_REV="0"
+PKG_SHA256="6f0017b9901bb1897de0eed21caef9ffa9d66ef559345a0d8a6f011308413ece"
 PKG_LICENSE="GPL2"
 PKG_SITE="https://mariadb.org"
-PKG_URL="https://archive.mariadb.org/${PKG_NAME}-${PKG_VERSION}/source/${PKG_NAME}-${PKG_VERSION}.tar.gz"
+PKG_URL="https://downloads.mariadb.com/MariaDB/${PKG_NAME}-${PKG_VERSION}/source/${PKG_NAME}-${PKG_VERSION}.tar.gz"
 PKG_DEPENDS_HOST="toolchain:host ncurses:host openssl:host"
 PKG_DEPENDS_TARGET="toolchain binutils boost bzip2 libaio libfmt libxml2 lz4 lzo ncurses openssl pcre2 systemd zlib mariadb:host"
 PKG_SHORTDESC="MariaDB is a community-developed fork of the MySQL."
@@ -22,6 +22,7 @@ PKG_ADDON_TYPE="xbmc.service"
 configure_package() {
   PKG_CMAKE_OPTS_HOST=" \
     -DCMAKE_INSTALL_MESSAGE=NEVER \
+    -DSTACK_DIRECTION=-1 \
     -DHAVE_IB_GCC_ATOMIC_BUILTINS=1 \
     -DCMAKE_CROSSCOMPILING=OFF"
 
@@ -30,6 +31,7 @@ configure_package() {
     -DCMAKE_BUILD_TYPE=Release \
     -DBUILD_CONFIG=mysql_release \
     -DFEATURE_SET=classic \
+    -DSTACK_DIRECTION=1 \
     -DDISABLE_LIBMYSQLCLIENT_SYMBOL_VERSIONING=ON \
     -DCMAKE_CROSSCOMPILING=ON \
     -DIMPORT_EXECUTABLES=${PKG_BUILD}/.${HOST_NAME}/import_executables.cmake \
@@ -37,6 +39,7 @@ configure_package() {
     -DWITHOUT_HASHICORP_KEY_MANAGEMENT=ON \
     -DWITH_EXTRA_CHARSETS=complex \
     -DWITH_SSL=system \
+    -DDEFAULT_SSL_VERIFY_SERVER_CERT=OFF \
     -DWITH_SSL=${SYSROOT_PREFIX}/usr \
     -DWITH_JEMALLOC=OFF \
     -DWITHOUT_TOKUDB=1 \

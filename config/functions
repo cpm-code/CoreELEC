@@ -14,7 +14,7 @@ onexitcleanup() {
   [ $? -eq 0 ] && return
 
   local _BASH_COMMAND="${BASH_COMMAND}"
- 
+
   if [ -n "${PKG_CURRENT_CALL}" ]; then
     print_color CLR_ERROR "FAILURE: $* during ${PKG_CURRENT_CALL} (${PKG_CURRENT_CALL_TYPE})"
     echo
@@ -299,18 +299,25 @@ get_target_linker() {
 
 setup_toolchain() {
   if [ "$LTO_SUPPORT" = "yes" ]; then
-    if flag_enabled "lto-fat" "no"; then
-      TARGET_CFLAGS+=" $FLAGS_OPTIM_LTO $FLAGS_OPTIM_LTO_FAT"
-      TARGET_CXXFLAGS+=" $FLAGS_OPTIM_LTO $FLAGS_OPTIM_LTO_FAT"
+    if flag_enabled "lto-parallel" "no"; then
+      TARGET_CFLAGS+=" $FLAGS_OPTIM_LTO_PARALLEL $FLAGS_OPTIM_LTO_NO_FAT"
+      TARGET_CXXFLAGS+=" $FLAGS_OPTIM_LTO_PARALLEL $FLAGS_OPTIM_LTO_NO_FAT"
+      TARGET_LDFLAGS+=" $LDFLAGS_OPTIM_LTO_COMMON $FLAGS_OPTIM_LTO_PARALLEL"
+    elif flag_enabled "lto-fat" "no"; then
+      TARGET_CFLAGS+=" $FLAGS_OPTIM_LTO_NO_PARALLEL $FLAGS_OPTIM_LTO_FAT"
+      TARGET_CXXFLAGS+=" $FLAGS_OPTIM_LTO_NO_PARALLEL $FLAGS_OPTIM_LTO_FAT"
+      TARGET_LDFLAGS+=" $LDFLAGS_OPTIM_LTO_COMMON $FLAGS_OPTIM_LTO_NO_PARALLEL"
     elif flag_enabled "lto" "no"; then
-      TARGET_CFLAGS+=" $FLAGS_OPTIM_LTO $FLAGS_OPTIM_LTO_NO_FAT"
-      TARGET_CXXFLAGS+=" $FLAGS_OPTIM_LTO $FLAGS_OPTIM_LTO_NO_FAT"
+      TARGET_CFLAGS+=" $FLAGS_OPTIM_LTO_NO_PARALLEL $FLAGS_OPTIM_LTO_NO_FAT"
+      TARGET_CXXFLAGS+=" $FLAGS_OPTIM_LTO_NO_PARALLEL $FLAGS_OPTIM_LTO_NO_FAT"
+      TARGET_LDFLAGS+=" $LDFLAGS_OPTIM_LTO_COMMON $FLAGS_OPTIM_LTO_NO_PARALLEL"
     fi
   fi
 
   if flag_enabled "lto-off" "no"; then
     TARGET_CFLAGS+=" $FLAGS_OPTIM_LTO_OFF"
     TARGET_CXXFLAGS+=" $FLAGS_OPTIM_LTO_OFF"
+    TARGET_LDFLAGS+=" $FLAGS_OPTIM_LTO_OFF"
   fi
 
   local linker="$(get_target_linker)"
@@ -338,12 +345,6 @@ setup_toolchain() {
   else
     TARGET_CFLAGS+=" $CFLAGS_OPTIM_DEFAULT"
     TARGET_CXXFLAGS+=" $CXXFLAGS_OPTIM_DEFAULT"
-  fi
-
-  # Only build host binaries with native when BUILD_REUSABLE is not set
-  if [ -z "${BUILD_REUSABLE}" ]; then
-    HOST_CFLAGS+=" $HOST_CFLAGS_OPTIM_NATIVE"
-    HOST_CXXFLAGS+=" $HOST_CFLAGS_OPTIM_NATIVE"
   fi
 
   # position-independent code
@@ -402,6 +403,7 @@ setup_toolchain() {
       export RANLIB="ranlib"
       export OBJCOPY="objcopy"
       export OBJDUMP="objdump"
+      export STRIP="strip"
       export CPPFLAGS="$HOST_CPPFLAGS"
       export CFLAGS="$HOST_CFLAGS"
       export CXXFLAGS="$HOST_CXXFLAGS"
@@ -410,6 +412,7 @@ setup_toolchain() {
       export TARGET_CC="${TARGET_PREFIX}gcc"
       export TARGET_CXX="${TARGET_PREFIX}g++"
       export TARGET_AR="${TARGET_PREFIX}ar"
+      export TARGET_STRIP="${TARGET_PREFIX}strip"
       export TARGET_CFLAGS="$TARGET_CFLAGS"
       export TARGET_CXXFLAGS="$TARGET_CXXFLAGS"
       export TARGET_LDFLAGS="$TARGET_LDFLAGS"
@@ -424,11 +427,6 @@ setup_toolchain() {
       export _python_sysroot="$SYSROOT_PREFIX"
       export _python_prefix=/usr
       export _python_exec_prefix=/usr
-      # STRIP is used outside meson and is supposed to
-      # point to target version. Meson doesn't use this
-      # environment variable anyway.
-      export STRIP="${TARGET_PREFIX}strip"
-      export HOST_STRIP="strip"
       ;;
 
     target:*|init:*)
@@ -581,7 +579,7 @@ create_meson_conf_host() {
 c = '$CC'
 cpp = '$CXX'
 ar = '$AR'
-strip = '$HOST_STRIP'
+strip = '$STRIP'
 pkg-config = '$PKG_CONFIG'
 llvm-config = '$TOOLCHAIN/bin/llvm-config'
 libgcrypt-config = '$SYSROOT_PREFIX/usr/bin/libgcrypt-config'
@@ -611,22 +609,18 @@ EOF
 }
 
 create_meson_conf_target() {
-  local linker="$(get_target_linker)"
   local properties
   properties="PKG_MESON_PROPERTIES_${1^^}"
 
   cat > $2 <<EOF
 [binaries]
 c = '$TARGET_CC'
-c_ld = '$linker'
 cpp = '$TARGET_CXX'
-cpp_ld = '$linker'
 ar = '$TARGET_AR'
-strip = '$STRIP'
+strip = '$TARGET_STRIP'
 pkg-config = '$PKG_CONFIG'
 llvm-config = '$SYSROOT_PREFIX/usr/bin/llvm-config'
 libgcrypt-config = '$SYSROOT_PREFIX/usr/bin/libgcrypt-config'
-rust = '$TOOLCHAIN/bin/rustc'
 
 [build_machine]
 system = 'linux'
@@ -773,13 +767,14 @@ init_package_cache() {
   local temp_global temp_local
 
   # If the package caches are unset, then populate them
-  if [ -z "${_CACHE_PACKAGE_LOCAL}" -o -z "${_CACHE_PACKAGE_GLOBAL}" ]; then
+  if [ -z "${_CACHE_PACKAGE_LOCAL}" -o -z "${_CACHE_PACKAGE_GLOBAL}" -o -z "${_CACHE_PACKAGE_LOCAL_DEVICE}" ]; then
     temp_global="$(mktemp)"
     temp_local="$(mktemp)"
+    temp_local_device="$(mktemp)"
 
     # cache project/device folder for packages
     if [ -n "${DEVICE}" ]; then
-      find "${ROOT}/projects/${PROJECT}/devices/${DEVICE}/packages" -type f -name package.mk 2>/dev/null | sed "s#/package\.mk\$#${_ANCHOR}#" >> "${temp_local}"
+      find "${ROOT}/projects/${PROJECT}/devices/${DEVICE}/packages" -type f -name package.mk 2>/dev/null | sed "s#/package\.mk\$#${_ANCHOR}#" >> "${temp_local_device}"
     fi
 
     # cache project folder for packages
@@ -789,11 +784,17 @@ init_package_cache() {
     find "${ROOT}/${PACKAGES}" -type f -name package.mk 2>/dev/null | sed "s#/package\.mk\$#${_ANCHOR}#" >> "${temp_global}"
 
     _CACHE_PACKAGE_LOCAL="${BUILD}/.cache_package_local"
+    _CACHE_PACKAGE_LOCAL_DEVICE="${BUILD}/.cache_package_local_device"
     _CACHE_PACKAGE_GLOBAL="${BUILD}/.cache_package_global"
-    export _CACHE_PACKAGE_LOCAL _CACHE_PACKAGE_GLOBAL
+    export _CACHE_PACKAGE_LOCAL _CACHE_PACKAGE_GLOBAL _CACHE_PACKAGE_LOCAL_DEVICE
 
     # overwrite existing cache files only when they are invalid, or not yet created
     mkdir -p "${_CACHE_PACKAGE_GLOBAL%/*}"
+    if [ -f "${_CACHE_PACKAGE_LOCAL_DEVICE}" ] && cmp -s "${temp_local_device}" "${_CACHE_PACKAGE_LOCAL_DEVICE}"; then
+      rm "${temp_local_device}"
+    else
+      mv "${temp_local_device}" "${_CACHE_PACKAGE_LOCAL_DEVICE}"
+    fi
     if [ -f "${_CACHE_PACKAGE_LOCAL}" ] && cmp -s "${temp_local}" "${_CACHE_PACKAGE_LOCAL}"; then
       rm "${temp_local}"
     else
@@ -1039,35 +1040,57 @@ get_pkg_version_maj_min() {
 }
 
 get_pkg_directory() {
-  local _PKG_ROOT_NAME=${1%:*} _ALL_DIRS _FOUND=0 _ANCHOR="@?+?@" _PKG_DIR _DIR
+  local _PKG_ROOT_NAME=${1%:*} _FOUND=0 _ANCHOR="@?+?@" _PKG_DIR _DIR
+  local -a _DIRS=()
 
+  # Check for any available local_device package in preference to a global package
+  for _DIR in $(grep -F "/${_PKG_ROOT_NAME}${_ANCHOR}" "${_CACHE_PACKAGE_LOCAL_DEVICE}"); do
+    _DIR="${_DIR%${_ANCHOR}}"
+    [ -z "${_PKG_DIR}" ] && _PKG_DIR="$_DIR"
+    _DIRS+=("${_DIR}")
+    _FOUND=$((_FOUND+1))
+  done
+
+  # If there's no local_device package available, use the global package
+  if [ $_FOUND -eq 0 ]; then
   # Check for any available local package in preference to a global package
   for _DIR in $(grep -F "/${_PKG_ROOT_NAME}${_ANCHOR}" "${_CACHE_PACKAGE_LOCAL}"); do
     _DIR="${_DIR%${_ANCHOR}}"
-    # found first, set $_PKG_DIR
-    _PKG_DIR="$_DIR"
-    # keep track of dirs with package.mk for detecting multiple folders
-    _ALL_DIRS+="${_DIR}\n"
+    [ -z "${_PKG_DIR}" ] && _PKG_DIR="$_DIR"
+    _DIRS+=("${_DIR}")
     _FOUND=$((_FOUND+1))
   done
+  fi
 
   # If there's no local package available, use the global package
   if [ $_FOUND -eq 0 ]; then
     for _DIR in $(grep -F "/${_PKG_ROOT_NAME}${_ANCHOR}" "${_CACHE_PACKAGE_GLOBAL}"); do
       _DIR="${_DIR%${_ANCHOR}}"
-      # found first, set $_PKG_DIR
-      _PKG_DIR="$_DIR"
-      # keep track of dirs with package.mk for detecting multiple folders
-      _ALL_DIRS+="${_DIR}\n"
+      [ -z "${_PKG_DIR}" ] && _PKG_DIR="$_DIR"
+      _DIRS+=("${_DIR}")
       _FOUND=$((_FOUND+1))
     done
   fi
 
   # _FOUND multiple packages? fail
   if [ $_FOUND -gt 1 ]; then
-    echo "Error - multiple package folders for package ${_PKG_ROOT_NAME}:" >&2
-    echo -e "$_ALL_DIRS" >&2
-    die
+    local -a _NON_ADDON_DEP_DIRS=()
+    local _d
+    for _d in "${_DIRS[@]}"; do
+      if [[ "${_d}" != *"/packages/addons/addon-depends/"* ]]; then
+        _NON_ADDON_DEP_DIRS+=("${_d}")
+      fi
+    done
+
+    # Common case: an addon-depends duplicate exists alongside the "real" package.
+    # Prefer the non-addon-depends package for normal builds.
+    if [ ${#_NON_ADDON_DEP_DIRS[@]} -eq 1 ]; then
+      _PKG_DIR="${_NON_ADDON_DEP_DIRS[0]}"
+    else
+      echo "Error - multiple package folders for package ${_PKG_ROOT_NAME}:" >&2
+      printf '%s\n' "${_DIRS[@]}" >&2
+      die
+    fi
   fi
 
   echo "$_PKG_DIR"
@@ -1075,7 +1098,7 @@ get_pkg_directory() {
 
 # Return a list of sorted package names for this project/device/arch
 get_all_package_names() {
-  sed -e 's#@?+?@##g; s#.*/##g' ${_CACHE_PACKAGE_GLOBAL} ${_CACHE_PACKAGE_LOCAL} | sort --ignore-case --unique
+  sed -e 's#@?+?@##g; s#.*/##g' ${_CACHE_PACKAGE_GLOBAL} ${_CACHE_PACKAGE_LOCAL} ${_CACHE_PACKAGE_LOCAL_DEVICE} | sort --ignore-case --unique
 }
 
 calculate_stamp() {
@@ -1084,6 +1107,12 @@ calculate_stamp() {
   stamp="$PKG_DIR $PROJECT_DIR/$PROJECT/patches/$PKG_NAME $PROJECT_DIR/$PROJECT/packages/$PKG_NAME"
   [ -n "$DEVICE" ] && stamp+=" $PROJECT_DIR/$PROJECT/devices/$DEVICE/patches/$PKG_NAME"
   [ -n "$PKG_NEED_UNPACK" ] && stamp+=" $PKG_NEED_UNPACK"
+
+  if [ -n "$PKG_STAMP_VAR" ]; then
+    local TMP_VAR="$(get_build_dir $PKG_NAME)/.pkg_stamp_var"
+    echo "$PKG_STAMP_VAR" > $TMP_VAR
+    stamp+=" $TMP_VAR"
+  fi
 
   data="$(find -L ${stamp} -type f -not -name '.*' 2>/dev/null | sed "s|^${ROOT}/||" | LC_ALL=C sort -u | xargs sha256sum)"
   [ -n "${PKG_STAMP}" ] && data+=$'\n'"$(echo "${PKG_STAMP}" | sha256sum)"

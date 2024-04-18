@@ -3,8 +3,8 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="mesa"
-PKG_VERSION="25.3.3"
-PKG_SHA256="05328b3891c000e6a110a3e7321d8bfbb21631d132bf86bd3d4a8f45c535ef6b"
+PKG_VERSION="24.2.3"
+PKG_SHA256="4ea18b1155a4544a09f7361848974768f6f73c19d88f63de2ec650be313b2d0c"
 PKG_LICENSE="OSS"
 PKG_SITE="http://www.mesa3d.org/"
 PKG_URL="https://mesa.freedesktop.org/archive/mesa-${PKG_VERSION}.tar.xz"
@@ -14,22 +14,36 @@ PKG_LONGDESC="Mesa is a 3-D graphics library with an API."
 
 get_graphicdrivers
 
+# Mesa requires at least one Gallium driver for DRI/GBM builds.
+# Some CoreELEC configurations (e.g. proprietary GLES stacks) can result in an
+# empty GALLIUM_DRIVERS list; default to swrast to satisfy libgbm/libgallium.
+MESA_GALLIUM_DRIVERS="${GALLIUM_DRIVERS// /,}"
+if [ -z "${MESA_GALLIUM_DRIVERS}" ]; then
+  # Use softpipe only (avoid llvmpipe which requires LLVM).
+  MESA_GALLIUM_DRIVERS="softpipe"
+fi
+
 if [ "${DEVICE}" = "Dragonboard" ]; then
   PKG_DEPENDS_TARGET+=" libarchive libxml2 lua54"
 fi
 
 PKG_MESON_OPTS_HOST="-Dglvnd=disabled \
                      -Dgallium-drivers=iris \
+                     -Dgallium-vdpau=disabled \
                      -Dplatforms= \
+                     -Ddri3=disabled \
                      -Dglx=disabled \
-                     -Dvulkan-drivers= \
-                     -Dshared-llvm=disabled \
-                     -Dtools=panfrost"
+                     -Dvulkan-drivers="
 
-PKG_MESON_OPTS_TARGET="-Dgallium-drivers=${GALLIUM_DRIVERS// /,} \
+PKG_MESON_OPTS_TARGET="-Dgallium-drivers=${MESA_GALLIUM_DRIVERS} \
                        -Dgallium-extra-hud=false \
                        -Dgallium-rusticl=false \
+                       -Dgallium-omx=disabled \
+                       -Dgallium-nine=false \
+                       -Dgallium-opencl=disabled \
                        -Dshader-cache=enabled \
+                       -Dshared-glapi=enabled \
+                       -Dopencl-spirv=false \
                        -Dopengl=true \
                        -Dgbm=enabled \
                        -Degl=enabled \
@@ -37,19 +51,28 @@ PKG_MESON_OPTS_TARGET="-Dgallium-drivers=${GALLIUM_DRIVERS// /,} \
                        -Dlibunwind=disabled \
                        -Dlmsensors=disabled \
                        -Dbuild-tests=false \
-                       -Dmicrosoft-clc=disabled"
+                       -Ddraw-use-llvm=false \
+                       -Dmicrosoft-clc=disabled \
+                       -Dselinux=false \
+                       -Dosmesa=false"
 
 if [ "${DISPLAYSERVER}" = "x11" ]; then
   PKG_DEPENDS_TARGET+=" xorgproto libXext libXdamage libXfixes libXxf86vm libxcb libX11 libxshmfence libXrandr"
   export X11_INCLUDES=
   PKG_MESON_OPTS_TARGET+=" -Dplatforms=x11 \
+                           -Ddri3=enabled \
                            -Dglx=dri"
 elif [ "${DISPLAYSERVER}" = "wl" ]; then
   PKG_DEPENDS_TARGET+=" wayland wayland-protocols"
   PKG_MESON_OPTS_TARGET+=" -Dplatforms=wayland \
+                           -Ddri3=disabled \
                            -Dglx=disabled"
 else
-  PKG_MESON_OPTS_TARGET+=" -Dplatforms="" \
+  # Headless build (no X11/Wayland): avoid X11/XCB deps while still building
+  # DRI/GBM (libgbm links against libgallium_dri).
+  PKG_DEPENDS_TARGET+=" wayland wayland-protocols"
+  PKG_MESON_OPTS_TARGET+=" -Dplatforms=wayland \
+                           -Ddri3=disabled \
                            -Dglx=disabled"
 fi
 
@@ -57,23 +80,12 @@ if listcontains "${GRAPHIC_DRIVERS}" "etnaviv"; then
   PKG_DEPENDS_TARGET+=" pycparser:host"
 fi
 
-if listcontains "${GRAPHIC_DRIVERS}" "(i915|r300)"; then
-  PKG_MESON_OPTS_TARGET+=" -Ddraw-use-llvm=true"
-else
-  PKG_MESON_OPTS_TARGET+=" -Ddraw-use-llvm=false"
+if listcontains "${GRAPHIC_DRIVERS}" "iris"; then
+  PKG_DEPENDS_TARGET+=" mesa:host"
+  PKG_MESON_OPTS_TARGET+=" -Dintel-clc=system"
 fi
 
-if listcontains "${GRAPHIC_DRIVERS}" "(iris|panfrost)"; then
-  if [ "${USE_REUSABLE}" = "yes" ]; then
-    PKG_DEPENDS_TARGET+=" mesa-reusable"
-  else
-    PKG_DEPENDS_TARGET+=" mesa:host"
-  fi
-  PKG_MESON_OPTS_TARGET+=" -Dmesa-clc=system -Dprecomp-compiler=system"
-fi
-
-if listcontains "${GRAPHIC_DRIVERS}" "(nvidia|nvidia-ng)" ||
-              [ "${OPENGL_SUPPORT}" = "yes" -a "${DISPLAYSERVER}" != "x11" ]; then
+if listcontains "${GRAPHIC_DRIVERS}" "(nvidia|nvidia-ng)"; then
   PKG_DEPENDS_TARGET+=" libglvnd"
   PKG_MESON_OPTS_TARGET+=" -Dglvnd=enabled"
 else
@@ -87,53 +99,46 @@ else
   PKG_MESON_OPTS_TARGET+=" -Dllvm=disabled"
 fi
 
+if [ "${VDPAU_SUPPORT}" = "yes" -a "${DISPLAYSERVER}" = "x11" ]; then
+  PKG_DEPENDS_TARGET+=" libvdpau"
+  PKG_MESON_OPTS_TARGET+=" -Dgallium-vdpau=enabled"
+else
+  PKG_MESON_OPTS_TARGET+=" -Dgallium-vdpau=disabled"
+fi
+
 if [ "${VAAPI_SUPPORT}" = "yes" ] && listcontains "${GRAPHIC_DRIVERS}" "(r600|radeonsi)"; then
   PKG_DEPENDS_TARGET+=" libva"
   PKG_MESON_OPTS_TARGET+=" -Dgallium-va=enabled \
-                           -Dvideo-codecs=vc1dec,h264dec,h264enc,h265dec,h265enc,av1dec,av1enc,vp9dec"
+                           -Dvideo-codecs=vc1dec,h264dec,h264enc,h265dec,h265enc"
 else
   PKG_MESON_OPTS_TARGET+=" -Dgallium-va=disabled"
 fi
 
-if [ "${OPENGLES_SUPPORT}" = "yes" ]; then
-  PKG_MESON_OPTS_TARGET+=" -Dgles1=disabled -Dgles2=enabled"
+if listcontains "${GRAPHIC_DRIVERS}" "vmware"; then
+  PKG_MESON_OPTS_TARGET+=" -Dgallium-xa=enabled"
 else
+  PKG_MESON_OPTS_TARGET+=" -Dgallium-xa=disabled"
+fi
+
+if [ "${DISPLAYSERVER}" = "x11" -o "${DISPLAYSERVER}" = "wl" ]; then
+  if [ "${OPENGLES_SUPPORT}" = "yes" ]; then
+    PKG_MESON_OPTS_TARGET+=" -Dgles1=disabled -Dgles2=enabled"
+  else
+    PKG_MESON_OPTS_TARGET+=" -Dgles1=disabled -Dgles2=disabled"
+  fi
+else
+  # Headless build: keep GLES disabled (GBM only).
   PKG_MESON_OPTS_TARGET+=" -Dgles1=disabled -Dgles2=disabled"
 fi
 
 if [ "${VULKAN_SUPPORT}" = "yes" ]; then
-  PKG_DEPENDS_TARGET+=" ${VULKAN} vulkan-tools ply:host"
+  PKG_DEPENDS_TARGET+=" ${VULKAN} vulkan-tools"
   PKG_MESON_OPTS_TARGET+=" -Dvulkan-drivers=${VULKAN_DRIVERS_MESA// /,}"
 else
   PKG_MESON_OPTS_TARGET+=" -Dvulkan-drivers="
 fi
 
 makeinstall_host() {
-  host_files="src/compiler/clc/mesa_clc src/compiler/spirv/vtn_bindgen2 src/panfrost/clc/panfrost_compile"
-
-  if listcontains "${BUILD_REUSABLE}" "(all|mesa:host)"; then
-    # Build the reusable mesa:host for both local and to be added to a GitHub release
-    strip ${host_files}
-    upx --lzma ${host_files}
-
-    REUSABLE_SOURCES="${SOURCES}/mesa-reusable"
-    MESA_HOST="mesa-reusable-${OS_VERSION}-${PKG_VERSION}"
-    REUSABLE_SOURCE_NAME=${MESA_HOST}-${MACHINE_HARDWARE_NAME}.tar
-
-    mkdir -p "${TARGET_IMG}"
-
-    tar cf ${TARGET_IMG}/${REUSABLE_SOURCE_NAME} --transform='s|.*/||' ${host_files}
-    sha256sum ${TARGET_IMG}/${REUSABLE_SOURCE_NAME} | \
-      cut -d" " -f1 >${TARGET_IMG}/${REUSABLE_SOURCE_NAME}.sha256
-
-    if listcontains "${BUILD_REUSABLE}" "save-local"; then
-      mkdir -p "${REUSABLE_SOURCES}"
-      cp -p ${TARGET_IMG}/${REUSABLE_SOURCE_NAME} ${REUSABLE_SOURCES}
-      cp -p ${TARGET_IMG}/${REUSABLE_SOURCE_NAME}.sha256 ${REUSABLE_SOURCES}
-      echo "save-local" >${REUSABLE_SOURCES}/${REUSABLE_SOURCE_NAME}.url
-    fi
-  fi
-
   mkdir -p "${TOOLCHAIN}/bin"
-    cp -a ${host_files} "${TOOLCHAIN}/bin"
+    cp -a src/intel/compiler/intel_clc "${TOOLCHAIN}/bin"
 }

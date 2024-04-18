@@ -3,8 +3,8 @@
 # Copyright (C) 2019-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="bluez"
-PKG_VERSION="5.85"
-PKG_SHA256="ad028e49254bc4551a13f08fe7904c63d02ba650d77be8ae15bb3b0a0ad94a6f"
+PKG_VERSION="5.78"
+PKG_SHA256="830fed1915c5d375b8de0f5e6f45fcdea0dcc5ff5ffb3d31db6ed0f00d73c5e3"
 PKG_LICENSE="GPL"
 PKG_SITE="http://www.bluez.org/"
 PKG_URL="https://www.kernel.org/pub/linux/bluetooth/${PKG_NAME}-${PKG_VERSION}.tar.xz"
@@ -71,7 +71,8 @@ post_makeinstall_target() {
   # bluez looks in /etc/firmware/
     ln -sf /usr/lib/firmware ${INSTALL}/etc/firmware
 
-  # kodi requires bluez pkgconfig
+  # pulseaudio checks for bluez via pkgconfig but lib is not actually needed
+    sed -i 's/-lbluetooth//g' ${PKG_BUILD}/lib/bluez.pc
     cp -P ${PKG_BUILD}/lib/bluez.pc ${SYSROOT_PREFIX}/usr/lib/pkgconfig
 }
 

@@ -108,7 +108,7 @@ else:
     for event in events:
         slotn[event.slot] = 0
 
-# Accumulate information in this hash - meh
+# Acumulate information in this hash - meh
 data = {"previous_status": None, "isactive": False, "statuses": {}}
 for status in ALL_STATUSES:
     data["statuses"][status] = {"enabled": False, "count": 0, "start": 0.0, "total": 0.0}

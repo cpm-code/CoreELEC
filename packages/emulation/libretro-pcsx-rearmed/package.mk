@@ -2,8 +2,8 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="libretro-pcsx-rearmed"
-PKG_VERSION="228c14e10e9a8fae0ead8adf30daad2cdd8655b9"
-PKG_SHA256="0530dc5772466c31900a5bb8b412b67f82a01d8cbf771e07fe25d5799c161f0a"
+PKG_VERSION="459f02ad03fa10b5c403fed724d47fe5adfd5fb1"
+PKG_SHA256="2d305cb8a24cfb33c911b58d10b4f4f2e4e7863fe099a348337a464bdf0638dc"
 PKG_LICENSE="GPLv2"
 PKG_SITE="https://github.com/libretro/pcsx_rearmed"
 PKG_URL="https://github.com/libretro/pcsx_rearmed/archive/${PKG_VERSION}.tar.gz"
@@ -39,7 +39,7 @@ if [ "${ARCH}" = "arm" ]; then
   if [ "${DEVICE}" = "OdroidGoAdvance" ]; then
     sed -e "s|armv8-a|armv8-a+crc|" \
         -i ../Makefile.libretro
-    PKG_MAKE_OPTS_TARGET+=" platform=classic_armv8_a35"
+    PKG_MAKE_OPTS_TARGET+=" platfrom=classic_armv8_a35"
   else
     PKG_MAKE_OPTS_TARGET+=" platform=unix"
   fi

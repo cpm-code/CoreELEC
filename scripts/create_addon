@@ -15,7 +15,7 @@ DESCRIPTION
        create_addon builds one or more addons.
 
        --show-only
-              output the list of packages, which are intended to build
+              output the list of packages, which are intented to build
 
        --help shows this message
 
@@ -68,7 +68,7 @@ get_addons() {
 
   exit() { exited=1; }
 
-  for pkgpath in $(cat "${_CACHE_PACKAGE_LOCAL}" "${_CACHE_PACKAGE_GLOBAL}" | grep -E "${paths}"); do
+  for pkgpath in $(cat "${_CACHE_PACKAGE_LOCAL_DEVICE}" "${_CACHE_PACKAGE_LOCAL}" "${_CACHE_PACKAGE_GLOBAL}" | grep -E "${paths}"); do
     if [ -n "${filter}" ]; then
       [[ ${pkgpath} =~ ^.*/${filter}@?+?@ ]] || continue
     fi
@@ -79,7 +79,7 @@ get_addons() {
 
     validpkg="no"
     VERIFY_FAIL=
-    # Should only build embedded addons when they are explicitly specified in the addon list
+    # Should only build embedded addons when they are explictly specified in the addon list
     if [ "${PKG_IS_ADDON}" = "embedded" ]; then
       if [ -n "${filter}" ]; then
         verify_addon && validpkg="yes"

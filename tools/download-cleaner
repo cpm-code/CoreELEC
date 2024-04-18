@@ -87,7 +87,7 @@ for SOURCE_PACKAGE in $(find "${SOURCES}/" -mindepth 1 -type d); do
     CUR_PACKAGE_FILE=$(basename "${PACKAGE_SOURCE_FILE}")
 
     for FILE in $(find "${SOURCE_PACKAGE}/" -type f); do
-      # don't test auxiliary files
+      # don't test auxilliary files
       if [[ "${FILE}" = *.url ]] || [[ "${FILE}" = *.sha256 ]]; then
         continue
       fi

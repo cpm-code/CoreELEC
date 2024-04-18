@@ -2,8 +2,8 @@
 # Copyright (C) 2021-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="pipewire"
-PKG_VERSION="1.5.84"
-PKG_SHA256="b9d137dcf18ff228d67312f9a205e3ea8766a13d9a841a029832568ea8928efe"
+PKG_VERSION="1.2.5"
+PKG_SHA256="4c3209c78ce63af6bd2658e5092c220d844fc2b7a039bbbb950e71890cc8ac78"
 PKG_LICENSE="LGPL"
 PKG_SITE="https://pipewire.org"
 PKG_URL="https://github.com/PipeWire/pipewire/archive/${PKG_VERSION}.tar.gz"
@@ -31,7 +31,7 @@ PKG_MESON_OPTS_TARGET="-Ddocs=disabled \
                        -Dinstalled_tests=disabled \
                        -Dgstreamer=disabled \
                        -Dgstreamer-device-provider=disabled \
-                       -Dlibsystemd=enabled \
+                       -Dsystemd=enabled \
                        -Dsystemd-system-service=enabled \
                        -Dsystemd-user-service=disabled \
                        -Dpipewire-alsa=enabled \

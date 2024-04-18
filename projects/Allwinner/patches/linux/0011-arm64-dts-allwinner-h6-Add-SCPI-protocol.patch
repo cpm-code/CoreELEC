@@ -1,18 +1,16 @@
-From 315918a6283718ac91064d2e70cc47cd31c0d24a Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Samuel Holland <samuel@sholland.org>
 Date: Sat, 14 Dec 2019 20:54:40 -0600
-Subject: [PATCH 11/84] arm64: dts: allwinner: h6: Add SCPI protocol
+Subject: [PATCH] arm64: dts: allwinner: h6: Add SCPI protocol
 
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
  arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi | 20 ++++++++++++++++++++
  1 file changed, 20 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
-index d7658b710a02..cdded95e0cd1 100644
 --- a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
 +++ b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
-@@ -122,6 +122,13 @@ psci {
+@@ -88,6 +88,13 @@
  		method = "smc";
  	};
  
@@ -26,7 +24,7 @@ index d7658b710a02..cdded95e0cd1 100644
  	timer {
  		compatible = "arm,armv8-timer";
  		arm,no-tick-in-suspend;
-@@ -241,6 +248,19 @@ syscon: syscon@3000000 {
+@@ -196,6 +203,19 @@
  			#size-cells = <1>;
  			ranges;
  
@@ -46,6 +44,3 @@ index d7658b710a02..cdded95e0cd1 100644
  			sram_c: sram@28000 {
  				compatible = "mmio-sram";
  				reg = <0x00028000 0x1e000>;
--- 
-2.43.0
-

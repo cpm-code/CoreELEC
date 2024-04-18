@@ -1,0 +1,12 @@
+[Unit]
+Description=Apply CPU affinity tweaks
+Before=kodi.service
+ConditionPathExists=/usr/lib/coreelec/cpu-affinity-tweaks.sh
+
+[Service]
+Type=oneshot
+ExecStart=-/bin/sh /usr/lib/coreelec/cpu-affinity-tweaks.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=kodi.service

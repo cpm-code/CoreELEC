@@ -14,7 +14,7 @@ Subject: [PATCH] Use a wrapper to setup service addons
 @@ -660,6 +660,37 @@ CAddonVersion CAddon::GetDependencyVersi
    return m_addonInfo->DependencyVersion(dependencyID);
  }
- 
+
 +void LEAddonHook(const AddonPtr& addon, const LE_ADDON_CONTEXT context) {
 +
 +  if (addon->Type() == AddonType::SERVICE) {
@@ -56,23 +56,23 @@ Subject: [PATCH] Use a wrapper to setup service addons
 +
 +  LEAddonHook(addon, LE_ADDON_POST_INSTALL);
    // OE
- 
+
    addon->OnPostInstall(update, modal);
 @@ -696,6 +729,8 @@ void OnPostInstall(const AddonPtr& addon
- 
+
  void OnPreUnInstall(const AddonPtr& addon)
  {
 +  LEAddonHook(addon, LE_ADDON_PRE_UNINSTALL);
 +
    addon->OnPreUnInstall();
  }
- 
+
 --- a/xbmc/addons/Addon.h
 +++ b/xbmc/addons/Addon.h
 @@ -31,6 +31,15 @@ void OnPostInstall(const AddonPtr& addon
  void OnPreUnInstall(const AddonPtr& addon);
  void OnPostUnInstall(const AddonPtr& addon);
- 
+
 +typedef enum {
 +  LE_ADDON_ENABLED,
 +  LE_ADDON_DISABLED,
@@ -108,6 +108,6 @@ Subject: [PATCH] Use a wrapper to setup service addons
      return false;
    m_disabled.erase(id);
 +  ADDON::LEAddonHook(addon, ADDON::LE_ADDON_ENABLED);
- 
+
    // If enabling a repo add-on without an origin, set its origin to its own id
    if (addon->HasType(AddonType::REPOSITORY) && addon->Origin().empty())

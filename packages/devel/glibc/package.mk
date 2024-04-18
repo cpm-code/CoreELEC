@@ -3,8 +3,8 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="glibc"
-PKG_VERSION="2.42"
-PKG_SHA256="d1775e32e4628e64ef930f435b67bb63af7599acb6be2b335b9f19f16509f17f"
+PKG_VERSION="2.40"
+PKG_SHA256="19a890175e9263d748f627993de6f4b1af9cd21e03f080e4bfb3a1fac10205a2"
 PKG_LICENSE="GPL"
 PKG_SITE="https://www.gnu.org/software/libc/"
 PKG_URL="https://ftp.gnu.org/pub/gnu/glibc/${PKG_NAME}-${PKG_VERSION}.tar.xz"
@@ -12,6 +12,18 @@ PKG_DEPENDS_TARGET="ccache:host autotools:host linux:host gcc:bootstrap Python3:
 PKG_DEPENDS_INIT="glibc"
 PKG_LONGDESC="The Glibc package contains the main C library."
 PKG_BUILD_FLAGS="+bfd"
+
+case "${LINUX}" in
+  amlogic-4.9)
+    OPT_ENABLE_KERNEL=4.9.0
+    ;;
+  amlogic-5.*)
+    OPT_ENABLE_KERNEL=5.4.0
+    ;;
+  *)
+    OPT_ENABLE_KERNEL=6.1.0
+    ;;
+esac
 
 if [ "${TARGET_ARCH}" = "arm" ] || [ "${TARGET_ARCH}" = "aarch64" ]; then
   PKG_PATCH_DIRS="widevine-arm"
@@ -31,7 +43,7 @@ PKG_CONFIGURE_OPTS_TARGET="BASH_SHELL=/bin/sh \
                            --with-__thread \
                            --with-binutils=${BUILD}/toolchain/bin \
                            --with-headers=${SYSROOT_PREFIX}/usr/include \
-                           --enable-kernel=6.12.0 \
+                           --enable-kernel=${OPT_ENABLE_KERNEL} \
                            --without-cvs \
                            --without-gd \
                            --disable-build-nscd \

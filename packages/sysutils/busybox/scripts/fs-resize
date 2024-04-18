@@ -20,7 +20,7 @@ if [ -e /storage/.please_resize_me ] ; then
   date -Iseconds >>$LOG
 
   # this sh** was never intended to be used
-  # on an already installed and running system
+  # on already installed and runing system
   if [ -d /storage/.kodi -o -d /storage/.config -o -d /storage/.cache ] ; then
     rm -f /storage/.please_resize_me
     sync
@@ -64,7 +64,7 @@ if [ -e /storage/.please_resize_me ] ; then
     StartProgressLog spinner "Resizing partition...   " "parted -s -f -m $DISK resizepart 2 100% >>$LOG 2>&1"
     StartProgressLog spinner "Creating file system... " "mke2fs -F -q -t ext4 -m 0 -L \"$LABEL\" -U \"$UUID\" $PART >>$LOG 2>&1"
     StartProgressLog spinner "Checking file system... " "e2fsck -f -p $PART >>$LOG 2>&1"
-    StartProgress countdown "Rebooting in 15s...     " 15 "NOW"
+    StartProgress countdown "Rebooting in 2s...     " 2 "NOW"
   else
     echo "Partition was not detected - resizing aborted."
     StartProgress countdown "Rebooting in 15s... " 15 "NOW"

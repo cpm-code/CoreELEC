@@ -1,0 +1,81 @@
+diff --git a/xbmc/cores/VideoPlayer/DVDInputStreams/DVDInputStreamBluray.cpp b/xbmc/cores/VideoPlayer/DVDInputStreams/DVDInputStreamBluray.cpp
+--- a/xbmc/cores/VideoPlayer/DVDInputStreams/DVDInputStreamBluray.cpp
++++ b/xbmc/cores/VideoPlayer/DVDInputStreams/DVDInputStreamBluray.cpp
+@@ -39,6 +39,7 @@
+ #include <vector>
+
+ #include <libbluray/bluray.h>
++#include <libbluray/bluray-version.h>
+ #include <libbluray/mpls_data.h>
+ #include <libbluray/log_control.h>
+
+@@ -565,10 +566,11 @@
+     CLog::Log(LOGDEBUG, "CDVDInputStreamBluray - BD_EVENT_PLAYITEM {}", m_event.param);
+     if (m_titleInfo && m_event.param < m_titleInfo->clip_count)
+       m_clip = &m_titleInfo->clips[m_event.param];
+-    uint64_t clip_start, clip_in, bytepos;
+-    ret = bd_get_clip_infos(m_bd, m_event.param, &clip_start, &clip_in, &bytepos, nullptr);
+-    if (ret)
+-      m_clipStartTime = clip_start / 90;
++    // libbluray 1.4.x does not expose bd_get_clip_infos(); use clip start_time from title info.
++    if (m_clip)
++      m_clipStartTime = m_clip->start_time / 90;
++    else
++      m_clipStartTime = 0;
+     break;
+
+   case BD_EVENT_CHAPTER:
+@@ -1278,6 +1280,7 @@
+
+   if (!m_bMVCDisabled)
+   {
++#if defined(BLURAY_VERSION) && (BLURAY_VERSION >= BLURAY_VERSION_CODE(1, 5, 0))
+     MPLS_PL * mpls = bd_get_title_mpls(m_bd);
+     if (mpls)
+     {
+@@ -1295,6 +1298,10 @@
+         }
+       }
+     }
++#else
++    // libbluray < 1.5: no public MPLS access for MVC extension streams
++    m_bMVCPlayback = false;
++#endif
+   }
+   CloseMVCDemux();
+   return true;
+@@ -1304,6 +1311,7 @@
+ {
+   if (!m_bMVCDisabled)
+   {
++#if defined(BLURAY_VERSION) && (BLURAY_VERSION >= BLURAY_VERSION_CODE(1, 5, 0))
+     MPLS_PL *mpls = bd_get_title_mpls(m_bd);
+     if (mpls)
+     {
+@@ -1316,6 +1324,10 @@
+         }
+       }
+     }
++#else
++    // libbluray < 1.5: no public MPLS access for MVC extension streams
++    (void)pid;
++#endif
+   }
+
+   return 0;
+@@ -1356,6 +1365,9 @@
+
+ bool CDVDInputStreamBluray::OpenMVCDemux(int playItem)
+ {
++#if !defined(BLURAY_VERSION) || (BLURAY_VERSION < BLURAY_VERSION_CODE(1, 5, 0))
++  return false;
++#else
+   MPLS_PL *pl = bd_get_title_mpls(m_bd);
+   if (!pl)
+     return false;
+@@ -1394,6 +1406,7 @@
+
+   m_nMVCClip = m_titleInfo->clips + playItem;
+   return true;
++#endif
+ }

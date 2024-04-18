@@ -2,8 +2,8 @@
 # Copyright (C) 2024-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="pypackaging"
-PKG_VERSION="25.0"
-PKG_SHA256="d443872c98d677bf60f6a1f2f8c1cb748e8fe762d2bf9d3148b5599295b0fc4f"
+PKG_VERSION="24.1"
+PKG_SHA256="026ed72c8ed3fcce5bf8950572258698927fd1dbda10a5e981cdf0ac37f4f002"
 PKG_LICENSE="BSD"
 PKG_SITE="https://pypi.org/project/build/"
 PKG_URL="https://files.pythonhosted.org/packages/source/p/packaging/packaging-${PKG_VERSION}.tar.gz"
