@@ -11,7 +11,7 @@ PKG_URL="https://tuxera.com/opensource/${PKG_NAME}-${PKG_VERSION}.tgz"
 PKG_DEPENDS_TARGET="toolchain fuse libgcrypt"
 PKG_LONGDESC="A NTFS driver with read and write support."
 PKG_TOOLCHAIN="autotools"
-PKG_BUILD_FLAGS="+lto"
+PKG_BUILD_FLAGS="+lto +speed -sysroot"
 
 PKG_CONFIGURE_OPTS_TARGET="--exec-prefix=/usr/ \
                            --disable-dependency-tracking \
@@ -21,22 +21,6 @@ PKG_CONFIGURE_OPTS_TARGET="--exec-prefix=/usr/ \
                            --enable-ntfsprogs \
                            --disable-crypto \
                            --with-fuse=external \
-                           --with-uuid"
+                           --with-uuid \
+                           --disable-mount-helper"
 
-post_makeinstall_target() {
-  # dont include ntfsprogs.
-  for i in ${INSTALL}/usr/bin/*; do
-    if [ "$(basename ${i})" != "ntfs-3g" ]; then
-      rm ${i}
-    fi
-  done
-
-  rm -rf ${INSTALL}/sbin
-  rm -rf ${INSTALL}/usr/sbin/ntfsclone
-  rm -rf ${INSTALL}/usr/sbin/ntfscp
-  rm -rf ${INSTALL}/usr/sbin/ntfsundelete
-
-  mkdir -p ${INSTALL}/usr/sbin
-    ln -sf /usr/bin/ntfs-3g ${INSTALL}/usr/sbin/mount.ntfs
-    ln -sf /usr/sbin/mkntfs ${INSTALL}/usr/sbin/mkfs.ntfs
-}
