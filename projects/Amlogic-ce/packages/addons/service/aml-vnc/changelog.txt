@@ -1,3 +1,7 @@
+21.1.1.7
+- add missing service alias
+- hide password on settings page
+
 21.0.6
 - bump package to 1.2.0
 
