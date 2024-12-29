@@ -1,0 +1,193 @@
+From 9db7710a3e4ae7900b22c50b21479c941b3f33ed Mon Sep 17 00:00:00 2001
+From: Nick Rosbrook <enr0n@ubuntu.com>
+Date: Fri, 15 Mar 2024 15:14:05 -0400
+Subject: [PATCH] shared/install: correctly install alias for units outside
+ search path
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Currently, if a unit file is enabled from outside of the search path,
+and that unit has an alias, then the symlink ends up pointing outside of
+the search path too. For example:
+
+ $ cat /tmp/a.service
+ [Service]
+ ExecStart=sleep infinity
+
+ [Install]
+ Alias=b.service
+ WantedBy=multi-user.target
+
+ $ systemctl enable /tmp/a.service
+ Created symlink /etc/systemd/system/a.service → /tmp/a.service.
+ Created symlink /etc/systemd/system/b.service → /tmp/a.service.
+ Created symlink /etc/systemd/system/multi-user.target.wants/a.service → /tmp/a.service.
+
+This then means the alias is treated as a separate unit:
+
+ $ systemctl start a.service
+ $ sudo systemctl status a
+ ● a.service
+  Loaded: loaded (/etc/systemd/system/a.service; enabled; preset: enabled)
+  Active: active (running) since Fri 2024-03-15 15:17:49 EDT; 9s ago
+ Main PID: 769593 (sleep)
+   Tasks: 1 (limit: 18898)
+  Memory: 220.0K
+     CPU: 5ms
+  CGroup: /system.slice/a.service
+          └─769593 sleep infinity
+
+ Mar 15 15:17:49 six systemd[1]: Started a.service.
+ $ sudo systemctl status b
+ ○ b.service
+  Loaded: loaded (/etc/systemd/system/b.service; alias)
+  Active: inactive (dead)
+
+To fix this, make sure the alias uses a target that is inside the search
+path. Since the unit file itself is outside of the search path, a
+symlink inside the search path will have been created already. Hence,
+just point the alias symlink to that recently created symlink.
+---
+ src/shared/install.c          | 16 ++++++++++++++--
+ src/test/test-install-root.c  | 25 +++++++++++++++++++------
+ test/test-systemctl-enable.sh |  4 ++--
+ 3 files changed, 35 insertions(+), 10 deletions(-)
+
+diff --git a/src/shared/install.c b/src/shared/install.c
+index 81f898f28a477..12bf083a2e60d 100644
+--- a/src/shared/install.c
++++ b/src/shared/install.c
+@@ -1941,7 +1941,7 @@ static int install_info_symlink_alias(
+         assert(config_path);
+ 
+         STRV_FOREACH(s, info->aliases) {
+-                _cleanup_free_ char *alias_path = NULL, *dst = NULL, *dst_updated = NULL;
++                _cleanup_free_ char *alias_path = NULL, *alias_target = NULL, *dst = NULL, *dst_updated = NULL;
+ 
+                 r = install_name_printf(scope, info, *s, &dst);
+                 if (r < 0) {
+@@ -1960,6 +1960,18 @@ static int install_info_symlink_alias(
+                 if (!alias_path)
+                         return -ENOMEM;
+ 
++                r = in_search_path(lp, info->path);
++                if (r < 0)
++                        return r;
++                if (r == 0) {
++                        /* The unit path itself is outside of the search path. To
++                         * correctly apply the alias, we need the alias symlink to
++                         * point to the symlink that was created in the search path. */
++                        alias_target = path_join(config_path, info->name);
++                        if (!alias_target)
++                                return -ENOMEM;
++                }
++
+                 bool broken;
+                 r = chase(alias_path, lp->root_dir, CHASE_NONEXISTENT, /* ret_path = */ NULL, /* ret_fd = */ NULL);
+                 if (r < 0 && r != -ENOENT) {
+@@ -1968,7 +1980,7 @@ static int install_info_symlink_alias(
+                 }
+                 broken = r == 0; /* symlink target does not exist? */
+ 
+-                RET_GATHER(ret, create_symlink(lp, info->path, alias_path, force || broken, changes, n_changes));
++                RET_GATHER(ret, create_symlink(lp, alias_target ?: info->path, alias_path, force || broken, changes, n_changes));
+         }
+ 
+         return ret;
+diff --git a/src/test/test-install-root.c b/src/test/test-install-root.c
+index efd75b2a6798b..c55445079c6c6 100644
+--- a/src/test/test-install-root.c
++++ b/src/test/test-install-root.c
+@@ -200,7 +200,7 @@ TEST(basic_mask_and_enable) {
+ }
+ 
+ TEST(linked_units) {
+-        const char *p, *q;
++        const char *p, *q, *s;
+         UnitFileState state;
+         InstallChange *changes = NULL;
+         size_t n_changes = 0, i;
+@@ -224,6 +224,7 @@ TEST(linked_units) {
+         p = strjoina(root, "/opt/linked.service");
+         assert_se(write_string_file(p,
+                                     "[Install]\n"
++                                    "Alias=linked-alias.service\n"
+                                     "WantedBy=multi-user.target\n", WRITE_STRING_FILE_CREATE) >= 0);
+ 
+         p = strjoina(root, "/opt/linked2.service");
+@@ -275,31 +276,41 @@ TEST(linked_units) {
+ 
+         /* Now, let's not just link it, but also enable it */
+         assert_se(unit_file_enable(RUNTIME_SCOPE_SYSTEM, 0, root, STRV_MAKE("/opt/linked.service"), &changes, &n_changes) >= 0);
+-        assert_se(n_changes == 2);
++        assert_se(n_changes == 3);
+         p = strjoina(root, SYSTEM_CONFIG_UNIT_DIR"/multi-user.target.wants/linked.service");
+         q = strjoina(root, SYSTEM_CONFIG_UNIT_DIR"/linked.service");
++        s = strjoina(root, SYSTEM_CONFIG_UNIT_DIR"/linked-alias.service");
+         for (i = 0 ; i < n_changes; i++) {
+                 assert_se(changes[i].type == INSTALL_CHANGE_SYMLINK);
+-                assert_se(streq(changes[i].source, "/opt/linked.service"));
++
++                if (s && streq(changes[i].path, s))
++                        /* The alias symlink should point within the search path. */
++                        assert_se(streq(changes[i].source, SYSTEM_CONFIG_UNIT_DIR"/linked.service"));
++                else
++                        assert_se(streq(changes[i].source, "/opt/linked.service"));
+ 
+                 if (p && streq(changes[i].path, p))
+                         p = NULL;
+                 else if (q && streq(changes[i].path, q))
+                         q = NULL;
++                else if (s && streq(changes[i].path, s))
++                        s = NULL;
+                 else
+                         assert_not_reached();
+         }
+-        assert_se(!p && !q);
++        assert_se(!p && !q && !s);
+         install_changes_free(changes, n_changes);
+         changes = NULL; n_changes = 0;
+ 
+         assert_se(unit_file_get_state(RUNTIME_SCOPE_SYSTEM, root, "linked.service", &state) >= 0 && state == UNIT_FILE_ENABLED);
++        assert_se(unit_file_get_state(RUNTIME_SCOPE_SYSTEM, root, "linked-alias.service", &state) >= 0 && state == UNIT_FILE_ALIAS);
+ 
+         /* And let's unlink it again */
+         assert_se(unit_file_disable(RUNTIME_SCOPE_SYSTEM, 0, root, STRV_MAKE("linked.service"), &changes, &n_changes) >= 0);
+-        assert_se(n_changes == 2);
++        assert_se(n_changes == 3);
+         p = strjoina(root, SYSTEM_CONFIG_UNIT_DIR"/multi-user.target.wants/linked.service");
+         q = strjoina(root, SYSTEM_CONFIG_UNIT_DIR"/linked.service");
++        s = strjoina(root, SYSTEM_CONFIG_UNIT_DIR"/linked-alias.service");
+         for (i = 0; i < n_changes; i++) {
+                 assert_se(changes[i].type == INSTALL_CHANGE_UNLINK);
+ 
+@@ -307,10 +318,12 @@ TEST(linked_units) {
+                         p = NULL;
+                 else if (q && streq(changes[i].path, q))
+                         q = NULL;
++                else if (s && streq(changes[i].path, s))
++                        s = NULL;
+                 else
+                         assert_not_reached();
+         }
+-        assert_se(!p && !q);
++        assert_se(!p && !q && !s);
+         install_changes_free(changes, n_changes);
+         changes = NULL; n_changes = 0;
+ 
+diff --git a/test/test-systemctl-enable.sh b/test/test-systemctl-enable.sh
+index 8427f6849bfd9..5615c900f4861 100644
+--- a/test/test-systemctl-enable.sh
++++ b/test/test-systemctl-enable.sh
+@@ -534,8 +534,8 @@ test ! -h "$root/etc/systemd/system/link5alias2.service"
+ 
+ "$systemctl" --root="$root" enable '/link5copy.service'
+ islink "$root/etc/systemd/system/link5copy.service" '/link5copy.service'
+-islink "$root/etc/systemd/system/link5alias.service" '/link5copy.service'
+-islink "$root/etc/systemd/system/link5alias2.service" '/link5copy.service'
++islink "$root/etc/systemd/system/link5alias.service" '/etc/systemd/system/link5copy.service'
++islink "$root/etc/systemd/system/link5alias2.service" '/etc/systemd/system/link5copy.service'
+ 
+ "$systemctl" --root="$root" disable 'link5copy.service'
+ test ! -h "$root/etc/systemd/system/link5copy.service"
