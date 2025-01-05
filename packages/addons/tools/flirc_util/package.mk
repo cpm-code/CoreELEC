@@ -2,9 +2,9 @@
 # Copyright (C) 2023-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="flirc_util"
-PKG_VERSION="653f706554b7dfa16c4b00859cfcccad8c5e02eb"
-PKG_SHA256="56c07170ede7fac1644b21af994b6e20fdbad37c9bc042d9a9d7906493d6bdbf"
-PKG_REV="0"
+PKG_VERSION="280cccbb333f5be30fc48ea958ca103d2fce6fec"
+PKG_SHA256="fc0a79e2e08b96d6cb8d69a7ee3a0cec6445f690ff432dbe62945f583213940e"
+PKG_REV="1"
 PKG_LICENSE="FLIRC"
 PKG_SITE="http://www.flirc.tv"
 PKG_URL="https://github.com/flirc/sdk/archive/${PKG_VERSION}.tar.gz"
