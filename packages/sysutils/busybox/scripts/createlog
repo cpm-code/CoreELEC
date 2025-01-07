@@ -157,13 +157,13 @@ mkdir -p $BASEDIR/$LOGDIR
 
 # Journal (current)
   LOGFILE="09_Journal-cur.log"
-  getlog_cmd journalctl --no-pager -b -0
+  getlog_cmd journalctl -o short-precise --no-pager -b -0
 
 # Journal (prev)
 # only exists if using persistent journal
   if [ -f "/storage/.cache/journald.conf.d/00_settings.conf" ]; then
     LOGFILE="10_Journal-prev.log"
-    getlog_cmd journalctl --no-pager -b -1
+    getlog_cmd journalctl -o short-precise --no-pager -b -1
   fi
 
 # addons
