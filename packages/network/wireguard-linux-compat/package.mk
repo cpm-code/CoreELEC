@@ -3,8 +3,8 @@
 # Copyright (C) 2024-present Team CoreELEC (https://coreelec.org)
 
 PKG_NAME="wireguard-linux-compat"
-PKG_VERSION="1.0.20220627"
-PKG_SHA256="362d412693c8fe82de00283435818d5c5def7f15e2433a07a9fe99d0518f63c0"
+PKG_VERSION="v1.0.20220627"
+PKG_SHA256="963a6038c798c837e1c0341eca98e3037a34a699666c3b7fe63a56e35f231b5e"
 PKG_LICENSE="GPLv2"
 PKG_SITE="https://www.wireguard.com"
 PKG_URL="https://git.zx2c4.com/wireguard-linux-compat/snapshot/wireguard-linux-compat-$PKG_VERSION.tar.xz"
