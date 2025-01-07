@@ -4,7 +4,7 @@
 
 PKG_NAME="wireguard-linux-compat"
 PKG_VERSION="v1.0.20220627"
-PKG_SHA256="894f0e0792aa3cc74e93958c175f16ab7155b0049cec940a9000bf7971380f98"
+PKG_SHA256="963a6038c798c837e1c0341eca98e3037a34a699666c3b7fe63a56e35f231b5e"
 PKG_LICENSE="GPLv2"
 PKG_SITE="https://www.wireguard.com"
 PKG_URL="https://git.zx2c4.com/wireguard-linux-compat/snapshot/wireguard-linux-compat-$PKG_VERSION.tar.xz"
