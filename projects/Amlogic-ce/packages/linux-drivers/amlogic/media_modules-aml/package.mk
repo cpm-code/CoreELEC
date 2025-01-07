@@ -2,11 +2,11 @@
 # Copyright (C) 2018-present Team CoreELEC (https://coreelec.org)
 
 PKG_NAME="media_modules-aml"
-PKG_VERSION="60561618f2bf154c1438d3c790b625ff01f215c3"
-PKG_SHA256="f219024ea335f2c91210eb349aead51b505de3ac59736920dff50f3cb3ffd551"
+PKG_VERSION="5985cde30fc2dd756ca93e38352e8e51baa41dc7"
+PKG_SHA256="ac2c12cbb4473078e795b80de22a155128a9e7e9c0ff62b0e041ae6511870362"
 PKG_LICENSE="GPL"
 PKG_SITE="https://coreelec.org"
-PKG_URL="https://github.com/CoreELEC/media_modules-aml/archive/$PKG_VERSION.tar.gz"
+PKG_URL="https://github.com/cpm-code/media_modules-aml/archive/$PKG_VERSION.tar.gz"
 PKG_DEPENDS_TARGET="toolchain linux"
 PKG_NEED_UNPACK="$LINUX_DEPENDS"
 PKG_LONGDESC="$PKG_NAME: Linux driver"
