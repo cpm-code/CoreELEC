@@ -178,7 +178,7 @@ fi
 fix_config
 
 if [ "$ENABLE_VDR_DEBUG" == "true" ] ; then
-  /usr/bin/journalctl -b -0 -f -u service.multimedia.vdr-addon > $ADDON_LOG_FILE &
+  /usr/bin/journalctl -o short-precise -b -0 -f -u service.multimedia.vdr-addon > $ADDON_LOG_FILE &
   sleep 1
 fi
 
