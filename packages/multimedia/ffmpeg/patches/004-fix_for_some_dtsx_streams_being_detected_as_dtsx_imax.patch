@@ -1,0 +1,50 @@
+From 87a3605e6e59366718ed2ee65e0320fb789ab097 Mon Sep 17 00:00:00 2001
+From: chk-dev <chucky88@gmail.com>
+Date: Thu, 9 Jan 2025 19:29:32 +0100
+Subject: [PATCH] avcodec/dca_xll: fix for some DTS:X streams being detected as
+ DTS:X IMAX
+
+Based on the investigation and testing performed by MediaInfo team and other contributors
+it was discovered that one of the two DTS:X IMAX syncwords in most cases indicates a 'standard' DTS:X stream.
+This commit updates the DTS:X recognition logic to be in line with the aforementioned findings.
+Despite this change there are still some false-positives due to detection being
+based on the reverse engineering and not on the official specification (which is not available to mere mortals).
+
+Related MediaInfo issue tickets:
+https://github.com/MediaArea/MediaInfo/issues/717
+https://github.com/MediaArea/MediaInfo/issues/823
+---
+ libavcodec/dca_syncwords.h | 3 ++-
+ libavcodec/dca_xll.c       | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/libavcodec/dca_syncwords.h b/libavcodec/dca_syncwords.h
+index 649bbd90dcf42..9a6f9ae242b48 100644
+--- a/libavcodec/dca_syncwords.h
++++ b/libavcodec/dca_syncwords.h
+@@ -33,7 +33,8 @@
+ #define    DCA_SYNCWORD_SUBSTREAM_CORE       0x02B09261U
+ #define    DCA_SYNCWORD_REV1AUX              0x9A1105A0U
+ 
+-#define    DCA_SYNCWORD_XLL_X                0x02000850U
++#define    DCA_SYNCWORD_XLL_X_1              0x02000850U
++#define    DCA_SYNCWORD_XLL_X_2              0xF14000D1U
+ #define    DCA_SYNCWORD_XLL_X_IMAX           0xF14000D0U
+ 
+ #endif /* AVCODEC_DCA_SYNCWORDS_H */
+diff --git a/libavcodec/dca_xll.c b/libavcodec/dca_xll.c
+index b8cf37a35f134..6d2b9ca0ad059 100644
+--- a/libavcodec/dca_xll.c
++++ b/libavcodec/dca_xll.c
+@@ -1064,9 +1064,9 @@ static int parse_frame(DCAXllDecoder *s, const uint8_t *data, int size, DCAExssA
+ 
+         extradata_syncword = show_bits_long(&s->gb, 32);
+ 
+-        if (extradata_syncword == DCA_SYNCWORD_XLL_X) {
++        if (extradata_syncword == DCA_SYNCWORD_XLL_X_1 || extradata_syncword == DCA_SYNCWORD_XLL_X_2) {
+             s->x_syncword_present = 1;
+-        } else if ((extradata_syncword >> 1) == (DCA_SYNCWORD_XLL_X_IMAX >> 1)) {
++        } else if (extradata_syncword == DCA_SYNCWORD_XLL_X_IMAX) {
+             s->x_imax_syncword_present = 1;
+         }
+     }
