@@ -2,9 +2,9 @@
 # Copyright (C) 2020-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="visualization.starburst"
-PKG_VERSION="20.2.0-Nexus"
-PKG_SHA256="0d63b38ba8d5b3bac542546b1ecfb7d722b79652da485d75b22086e26ef4f825"
-PKG_REV="6"
+PKG_VERSION="21.0.1-Omega"
+PKG_SHA256="e77a061271f654b3ad24f2341780675d623db24b7c0debd3ac84d76f04cb9fdd"
+PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/xbmc/visualization.starburst"

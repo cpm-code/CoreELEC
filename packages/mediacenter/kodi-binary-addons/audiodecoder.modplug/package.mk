@@ -3,9 +3,9 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="audiodecoder.modplug"
-PKG_VERSION="20.2.0-Nexus"
-PKG_SHA256="619ba20ea19dd9aea15e7d30aa12a146b412c7fcd9e709528f6758e82a3d85e7"
-PKG_REV="7"
+PKG_VERSION="21.0.1-Omega"
+PKG_SHA256="b929bc4ff40bfb6af2bf25bf96f810023d3b51ef21f656739aca2aac7e15121d"
+PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/xbmc/audiodecoder.modplug"

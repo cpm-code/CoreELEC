@@ -3,8 +3,8 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="screensaver.stars"
-PKG_VERSION="20.1.0-Nexus"
-PKG_SHA256="5ea0d19c3ef94e9603a0e06c78ae01cd6f9227da7b505eaa7d4527ca6018ea03"
+PKG_VERSION="21.0.1-Omega"
+PKG_SHA256="ca257379af46215a1b728363f8364c6a1e596804c623d359777aa590793eec61"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"

@@ -2,9 +2,9 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="imagedecoder.raw"
-PKG_VERSION="20.1.0-Nexus"
-PKG_SHA256="6235c0be431bbb814b3e464753af9ad17febf6001f77cbf030e6c6e1cdc41a04"
-PKG_REV="8"
+PKG_VERSION="21.0.1-Omega"
+PKG_SHA256="8029d06bcf9f4f945658b775df49ff0c41aa6fe33c8e529de76aa4ba76fd9616"
+PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/xbmc/imagedecoder.raw"

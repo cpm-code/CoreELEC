@@ -3,9 +3,9 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="audiodecoder.ssf"
-PKG_VERSION="20.2.0-Nexus"
-PKG_SHA256="c2d5fbba35d2d73ed5891567d507f77bc64fa447dfcb4474f5d58594e9a07b2d"
-PKG_REV="7"
+PKG_VERSION="21.0.1-Omega"
+PKG_SHA256="405d488f4251222cd640980e5c099aed25f0ebc3203d5ca4d51dd38a776826a3"
+PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/xbmc/audiodecoder.ssf"
