@@ -3,8 +3,8 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="screensaver.asterwave"
-PKG_VERSION="21.0.1-Omega"
-PKG_SHA256="db87ba0b15d602f47f67f57d940f5c080da312f69f4989c72c918e60634ddbad"
+PKG_VERSION="21.0.2-Omega"
+PKG_SHA256="de92f8773f23c77f388201d316273f1a06103965bdb9684cbda19a73180c1488"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"

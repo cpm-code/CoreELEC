@@ -3,8 +3,8 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="screensaver.matrixtrails"
-PKG_VERSION="21.0.1-Omega"
-PKG_SHA256="40c095465db0dd30c90a358de6d6bbe1ade365841e7c6e334e834971a9bd2771"
+PKG_VERSION="21.0.2-Omega"
+PKG_SHA256="cc342d201606e682fc9def894a308784b74633f981209570c87d1bd206894311"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"

@@ -3,8 +3,8 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="audiodecoder.stsound"
-PKG_VERSION="21.0.1-Omega"
-PKG_SHA256="b5202aa0165f78aa4b6c73bebbd95c3280e4a17adf823c56d6ba624999b48119"
+PKG_VERSION="21.0.2-Omega"
+PKG_SHA256="089ddd6c890e571f69eda0a85077d8ffe91c4b31fd0f9e20f47d4053c1e984a8"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"

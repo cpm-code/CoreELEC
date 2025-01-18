@@ -3,8 +3,8 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="audiodecoder.timidity"
-PKG_VERSION="21.0.1-Omega"
-PKG_SHA256="c21cbe20fad1b19ff7437d8f293dfc7921f7af0be44a361052bf996ce1b13f4b"
+PKG_VERSION="21.0.2-Omega"
+PKG_SHA256="eb7bee9453825f86275ae05c4561fb52ee7fd9fa21857e303933cb57d28ccc4b"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"

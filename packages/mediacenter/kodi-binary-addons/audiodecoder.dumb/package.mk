@@ -3,8 +3,8 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="audiodecoder.dumb"
-PKG_VERSION="21.0.1-Omega"
-PKG_SHA256="58238ed98eee13c0ad401c17fa99bb8bc23e9c1274b0bd00d4d0053118a7964d"
+PKG_VERSION="21.0.2-Omega"
+PKG_SHA256="57a6442d0b0d20e88eaf9ea95a06d4b84fa584bc7a51d1ea909b4206f0013274"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"

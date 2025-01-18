@@ -2,8 +2,8 @@
 # Copyright (C) 2017-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="vfs.rar"
-PKG_VERSION="21.0.1-Omega"
-PKG_SHA256="b80312982734b10e28e90c260e5a44f13a8c9ecd626c6eeac61cabeee59de13a"
+PKG_VERSION="21.0.2-Omega"
+PKG_SHA256="7492cf73d52299218acc982c4b35b020ea801d36d47e40460341f4dde712de50"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
