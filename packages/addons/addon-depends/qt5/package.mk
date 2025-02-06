@@ -2,12 +2,12 @@
 # Copyright (C) 2009-2016 Lukas Rusak (lrusak@libreelec.tv)
 # Copyright (C) 2019-present Team LibreELEC (https://libreelec.tv)
 
-PKG_NAME="qtbase"
-PKG_VERSION="5.14.0"
-PKG_SHA256="4ef921c0f208a1624439801da8b3f4344a3793b660ce1095f2b7f5c4246b9463"
+PKG_NAME="qt5"
+PKG_VERSION="5.15.16"
+PKG_SHA256="efa99827027782974356aceff8a52bd3d2a8a93a54dd0db4cca41b5e35f1041c"
 PKG_LICENSE="GPL"
 PKG_SITE="https://qt-project.org"
-PKG_URL="https://download.qt.io/archive/qt/${PKG_VERSION%.*}/${PKG_VERSION}/submodules/${PKG_NAME}-everywhere-src-${PKG_VERSION}.tar.xz"
+PKG_URL="https://download.qt.io/archive/qt/${PKG_VERSION%.*}/${PKG_VERSION}/single/qt-everywhere-opensource-src-${PKG_VERSION}.tar.xz"
 PKG_DEPENDS_TARGET="freetype libjpeg-turbo libpng openssl sqlite zlib"
 PKG_LONGDESC="A cross-platform application and UI framework."
 PKG_BUILD_FLAGS="-sysroot"
@@ -62,10 +62,52 @@ PKG_CONFIGURE_OPTS_TARGET="-prefix /usr
                            -system-libpng
                            -system-libjpeg
                            -no-sql-mysql
-                           -system-sqlite"
+                           -system-sqlite
+                           -no-gtk
+                           -no-xcb-xlib
+                           -skip qt3d
+                           -skip qtactiveqt
+                           -skip qtandroidextras
+                           -skip qtcharts
+                           -skip qtconnectivity
+                           -skip qtdatavis3d
+                           -skip qtdeclarative
+                           -skip qtdoc
+                           -skip qtgamepad
+                           -skip qtgraphicaleffects
+                           -skip qtimageformats
+                           -skip qtlocation
+                           -skip qtlottie
+                           -skip qtmacextras
+                           -skip qtmultimedia
+                           -skip qtnetworkauth
+                           -skip qtpurchasing
+                           -skip qtquick3d
+                           -skip qtquickcontrols
+                           -skip qtquickcontrols2
+                           -skip qtquicktimeline
+                           -skip qtremoteobjects
+                           -skip qtscript
+                           -skip qtscxml
+                           -skip qtsensors
+                           -skip qtserialbus
+                           -skip qtspeech
+                           -skip qtsvg
+                           -skip qttools
+                           -skip qttranslations
+                           -skip qtvirtualkeyboard
+                           -skip qtwayland
+                           -skip qtwebchannel
+                           -skip qtwebengine
+                           -skip qtwebglplugin
+                           -skip qtwebsockets
+                           -skip qtwebview
+                           -skip qtwinextras
+                           -skip qtx11extras
+                           -skip qtxmlpatterns"
 
 configure_target() {
-  QMAKE_CONF_DIR="mkspecs/devices/linux-libreelec-g++"
+  QMAKE_CONF_DIR="qtbase/mkspecs/devices/linux-libreelec-g++"
 
   cd ..
   mkdir -p ${QMAKE_CONF_DIR}
