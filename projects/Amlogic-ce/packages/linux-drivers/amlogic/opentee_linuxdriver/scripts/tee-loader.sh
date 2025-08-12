@@ -92,6 +92,9 @@ run_tee_from_android() {
 
   message "active slot: '${active_slot}'"
 
+  # load module manually because seems first mount fails with erofs
+  [ ! -d /sys/class/amfc ] && modprobe erofs
+
   mountpoint -q /android/system || mount -o ro /dev/mapper/dynpart-system${active_slot} /android/system
   mountpoint -q /android/vendor || mount -o ro /dev/mapper/dynpart-vendor${active_slot} /android/vendor
 
