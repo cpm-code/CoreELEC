@@ -77,7 +77,7 @@ run_tee_from_android() {
   local SERIAL_S5=$(printf "%d" "0x3e")
   message "run tee from android start"
 
-  ! ls /dev/mapper/dynpart-* &>/dev/null && dmsetup create --concise "$(parse-android-dynparts /dev/super)"
+  dmsetup create --concise "$(parse-android-dynparts /dev/super)"
 
   local active_slot=$(fw_printenv active_slot 2>/dev/null | awk -F '=' '/active_slot=/ {print $2}')
   message "fw active slot: '${active_slot}'"
@@ -95,12 +95,13 @@ run_tee_from_android() {
   # load module manually because seems first mount fails with erofs
   [ ! -d /sys/class/amfc ] && modprobe erofs
 
-  mountpoint -q /android/system || mount -o ro /dev/mapper/dynpart-system${active_slot} /android/system
-  mountpoint -q /android/vendor || mount -o ro /dev/mapper/dynpart-vendor${active_slot} /android/vendor
+  mount -o ro /dev/mapper/dynpart-system${active_slot} /android/system
+  mount -o ro /dev/mapper/dynpart-vendor${active_slot} /android/vendor
 
   read_firmware_version /vendor${VIDEO_UCODE_BIN_PATH} &>/dev/null
   message "Android ucode version: '${minor}.${batch}'"
   if [[ ${minor} -gt 4 || ( ${minor} -eq 4 && ${batch} -ge 1 ) ]]; then
+    umount_partitions
     message "run tee from android end"
     return 2
   fi
@@ -118,6 +119,7 @@ EOF
   fi
 
   if [ ! -x /vendor/bin/tee-supplicant ]; then
+    umount_partitions
     message "tee-supplicant does not exist on android"
     message "run tee from android end"
     return 1
@@ -130,8 +132,16 @@ EOF
 
   android_wrapper /vendor/bin/tee_preload_fw ${VIDEO_UCODE_BIN_PATH}
   local rv=${?}
+  umount_partitions
   message "run tee from android end"
   return ${rv}
+}
+
+umount_partitions() {
+  mountpoint -q /android/system && umount /android/system
+  mountpoint -q /android/vendor && umount /android/vendor
+  ls /dev/mapper/dynpart-* &>/dev/null && dmsetup remove /dev/mapper/dynpart-*
+  return 0  # success
 }
 
 cleanup_tee() {
@@ -144,10 +154,7 @@ cleanup_tee() {
     rm -f ${TEE_SUPPLICANT_PID_FILE}
   fi
 
-  mountpoint -q /android/system && umount /android/system
-  mountpoint -q /android/vendor && umount /android/vendor
-  ls /dev/mapper/dynpart-* &>/dev/null && dmsetup remove /dev/mapper/dynpart-*
-
+  umount_partitions
   message "cleanup tee end"
 }
 
