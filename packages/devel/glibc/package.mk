@@ -18,7 +18,7 @@ case "${LINUX}" in
     OPT_ENABLE_KERNEL=4.9.0
     ;;
   amlogic-5.*)
-    OPT_ENABLE_KERNEL=5.4.0
+    OPT_ENABLE_KERNEL=5.15.0
     ;;
   *)
     OPT_ENABLE_KERNEL=6.12.0
