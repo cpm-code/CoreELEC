@@ -2,8 +2,8 @@
 # Copyright (C) 2020-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="visualization.goom"
-PKG_VERSION="22.0.1-Piers"
-PKG_SHA256="ac3e56b6441315be6f2add90ada2e656f03bbead999bc86fefff423a0cd56a77"
+PKG_VERSION="22.0.2-Piers"
+PKG_SHA256="6f43f8527a805e8be22aef3cd3788c473b40de6ecaaf38d6a99a49cadac72a2c"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"

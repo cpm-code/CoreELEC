@@ -2,9 +2,9 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="minisatip"
-PKG_VERSION="2.0.10"
-PKG_SHA256="e9f836af2685abecdfa9d0f40fbb22cecca5a084ff6a28c758505d8641045c41"
-PKG_REV="5"
+PKG_VERSION="2.0.20"
+PKG_SHA256="6f85f1b8f4b90a6c4ffd94bcd0aa0132920053dae74c2aceee82fd636649101f"
+PKG_REV="6"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/catalinii/minisatip"
@@ -19,11 +19,9 @@ PKG_IS_ADDON="yes"
 PKG_ADDON_NAME="Minisatip"
 PKG_ADDON_TYPE="xbmc.service"
 
-PKG_CONFIGURE_OPTS_TARGET="--enable-static \
-                           --disable-netcv \
+PKG_CONFIGURE_OPTS_TARGET="--disable-netcv \
                            --enable-dvbca \
-                           --enable-dvbcsa \
-                           --with-xml2=$(get_install_dir libxml2)/usr/include/libxml2"
+                           --enable-dvbcsa"
 
 pre_configure_target() {
   cd ${PKG_BUILD}
