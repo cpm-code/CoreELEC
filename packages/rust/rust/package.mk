@@ -33,7 +33,7 @@ configure_host() {
   esac
 
   cat >${PKG_BUILD}/config.toml  <<END
-change-id = 140732
+change-id = 142379
 
 [llvm]
 download-ci-llvm = false

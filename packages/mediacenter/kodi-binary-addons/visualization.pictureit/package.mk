@@ -2,8 +2,8 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="visualization.pictureit"
-PKG_VERSION="22.0.1-Piers"
-PKG_SHA256="71ddb9ddc9cb448af7817ee0124175f5dc7628cfcb907a812df18e0c1cca548e"
+PKG_VERSION="22.0.2-Piers"
+PKG_SHA256="88414a42deb0e7b47ebe4c0fdc18b3dda4154a8608dcbae303e41804b159bb1e"
 PKG_REV="1"
 PKG_ARCH="x86_64"
 PKG_LICENSE="GPL"
