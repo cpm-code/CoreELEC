@@ -1087,17 +1087,41 @@ check_update() {
 }
 
 do_aml_autoscript() {
-  if [ -f /flash/aml_autoscript -a -e /dev/env ]; then
-    echo "Doing aml_autoscript..."
+  echo "check if 'reboot update' or 'run update' was run"
 
-    mkdir -p /var/lock
-    dd if=/flash/aml_autoscript bs=72 skip=1 status=none | \
-      while read line; do
-        cmd=$(echo ${line} | sed -n "s|^setenv \(.*\)|fw_setenv \1|gp")
-        [ -n "${cmd}" ] && eval ${cmd}
-      done
+  if [ -z "${boot}" -a -z "${disk}"]; then
+    echo "update was run"
 
-    echo "Done..."
+    # set missing variables not set in this case
+    boot="LABEL=COREELEC"
+
+    mount_flash
+
+    # wait for eMMC
+    for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
+      [ -b /dev/env ] && break
+
+      usleep 1000000
+    done
+
+    if [ -f /flash/aml_autoscript -a -b /dev/env ]; then
+      echo "doing aml_autoscript..."
+
+      mkdir -p /var/lock
+      dd if=/flash/aml_autoscript bs=72 skip=1 status=none | \
+        while read line; do
+          cmd=$(echo ${line} | sed -n "s|^setenv \(.*\)|fw_setenv \1|gp")
+          [ -n "${cmd}" ] && eval ${cmd}
+        done
+
+      echo "done..."
+    else
+      echo "something went wrong"
+    fi
+
+    do_reboot
+  else
+    echo "update was not run"
   fi
 }
 
@@ -1343,14 +1367,7 @@ fi
 debug_msg "Unique identifier for this client: ${MACHINE_UID:-NOT AVAILABLE}"
 
 # check if 'reboot update' or 'run update' was run
-if [ -z "${boot}" -a -z "${disk}"]; then
-  # set missing variables not set in this case
-  boot="LABEL=COREELEC"
-
-  mount_flash
-  do_aml_autoscript
-  do_reboot
-fi
+do_aml_autoscript
 
 # main boot sequence
 for BOOT_STEP in \
