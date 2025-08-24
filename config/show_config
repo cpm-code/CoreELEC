@@ -41,6 +41,17 @@ show_config() {
   config_message+="\n - Local Ccache:\t\t\t ${LOCAL_CCACHE:-no}"
   config_message+="\n - CONFIG_SHELL:\t\t\t ${CONFIG_SHELL:-auto}"
 
+  # Image Filsystem
+
+  config_message+="\n\n Image Filesystems:"
+  config_message+="\n $dashes$dashes"
+  config_message+="\n - Flash Size (MiB): \t\t\t $SYSTEM_SIZE"
+  config_message+="\n - Storage Size (MiB): \t\t\t $STORAGE_SIZE"
+  config_message+="\n - SquashFS Compression Method: \t $SQUASHFS_COMPRESSION"
+  if [ -n "${SQUASHFS_COMPRESSION_OPTION}" ]; then
+    config_message+="\n - SquashFS Compression Options: \t $SQUASHFS_COMPRESSION_OPTION"
+  fi
+
   # Misc. hardware configuration
 
   config_message+="\n\n Misc. hardware configuration:"
@@ -150,8 +161,8 @@ show_config() {
   #   $DISTRO/config/functions
   #   $DISTRO/show_config
 
-  if [ -f distributions/${DISTRO}/show_config ]; then
-    . distributions/${DISTRO}/show_config
+  if [ -f "${DISTRO_DIR}/${DISTRO}/show_config" ]; then
+    . "${DISTRO_DIR}/${DISTRO}/show_config"
   fi
   if [ "$(type -t show_distro_config)" = "function" ]; then
     show_distro_config

@@ -103,7 +103,7 @@ makeinstall_host() {
 }
 
 pre_make_target() {
-  ( 
+  (
     cd ${ROOT}
     rm -rf ${BUILD}/initramfs
     rm -f ${STAMPS_INSTALL}/initramfs/install_target ${STAMPS_INSTALL}/*/install_init
@@ -212,7 +212,7 @@ make_target() {
   DTC_FLAGS=-@ kernel_make ${KERNEL_TARGET} ${KERNEL_MAKE_EXTRACMD} modules
 
   if [ "${PKG_BUILD_PERF}" = "yes" ]; then
-    ( 
+    (
       cd tools/perf
 
       # arch specific perf build args

@@ -75,7 +75,7 @@ configure_package() {
       PKG_APPLIANCE_XML="${PKG_DIR}/config/appliance-gbm-generic.xml"
     else
       PKG_APPLIANCE_XML="${PKG_DIR}/config/appliance-gbm.xml"
-    fi 
+    fi
   fi
 
   if [ ! "${OPENGL}" = "no" ]; then
@@ -155,11 +155,11 @@ configure_package() {
 
   case "${KODI_MYSQL_SUPPORT}" in
     mysql)
-      PKG_DEPENDS_TARGET="${PKG_DEPENDS_TARGET} mysql"
+      PKG_DEPENDS_TARGET+=" mysql"
       KODI_MYSQL="-DENABLE_MYSQLCLIENT=ON -DENABLE_MARIADBCLIENT=OFF"
       ;;
     mariadb)
-      PKG_DEPENDS_TARGET="${PKG_DEPENDS_TARGET} mariadb-connector-c"
+      PKG_DEPENDS_TARGET+=" mariadb-connector-c"
       KODI_MYSQL="-DENABLE_MARIADBCLIENT=ON -DENABLE_MYSQLCLIENT=OFF"
       ;;
     *)
