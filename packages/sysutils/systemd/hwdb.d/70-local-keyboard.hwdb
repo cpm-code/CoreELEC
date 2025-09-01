@@ -1,6 +1,6 @@
- # Ali Express G60S Pro Plus remote
- evdev:input:b0003v1915p1001e0201*
-  KEYBOARD_KEY_c0041=enter
+# ali express g60s pro plus remote
+evdev:input:b0003v1915p1001e0201*
+ KEYBOARD_KEY_c0041=enter
 
 # alfawise z1 remote
 evdev:input:b0005v2B54p1603e*
@@ -16,7 +16,7 @@ evdev:input:b0005v0171p04??*
  KEYBOARD_KEY_c009c=pageup
  KEYBOARD_KEY_c009d=pagedown
  
-# auvipal g9f
+# auvipal g9f remote
 evdev:input:b0005v045Ep0041*
  KEYBOARD_KEY_c0041=enter
  KEYBOARD_KEY_70071=l
@@ -153,7 +153,7 @@ evdev:input:b0005v2717p32B9e4A4C*
 evdev:input:b0005v0416p0300*
  KEYBOARD_KEY_c0041=enter
 
-# zidoo v10
+# zidoo v10 remote
 # BT-pair mode = long press "menu" + "|<<"
 evdev:input:b0005v2B54p1600*
  KEYBOARD_KEY_c0041=enter
