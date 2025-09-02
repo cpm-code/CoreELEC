@@ -93,7 +93,7 @@ run_tee_from_android() {
   message "active slot: '${active_slot}'"
 
   # load extra EROFS module when SoC support AMFC driver
-  [ -d /sys/class/amfc ] && modprobe amlogic-soc-erofs
+  [ -d /sys/class/amfc ] && modprobe aml-erofs
 
   mount -o ro /dev/mapper/dynpart-system${active_slot} /android/system
   mount -o ro /dev/mapper/dynpart-vendor${active_slot} /android/vendor
