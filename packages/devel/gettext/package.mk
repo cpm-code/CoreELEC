@@ -13,8 +13,11 @@ PKG_DEPENDS_TARGET="autotools:host make:host gcc:host"
 PKG_LONGDESC="A program internationalization library and tools."
 PKG_BUILD_FLAGS="+local-cc"
 
-PKG_CONFIGURE_OPTS_HOST="--disable-static --enable-shared \
-                         --disable-rpath \
+PKG_CONFIGURE_OPTS_COMMON="--disable-rpath \
+                           --disable-modula2"
+
+PKG_CONFIGURE_OPTS_HOST="${PKG_CONFIGURE_OPTS_COMMON} \
+                         --disable-static --enable-shared \
                          --with-gnu-ld \
                          --disable-java \
                          --disable-curses \
@@ -23,7 +26,8 @@ PKG_CONFIGURE_OPTS_HOST="--disable-static --enable-shared \
                          --disable-csharp \
                          --without-emacs"
 
-PKG_CONFIGURE_OPTS_TARGET="--disable-rpath"
+PKG_CONFIGURE_OPTS_TARGET="${PKG_CONFIGURE_OPTS_COMMON} \
+                           --with-sysroot=yes"
 
 post_configure_target() {
   libtool_remove_rpath gettext-runtime/libasprintf/libtool
