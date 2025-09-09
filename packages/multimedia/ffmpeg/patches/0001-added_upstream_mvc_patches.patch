@@ -1,7 +1,7 @@
-From f33f627872b3fd7f563cfc12a4e61f92235e88f3 Mon Sep 17 00:00:00 2001
+From 20909d28277c8dfc3a827dd0b1b7fde4c808c2ae Mon Sep 17 00:00:00 2001
 From: tanio99 <tanio99@wolke7.net>
 Date: Sat, 9 Jan 2021 10:28:48 +0100
-Subject: [PATCH 1/2] avcodec: add h264_mvc codec id and profiles (original
+Subject: [PATCH 1/3] avcodec: add h264_mvc codec id and profiles (original
  patch from h.leppkes@gmail.com)
 
 ---
@@ -85,12 +85,12 @@ index b4a0359..8c95524 100644
              break;
          case AV_CODEC_ID_HEVC:
 diff --git a/libavcodec/codec_desc.c b/libavcodec/codec_desc.c
-index 03dea57..aad4fa7 100644
+index a065556..f7d4773 100644
 --- a/libavcodec/codec_desc.c
 +++ b/libavcodec/codec_desc.c
-@@ -1959,6 +1959,13 @@ static const AVCodecDescriptor codec_descriptors[] = {
-         .long_name = NULL_IF_CONFIG_SMALL("LEAD MCMP"),
+@@ -2000,6 +2000,13 @@ static const AVCodecDescriptor codec_descriptors[] = {
          .props     = AV_CODEC_PROP_INTRA_ONLY | AV_CODEC_PROP_LOSSY,
+         .profiles  = NULL_IF_CONFIG_SMALL(ff_prores_raw_profiles),
      },
 +    {
 +        .id        = AV_CODEC_ID_H264_MVC,
@@ -103,12 +103,12 @@ index 03dea57..aad4fa7 100644
      /* various PCM "codecs" */
      {
 diff --git a/libavcodec/codec_id.h b/libavcodec/codec_id.h
-index 0a8d3be..910678a 100644
+index c4842e6..3845adb 100644
 --- a/libavcodec/codec_id.h
 +++ b/libavcodec/codec_id.h
-@@ -323,6 +323,8 @@ enum AVCodecID {
-     AV_CODEC_ID_VMIX,
-     AV_CODEC_ID_LEAD,
+@@ -332,6 +332,8 @@ enum AVCodecID {
+     AV_CODEC_ID_APV,
+     AV_CODEC_ID_PRORES_RAW,
  
 +    AV_CODEC_ID_H264_MVC,
 +
@@ -116,7 +116,7 @@ index 0a8d3be..910678a 100644
      AV_CODEC_ID_FIRST_AUDIO = 0x10000,     ///< A dummy id pointing at the start of audio codecs
      AV_CODEC_ID_PCM_S16LE = 0x10000,
 diff --git a/libavcodec/defs.h b/libavcodec/defs.h
-index 24250f8..a640d20 100644
+index b13e983..5da5ee0 100644
 --- a/libavcodec/defs.h
 +++ b/libavcodec/defs.h
 @@ -118,6 +118,7 @@
@@ -128,7 +128,7 @@ index 24250f8..a640d20 100644
  #define AV_PROFILE_H264_HIGH_444_PREDICTIVE  244
  #define AV_PROFILE_H264_HIGH_444_INTRA       (244|AV_PROFILE_H264_INTRA)
 diff --git a/libavcodec/h264_parser.c b/libavcodec/h264_parser.c
-index 94cfbc4..3939a56 100644
+index 006f405..9a877f1 100644
 --- a/libavcodec/h264_parser.c
 +++ b/libavcodec/h264_parser.c
 @@ -65,6 +65,7 @@ typedef struct H264ParseContext {
@@ -207,10 +207,10 @@ index 94cfbc4..3939a56 100644
 +    .parser_close   = h264_close,
 +};
 diff --git a/libavcodec/parsers.c b/libavcodec/parsers.c
-index 5128009..e78e3b1 100644
+index b12c48f..1451788 100644
 --- a/libavcodec/parsers.c
 +++ b/libavcodec/parsers.c
-@@ -51,6 +51,7 @@ extern const AVCodecParser ff_gsm_parser;
+@@ -54,6 +54,7 @@ extern const AVCodecParser ff_gsm_parser;
  extern const AVCodecParser ff_h261_parser;
  extern const AVCodecParser ff_h263_parser;
  extern const AVCodecParser ff_h264_parser;
@@ -219,7 +219,7 @@ index 5128009..e78e3b1 100644
  extern const AVCodecParser ff_hdr_parser;
  extern const AVCodecParser ff_ipu_parser;
 diff --git a/libavcodec/profiles.c b/libavcodec/profiles.c
-index 3cef82b..e8a2e88 100644
+index 1b67870..7970262 100644
 --- a/libavcodec/profiles.c
 +++ b/libavcodec/profiles.c
 @@ -85,6 +85,7 @@ const AVProfile ff_h264_profiles[] = {
@@ -231,18 +231,18 @@ index 3cef82b..e8a2e88 100644
  };
  
 diff --git a/libavformat/mpegts.c b/libavformat/mpegts.c
-index 04565a2..6e9c73a 100644
+index 981dd8c..6c35056 100644
 --- a/libavformat/mpegts.c
 +++ b/libavformat/mpegts.c
-@@ -811,7 +811,7 @@ static const StreamType ISO_types[] = {
+@@ -812,7 +812,7 @@ static const StreamType ISO_types[] = {
  #endif
-     { 0x1b, AVMEDIA_TYPE_VIDEO, AV_CODEC_ID_H264       },
-     { 0x1c, AVMEDIA_TYPE_AUDIO, AV_CODEC_ID_AAC        },
--    { 0x20, AVMEDIA_TYPE_VIDEO, AV_CODEC_ID_H264       },
-+    { 0x20, AVMEDIA_TYPE_VIDEO, AV_CODEC_ID_H264_MVC   },
-     { 0x21, AVMEDIA_TYPE_VIDEO, AV_CODEC_ID_JPEG2000   },
-     { 0x24, AVMEDIA_TYPE_VIDEO, AV_CODEC_ID_HEVC       },
-     { 0x33, AVMEDIA_TYPE_VIDEO, AV_CODEC_ID_VVC        },
+     { STREAM_TYPE_VIDEO_H264,     AVMEDIA_TYPE_VIDEO, AV_CODEC_ID_H264       },
+     { STREAM_TYPE_AUDIO_MPEG4,    AVMEDIA_TYPE_AUDIO, AV_CODEC_ID_AAC        },
+-    { STREAM_TYPE_VIDEO_MVC,      AVMEDIA_TYPE_VIDEO, AV_CODEC_ID_H264       },
++    { STREAM_TYPE_VIDEO_MVC,      AVMEDIA_TYPE_VIDEO, AV_CODEC_ID_H264_MVC   },
+     { STREAM_TYPE_VIDEO_JPEG2000, AVMEDIA_TYPE_VIDEO, AV_CODEC_ID_JPEG2000   },
+     { STREAM_TYPE_VIDEO_HEVC,     AVMEDIA_TYPE_VIDEO, AV_CODEC_ID_HEVC       },
+     { STREAM_TYPE_VIDEO_VVC,      AVMEDIA_TYPE_VIDEO, AV_CODEC_ID_VVC        },
 -- 
 2.43.0
 

@@ -3,8 +3,8 @@
 # Copyright (C) 2017-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="ffmpeg"
-PKG_VERSION="7.1.1"
-PKG_SHA256="733984395e0dbbe5c046abda2dc49a5544e7e0e1e2366bba849222ae9e3a03b1"
+PKG_VERSION="8.0.1"
+PKG_SHA256="05ee0b03119b45c0bdb4df654b96802e909e0a752f72e4fe3794f487229e5a41"
 PKG_LICENSE="GPL-3.0-only"
 PKG_SITE="https://ffmpeg.org"
 PKG_URL="http://ffmpeg.org/releases/ffmpeg-${PKG_VERSION}.tar.xz"
@@ -170,7 +170,6 @@ configure_target() {
               --enable-avcodec \
               --enable-avformat \
               --enable-swscale \
-              --enable-postproc \
               --enable-avfilter \
               --disable-devices \
               --enable-pthreads \
