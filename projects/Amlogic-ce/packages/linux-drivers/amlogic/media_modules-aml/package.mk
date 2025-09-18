@@ -2,7 +2,7 @@
 # Copyright (C) 2018-present Team CoreELEC (https://coreelec.org)
 
 PKG_NAME="media_modules-aml"
-PKG_VERSION="b9c86220aceaa770d1191eac589aaba6aa95724a"
+PKG_VERSION="2cd1f9c1a436fc155093054b17050ac4fa6f53bd"
 PKG_SHA256=""
 PKG_LICENSE="GPL"
 PKG_SITE="https://coreelec.org"
