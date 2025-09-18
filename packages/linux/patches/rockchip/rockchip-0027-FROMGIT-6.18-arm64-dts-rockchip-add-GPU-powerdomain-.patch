@@ -1,7 +1,7 @@
-From 5eb285a0a2db04a425b7198bf4ccad266646b7b0 Mon Sep 17 00:00:00 2001
+From 7c979b574c428a062ddaec3a916104ce65043c87 Mon Sep 17 00:00:00 2001
 From: Alex Bee <knaerzche@gmail.com>
 Date: Wed, 2 Sep 2020 19:52:02 +0200
-Subject: [PATCH 027/108] FROMGIT(6.18): arm64: dts: rockchip: add GPU
+Subject: [PATCH 027/110] FROMGIT(6.18): arm64: dts: rockchip: add GPU
  powerdomain, opps, and cooling to rk3328
 
 Add GPU powerdomain, opp-table, and cooling map nodes for the Mali

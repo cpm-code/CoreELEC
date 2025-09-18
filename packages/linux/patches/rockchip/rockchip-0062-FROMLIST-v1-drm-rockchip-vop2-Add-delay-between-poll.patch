@@ -1,7 +1,7 @@
-From 05a6c754cfa875530326c613a59785547de4dd91 Mon Sep 17 00:00:00 2001
+From 96cd4543bdacaa418a90fe1562b6173e6c8010cb Mon Sep 17 00:00:00 2001
 From: Andy Yan <andy.yan@rock-chips.com>
 Date: Fri, 18 Jul 2025 14:41:13 +0800
-Subject: [PATCH 062/108] FROMLIST(v1): drm/rockchip: vop2: Add delay between
+Subject: [PATCH 062/110] FROMLIST(v1): drm/rockchip: vop2: Add delay between
  poll registers
 
 According to the implementation of read_poll_timeout_atomic, if the

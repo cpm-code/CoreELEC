@@ -1,7 +1,7 @@
-From c6b8b1969778e5e3fe6e805cbd087b1fbd64c73a Mon Sep 17 00:00:00 2001
+From b603c6be6c6cdbf838d820baf4a882a60608ee7c Mon Sep 17 00:00:00 2001
 From: Detlev Casanova <detlev.casanova@collabora.com>
 Date: Tue, 10 Jun 2025 15:13:46 -0400
-Subject: [PATCH 074/108] DETLEV(v3): media: rkvdec: Support per-variant
+Subject: [PATCH 074/110] DETLEV(v3): media: rkvdec: Support per-variant
  interrupt handler
 
 Preparation commit for supporting different variants with different

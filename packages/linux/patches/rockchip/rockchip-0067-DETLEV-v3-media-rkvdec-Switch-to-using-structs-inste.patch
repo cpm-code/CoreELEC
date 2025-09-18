@@ -1,7 +1,7 @@
-From 2568fcb4a2bfc6388f1ef634986fa580c7b688dd Mon Sep 17 00:00:00 2001
+From 782a01dbdaf289bfdd63b55c67a984956239d362 Mon Sep 17 00:00:00 2001
 From: Detlev Casanova <detlev.casanova@collabora.com>
 Date: Tue, 27 May 2025 11:00:22 -0400
-Subject: [PATCH 067/108] DETLEV(v3): media: rkvdec: Switch to using structs
+Subject: [PATCH 067/110] DETLEV(v3): media: rkvdec: Switch to using structs
  instead of writel
 
 In an effort to merge the rkvdec2 driver [1] with this one, switch from

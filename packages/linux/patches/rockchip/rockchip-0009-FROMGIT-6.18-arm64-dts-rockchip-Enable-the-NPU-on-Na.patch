@@ -1,7 +1,7 @@
-From 4105b87fae397b898acc67b05019c7e8801bc582 Mon Sep 17 00:00:00 2001
+From ff036ee4ef16c474a987237522fdfc1beab0d332 Mon Sep 17 00:00:00 2001
 From: Anton Kirilov <anton.kirilov@arm.com>
 Date: Wed, 27 Aug 2025 15:22:10 +0100
-Subject: [PATCH 009/108] FROMGIT(6.18): arm64: dts: rockchip: Enable the NPU
+Subject: [PATCH 009/110] FROMGIT(6.18): arm64: dts: rockchip: Enable the NPU
  on NanoPi R6C/R6S
 
 Enable the NPU on FriendlyElec NanoPi R6C/R6S boards.

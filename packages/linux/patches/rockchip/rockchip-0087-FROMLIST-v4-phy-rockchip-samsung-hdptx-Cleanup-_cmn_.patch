@@ -1,7 +1,7 @@
-From b0bb97f5d92761409c626b98ebe9e1ff5d9788ef Mon Sep 17 00:00:00 2001
+From 3c7ebf52a0cb4d6ede81b96553e3e7320c91ed4b Mon Sep 17 00:00:00 2001
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Date: Thu, 5 Jun 2025 21:31:22 +0300
-Subject: [PATCH 087/108] FROMLIST(v4): phy: rockchip: samsung-hdptx: Cleanup
+Subject: [PATCH 087/110] FROMLIST(v4): phy: rockchip: samsung-hdptx: Cleanup
  *_cmn_init_seq lists
 
 Drop redundant reg_sequence entries from rk_hdptx_common_cmn_init_seq[],

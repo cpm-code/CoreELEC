@@ -1,7 +1,7 @@
-From ba2f7791641e70ab3a6ad8605622a46a99f4b667 Mon Sep 17 00:00:00 2001
+From d2b936034b54c68dad7ea5a992516f00fcf25872 Mon Sep 17 00:00:00 2001
 From: Detlev Casanova <detlev.casanova@collabora.com>
 Date: Thu, 24 Jul 2025 14:10:18 -0400
-Subject: [PATCH 004/108] FROMGIT(6.18): media: uapi: HEVC: Add
+Subject: [PATCH 004/110] FROMGIT(6.18): media: uapi: HEVC: Add
  v4l2_ctrl_hevc_ext_sps_[ls]t_rps controls
 
 Some hardware (e.g.: Rockchip's rk3588 hevc decoder) need the

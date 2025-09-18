@@ -1,7 +1,7 @@
-From 9edb994862d977209a27a5043bb3076d9c38b688 Mon Sep 17 00:00:00 2001
+From 188311fd217fa841ed39d90faf1df996e9a2736a Mon Sep 17 00:00:00 2001
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Date: Mon, 25 Aug 2025 13:08:35 +0300
-Subject: [PATCH 060/108] FROMLIST(v2): drm/rockchip: dw_hdmi_qp: Use bit
+Subject: [PATCH 060/110] FROMLIST(v2): drm/rockchip: dw_hdmi_qp: Use bit
  macros for RK3576 regs
 
 For consistency and improved readability, redefine a few RK3576 specific

@@ -1,7 +1,7 @@
-From b78e78578111f26f5ae1fd83fbd0a41658449f46 Mon Sep 17 00:00:00 2001
+From 9a9185a1ad5f0a3ea9d79e915f905ef47b743c84 Mon Sep 17 00:00:00 2001
 From: Detlev Casanova <detlev.casanova@collabora.com>
 Date: Thu, 26 Jun 2025 08:53:07 -0400
-Subject: [PATCH 038/108] FROMLIST(v1): drm/bridge: synopsys: Do not warn about
+Subject: [PATCH 038/110] FROMLIST(v1): drm/bridge: synopsys: Do not warn about
  audio params computation
 
 There is no need to warn about non pre-computed values, just change it to

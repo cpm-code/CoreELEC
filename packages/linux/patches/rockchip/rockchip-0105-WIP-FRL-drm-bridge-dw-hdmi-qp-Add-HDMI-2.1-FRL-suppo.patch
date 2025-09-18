@@ -1,7 +1,7 @@
-From c9e07e82566586e8d4b15cf28c0b985afaaaea88 Mon Sep 17 00:00:00 2001
+From eb8cd72f25d04baf60554da56b82afe07ba12dd9 Mon Sep 17 00:00:00 2001
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Date: Thu, 3 Jul 2025 12:42:38 +0300
-Subject: [PATCH 105/108] [WIP-FRL] drm/bridge: dw-hdmi-qp: Add HDMI 2.1 FRL
+Subject: [PATCH 105/110] [WIP-FRL] drm/bridge: dw-hdmi-qp: Add HDMI 2.1 FRL
  support
 
 Implement the link training state machine required to support HDMI 2.1

@@ -1,7 +1,7 @@
-From 1bcc6e8cccb0206ba43da361f51d30c38874065d Mon Sep 17 00:00:00 2001
+From 7fecf1e0658b22b43f8914169f11b68fdd20cc22 Mon Sep 17 00:00:00 2001
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Date: Fri, 10 Jan 2025 23:04:23 +0200
-Subject: [PATCH 096/108] [WIP-SCRAMB] drm/bridge-connector: Switch from
+Subject: [PATCH 096/110] [WIP-SCRAMB] drm/bridge-connector: Switch from
  ->detect() to ->detect_ctx()
 
 In preparation to provide scrambling support to the HDMI Connector

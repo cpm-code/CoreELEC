@@ -1,7 +1,7 @@
-From f4b2e0c1cce961b7a1abd8bb27760857af6e7faa Mon Sep 17 00:00:00 2001
+From 655aa94e79eee3a867cea8595454e6afece34d3c Mon Sep 17 00:00:00 2001
 From: Detlev Casanova <detlev.casanova@collabora.com>
 Date: Tue, 10 Jun 2025 17:45:17 -0400
-Subject: [PATCH 077/108] DETLEV(v3): media: rkvdec: Add H264 support for the
+Subject: [PATCH 077/110] DETLEV(v3): media: rkvdec: Add H264 support for the
  VDPU383 variant
 
 This variant is used on the RK3576 SoC.

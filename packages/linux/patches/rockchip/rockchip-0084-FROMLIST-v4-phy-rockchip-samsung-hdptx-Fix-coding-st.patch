@@ -1,7 +1,7 @@
-From 0b918f0ad444ecd4724ff9cdc3012c5e0b9a46aa Mon Sep 17 00:00:00 2001
+From 4a16f714180e2b7a63eda6e4bf0a8a9418f4d081 Mon Sep 17 00:00:00 2001
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Date: Wed, 28 May 2025 13:35:01 +0300
-Subject: [PATCH 084/108] FROMLIST(v4): phy: rockchip: samsung-hdptx: Fix
+Subject: [PATCH 084/110] FROMLIST(v4): phy: rockchip: samsung-hdptx: Fix
  coding style alignment
 
 Handle a bunch of reported checkpatch.pl complaints:

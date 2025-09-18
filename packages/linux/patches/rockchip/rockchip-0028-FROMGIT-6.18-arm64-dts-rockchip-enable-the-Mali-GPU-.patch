@@ -1,7 +1,7 @@
-From 4d3154e1151a869b20cca421792ed2237c75ff9f Mon Sep 17 00:00:00 2001
+From 8ba373036e302c7ef351b851af57e6ff71c4af74 Mon Sep 17 00:00:00 2001
 From: Alex Bee <knaerzche@gmail.com>
 Date: Wed, 2 Sep 2020 19:52:02 +0200
-Subject: [PATCH 028/108] FROMGIT(6.18): arm64: dts: rockchip: enable the Mali
+Subject: [PATCH 028/110] FROMGIT(6.18): arm64: dts: rockchip: enable the Mali
  GPU on RK3328 boards
 
 Add a gpu node to the rock64 board to enable the Mali GPU and

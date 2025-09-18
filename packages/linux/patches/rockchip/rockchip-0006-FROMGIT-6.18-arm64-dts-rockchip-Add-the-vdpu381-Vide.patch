@@ -1,7 +1,7 @@
-From fab7fe918af46b99bdd05a9a32c16d488ac8050b Mon Sep 17 00:00:00 2001
+From bc692341b1da628b580b01a9fd5ae59bf6d1da22 Mon Sep 17 00:00:00 2001
 From: Detlev Casanova <detlev.casanova@collabora.com>
 Date: Mon, 23 Jun 2025 12:07:17 -0400
-Subject: [PATCH 006/108] FROMGIT(6.18): arm64: dts: rockchip: Add the vdpu381
+Subject: [PATCH 006/110] FROMGIT(6.18): arm64: dts: rockchip: Add the vdpu381
  Video Decoders on RK3588
 
 Add the vdpu381 Video Decoders to the rk3588-base devicetree.

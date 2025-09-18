@@ -206,7 +206,7 @@ if { [ -d "${SOURCES}/${PKG_NAME}" ] || [ -d "${PKG_DIR}/sources" ]; } || pkg_ca
       build_msg "CLR_FIXCONFIG" "FIXCONFIG" "${config}"
 
       for file in config.guess config.sub; do
-        if [ -f "${config}/${file}" && [ -f "${TOOLCHAIN}/configtools/${file}" ]; then
+        if [ -f "${config}/${file}" ] && [ -f "${TOOLCHAIN}/configtools/${file}" ]; then
           cp -f "${TOOLCHAIN}/configtools/${file}" "${config}/"
         fi
       done

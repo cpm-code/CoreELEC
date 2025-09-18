@@ -1,7 +1,7 @@
-From 4898362d8fb614e726a5ae7df1d31b7ce3fb3119 Mon Sep 17 00:00:00 2001
+From c6a6443498cca81191ac1181bd4411aeb146893b Mon Sep 17 00:00:00 2001
 From: Alex Bee <knaerzche@gmail.com>
 Date: Tue, 2 Feb 2021 17:22:21 +0200
-Subject: [PATCH 029/108] FROMGIT(6.18): ARM: dts: rockchip: add HDMI audio to
+Subject: [PATCH 029/110] FROMGIT(6.18): ARM: dts: rockchip: add HDMI audio to
  rk3288-miqi
 
 Add the sound and i2s nodes to enable HDMI audio output on

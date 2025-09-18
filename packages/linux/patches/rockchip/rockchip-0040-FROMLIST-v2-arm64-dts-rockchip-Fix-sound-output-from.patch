@@ -1,7 +1,7 @@
-From 1522430dfc988a0f13ceb046c97436b751042e88 Mon Sep 17 00:00:00 2001
+From 282e8b359334658c4fcd32c3da67021fde413069 Mon Sep 17 00:00:00 2001
 From: Hide Hako <opi5plus@bcc.bai.ne.jp>
 Date: Tue, 26 Aug 2025 01:44:00 +0000
-Subject: [PATCH 040/108] FROMLIST(v2): arm64: dts: rockchip: Fix sound output
+Subject: [PATCH 040/110] FROMLIST(v2): arm64: dts: rockchip: Fix sound output
  from the audio jack on OrangePI5 Plus
 
 Currently, analog sound is not output from the audio jack.

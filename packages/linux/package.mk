@@ -30,8 +30,8 @@ case "${LINUX}" in
     PKG_PATCH_DIRS="raspberrypi rtlwifi/6.13 rtlwifi/6.14 rtlwifi/6.15 rtlwifi/6.17"
     ;;
   rockchip)
-    PKG_VERSION="76eeb9b8de9880ca38696b2fb56ac45ac0a25c6c" # 6.17-rc5
-    PKG_SHA256="b2ff7ef05755dadd0cfc526ef59ec80954a89ec6dc71e978ea09cb0420551950"
+    PKG_VERSION="f83ec76bf285bea5727f478a68b894f5543ca76e" # 6.17-rc6
+    PKG_SHA256="e3fc0d538db1085d756041190b5245b49a10e9b665a633c2539ea1515c328fb6"
     PKG_URL="https://github.com/chewitt/linux/archive/${PKG_VERSION}.tar.gz"
     PKG_SOURCE_NAME="linux-${LINUX}-${PKG_VERSION}.tar.gz"
     PKG_PATCH_DIRS="default rockchip rtlwifi/6.17"

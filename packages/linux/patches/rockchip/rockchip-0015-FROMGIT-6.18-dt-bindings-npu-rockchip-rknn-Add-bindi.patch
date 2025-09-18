@@ -1,7 +1,7 @@
-From 2a4747ba6fab4596a99366cea799aa992e262ce6 Mon Sep 17 00:00:00 2001
+From fcb2dac8a2a8889747b13efd52bc695c41016593 Mon Sep 17 00:00:00 2001
 From: Tomeu Vizoso <tomeu@tomeuvizoso.net>
 Date: Mon, 21 Jul 2025 11:17:33 +0200
-Subject: [PATCH 015/108] FROMGIT(6.18): dt-bindings: npu: rockchip,rknn: Add
+Subject: [PATCH 015/110] FROMGIT(6.18): dt-bindings: npu: rockchip,rknn: Add
  bindings
 
 Add the bindings for the Neural Processing Unit IP from Rockchip.

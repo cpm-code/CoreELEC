@@ -1,7 +1,7 @@
-From 960534f564d80801fead4231c1e528e8e437ed87 Mon Sep 17 00:00:00 2001
+From 51c66e8a09312dfea8ef89237114aba928307fc7 Mon Sep 17 00:00:00 2001
 From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 Date: Mon, 21 Jul 2025 11:17:34 +0200
-Subject: [PATCH 016/108] FROMGIT(6.18): arm64: dts: rockchip: add pd_npu label
+Subject: [PATCH 016/110] FROMGIT(6.18): arm64: dts: rockchip: add pd_npu label
  for RK3588 power domains
 
 The NPU of the RK3588 has an external supply. This supply also affects

@@ -1,7 +1,7 @@
-From f76fef2efa1a4fe481e10c118870cb54d349c5a2 Mon Sep 17 00:00:00 2001
+From 5c670dd3e98cf211977ad8250374c3b930c74f69 Mon Sep 17 00:00:00 2001
 From: Detlev Casanova <detlev.casanova@collabora.com>
 Date: Tue, 10 Jun 2025 14:05:08 -0400
-Subject: [PATCH 072/108] DETLEV(v3): media: rkvdec: Add per variant
+Subject: [PATCH 072/110] DETLEV(v3): media: rkvdec: Add per variant
  configuration
 
 This is to prepare for adding different variants of the decoder and

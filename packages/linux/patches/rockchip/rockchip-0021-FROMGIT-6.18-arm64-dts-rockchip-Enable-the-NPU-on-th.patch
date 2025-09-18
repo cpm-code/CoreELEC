@@ -1,7 +1,7 @@
-From 17bad86ba250bb1a93bcc42333f0dc1bdee3ea9b Mon Sep 17 00:00:00 2001
+From 0d402d84d1e3afb656d6261fa53bf877c14aa996 Mon Sep 17 00:00:00 2001
 From: Maud Spierings <maud_spierings@hotmail.com>
 Date: Sat, 23 Aug 2025 14:43:52 +0200
-Subject: [PATCH 021/108] FROMGIT(6.18): arm64: dts: rockchip: Enable the NPU
+Subject: [PATCH 021/110] FROMGIT(6.18): arm64: dts: rockchip: Enable the NPU
  on the orangepi 5 boards
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8

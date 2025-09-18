@@ -1,7 +1,7 @@
-From c7b2662ce199453cd088ea7568849fa4ef09e854 Mon Sep 17 00:00:00 2001
+From 69ee828d2be233b68c79c4f508d6301c5c6b46d2 Mon Sep 17 00:00:00 2001
 From: Detlev Casanova <detlev.casanova@collabora.com>
 Date: Tue, 10 Jun 2025 13:16:24 -0400
-Subject: [PATCH 070/108] DETLEV(v3): media: rkvdec: Move h264 functions to
+Subject: [PATCH 070/110] DETLEV(v3): media: rkvdec: Move h264 functions to
  common file
 
 This is a preparation commit to add support for new variants of the

@@ -1,7 +1,7 @@
-From cfcdbeea880365e4217fede204f3516ef1869618 Mon Sep 17 00:00:00 2001
+From e0e0e91a7ab46c827517332c71ac7641b232bbc2 Mon Sep 17 00:00:00 2001
 From: Alex Bee <knaerzche@gmail.com>
 Date: Sat, 27 Feb 2021 17:52:02 +0100
-Subject: [PATCH 024/108] FROMGIT(6.18): arm64: dts: rockchip: add SPDIF audio
+Subject: [PATCH 024/110] FROMGIT(6.18): arm64: dts: rockchip: add SPDIF audio
  to Beelink A1
 
 Add the required nodes to enable SPDIF audio output on

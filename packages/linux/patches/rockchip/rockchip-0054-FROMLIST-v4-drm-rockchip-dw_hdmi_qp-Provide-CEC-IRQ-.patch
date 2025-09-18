@@ -1,7 +1,7 @@
-From dc1e6185af563cfd6dcf4b927c5a519d4d42e8dc Mon Sep 17 00:00:00 2001
+From 37289508c78629d0c52eb70ce608a86abef4bd61 Mon Sep 17 00:00:00 2001
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Date: Wed, 3 Sep 2025 21:51:02 +0300
-Subject: [PATCH 054/108] FROMLIST(v4): drm/rockchip: dw_hdmi_qp: Provide CEC
+Subject: [PATCH 054/110] FROMLIST(v4): drm/rockchip: dw_hdmi_qp: Provide CEC
  IRQ in dw_hdmi_qp_plat_data
 
 In order to support the CEC interface of the DesignWare HDMI QP IP

@@ -1,7 +1,7 @@
-From 37d415b4ca7709e66a731960de178d2b8f037238 Mon Sep 17 00:00:00 2001
+From 7c459a4883b48c84f732104b5db49fa06b712bd4 Mon Sep 17 00:00:00 2001
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Date: Fri, 30 May 2025 00:56:48 +0300
-Subject: [PATCH 082/108] FROMLIST(v4): phy: hdmi: Add HDMI 2.1 FRL
+Subject: [PATCH 082/110] FROMLIST(v4): phy: hdmi: Add HDMI 2.1 FRL
  configuration options
 
 The HDMI 2.1 specification introduced the Fixed Rate Link (FRL) mode,

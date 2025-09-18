@@ -1,7 +1,7 @@
-From ee2f59492e51379da3fb11760c8b2d1bec7ebe48 Mon Sep 17 00:00:00 2001
+From e57ce0b593e2b92db338700386877451af5ef286 Mon Sep 17 00:00:00 2001
 From: "kylepzak@projectinitiative.io" <kylepzak@projectinitiative.io>
 Date: Tue, 19 Aug 2025 21:30:12 -0500
-Subject: [PATCH 022/108] FROMGIT(6.18): arm64: dts: rockchip: rk3588s-rock-5a:
+Subject: [PATCH 022/110] FROMGIT(6.18): arm64: dts: rockchip: rk3588s-rock-5a:
  Add green power LED
 
 The Radxa ROCK 5A board includes a green power LED that is defined in

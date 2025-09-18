@@ -1,7 +1,7 @@
-From e22bf4ac4e23f523be5efa42f828f1aee065bcad Mon Sep 17 00:00:00 2001
+From 767ba6b92dd6b409208540b8fe2e57361b20afb6 Mon Sep 17 00:00:00 2001
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Date: Wed, 3 Sep 2025 21:51:00 +0300
-Subject: [PATCH 052/108] FROMLIST(v4): drm/bridge: dw-hdmi-qp: Fixup timer
+Subject: [PATCH 052/110] FROMLIST(v4): drm/bridge: dw-hdmi-qp: Fixup timer
  base setup
 
 Currently the TIMER_BASE_CONFIG0 register gets initialized to a fixed

@@ -1,7 +1,7 @@
-From 9ee5120322779e070d0c3b38866f21e962d11fcc Mon Sep 17 00:00:00 2001
+From b70df618e8c160d014bf5fea0b79024392dbca14 Mon Sep 17 00:00:00 2001
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
 Date: Wed, 20 Aug 2025 19:40:47 +0200
-Subject: [PATCH 041/108] FROMLIST(v2): thermal: rockchip: unify struct
+Subject: [PATCH 041/110] FROMLIST(v2): thermal: rockchip: unify struct
  rockchip_tsadc_chip format
 
 Unify all chip descriptions to the version without any empty

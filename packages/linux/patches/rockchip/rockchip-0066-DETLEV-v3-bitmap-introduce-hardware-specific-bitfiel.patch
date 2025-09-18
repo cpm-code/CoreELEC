@@ -1,7 +1,7 @@
-From f099b720f1cef83dd8073cb08b1d1272496d2695 Mon Sep 17 00:00:00 2001
+From f68dca914c801c29aedaa9ce11e173be7e98d33b Mon Sep 17 00:00:00 2001
 From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 Date: Mon, 23 Jun 2025 18:05:29 +0200
-Subject: [PATCH 066/108] DETLEV(v3): bitmap: introduce hardware-specific
+Subject: [PATCH 066/110] DETLEV(v3): bitmap: introduce hardware-specific
  bitfield operations
 
 Hardware of various vendors, but very notably Rockchip, often uses
@@ -35,7 +35,7 @@ Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
  create mode 100644 include/linux/hw_bitfield.h
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index a19231134b01..db4cb02cf04e 100644
+index 8e1c8da14af1..7e0eff6c982c 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
 @@ -4276,6 +4276,7 @@ F:	include/linux/bits.h

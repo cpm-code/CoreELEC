@@ -1,7 +1,7 @@
-From 2927cd7f8d3dfa8180a55c1bb394250e8472f3ab Mon Sep 17 00:00:00 2001
+From bbf4744749da5b7ba3a5182ccc32ae0f20950e22 Mon Sep 17 00:00:00 2001
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Date: Fri, 30 May 2025 00:58:26 +0300
-Subject: [PATCH 092/108] FROMLIST(v4): phy: rockchip: samsung-hdptx: Add HDMI
+Subject: [PATCH 092/110] FROMLIST(v4): phy: rockchip: samsung-hdptx: Add HDMI
  2.1 FRL support
 
 The PHY is capable of handling four HDMI 2.1 Fixed Rate Link (FRL)

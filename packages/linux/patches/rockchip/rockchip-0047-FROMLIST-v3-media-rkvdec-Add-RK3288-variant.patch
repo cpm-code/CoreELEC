@@ -1,7 +1,7 @@
-From d0a24ad239a154b3e967f8c48856fbe7a1491def Mon Sep 17 00:00:00 2001
+From 4a51d808c4b8be543bd68e313c0add85060b9042 Mon Sep 17 00:00:00 2001
 From: Alex Bee <knaerzche@gmail.com>
 Date: Sun, 10 Aug 2025 21:24:34 +0000
-Subject: [PATCH 047/108] FROMLIST(v3): media: rkvdec: Add RK3288 variant
+Subject: [PATCH 047/110] FROMLIST(v3): media: rkvdec: Add RK3288 variant
 
 Add a RK3288 variant, a version of the Rockchip VDEC IP that only
 support HEVC decoding.
