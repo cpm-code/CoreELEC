@@ -4,8 +4,8 @@
 # Copyright (C) 2020-present Team CoreELEC (https://coreelec.org)
 
 PKG_NAME="gobject-introspection"
-PKG_VERSION="1.84.0"
-PKG_SHA256="8ff69ea72bea4f42d2daab1d0cf2dc5810b58387583f403f796f661af2b15a7b"
+PKG_VERSION="1.86.0"
+PKG_SHA256="eadae02135e96ad40221b4a9eb5e168f8c70ef3f697485c38345a3638adf51a2"
 PKG_ARCH="any"
 PKG_LICENSE="LGPL"
 PKG_SITE="http://www.gtk.org/"
