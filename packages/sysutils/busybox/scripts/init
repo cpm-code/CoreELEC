@@ -867,7 +867,7 @@ check_update() {
   if [ -f "$UPDATE_TAR" ]; then
     TARRESULT="0"
 
-    echo "Found new .tar archive"
+    echo "Found new .tar archive file"
     UPDATE_FILENAME="$UPDATE_TAR"
     StartProgress spinner "Extracting contents of archive... "
       tar -xf "$UPDATE_TAR" -C $UPDATE_DIR/.tmp 1>/dev/null 2>/tmp/tarresult.txt || TARRESULT="1"
@@ -875,7 +875,7 @@ check_update() {
     if [ "${TARRESULT}" -eq "0" ]; then
       mv $UPDATE_DIR/.tmp/*/target/* $UPDATE_DIR &>/dev/null
       sync
-      StopProgress "done"
+      StopProgress "OK"
     else
       StopProgress "FAILED"
 
@@ -1087,10 +1087,8 @@ check_update() {
 }
 
 do_aml_autoscript() {
-  echo "check if 'reboot update' or 'run update' was run"
-
-  if [ -z "${boot}" -a -z "${disk}"]; then
-    echo "update was run"
+  if [ -z "${boot}" ] && [ -z "${disk}" ]; then
+    echo "'reboot update' or 'run update' was run"
 
     # set missing variables not set in this case
     boot="LABEL=COREELEC"
@@ -1104,7 +1102,7 @@ do_aml_autoscript() {
       usleep 1000000
     done
 
-    if [ -f /flash/aml_autoscript -a -b /dev/env ]; then
+    if [ -f /flash/aml_autoscript ] && [ -b /dev/env ]; then
       echo "doing aml_autoscript..."
 
       mkdir -p /var/lock
@@ -1121,8 +1119,10 @@ do_aml_autoscript() {
 
     do_reboot
   else
-    echo "update was not run"
+    echo "'reboot update' or 'run update' was not run"
   fi
+
+  echo
 }
 
 prepare_sysroot() {
