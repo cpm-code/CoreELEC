@@ -30,10 +30,6 @@ if [ "${WIREGUARD_SUPPORT}" = "yes" ]; then
   PKG_DEPENDS_TARGET+=" wireguard-tools"
 fi
 
-if [ "${ISCSI_SUPPORT}" = "yes" ]; then
-  PKG_DEPENDS_TARGET+=" open-iscsi"
-fi
-
 if [ "${NFS_SUPPORT}" = "yes" ]; then
   PKG_DEPENDS_TARGET+=" nfs-utils"
 fi
