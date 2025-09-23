@@ -3,8 +3,8 @@
 # Copyright (C) 2019-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="expat"
-PKG_VERSION="2.7.1"
-PKG_SHA256="354552544b8f99012e5062f7d570ec77f14b412a3ff5c7d8d0dae62c0d217c30"
+PKG_VERSION="2.7.2"
+PKG_SHA256="21b778b34ec837c2ac285aef340f9fb5fa063a811b21ea4d2412a9702c88995c"
 PKG_LICENSE="OSS"
 PKG_SITE="https://libexpat.github.io"
 PKG_URL="https://github.com/libexpat/libexpat/releases/download/R_${PKG_VERSION//./_}/${PKG_NAME}-${PKG_VERSION}.tar.xz"
