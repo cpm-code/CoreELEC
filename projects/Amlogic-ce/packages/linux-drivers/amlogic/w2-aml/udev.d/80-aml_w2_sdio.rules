@@ -1,9 +1,15 @@
 ### Amlogic W2
 ### this driver is split in two individual kernel modules
-ENV{MODALIAS}=="?*", ENV{SUBSYSTEM}=="sdio", ENV{SDIO_ID}=="1B8E:0640", GOTO="load_module"
+
+# SDIO rule
+ENV{MODALIAS}=="?*", ENV{SUBSYSTEM}=="sdio", ENV{SDIO_ID}=="1B8E:0640", ENV{W2_BUS_TYPE}="sdio", GOTO="load_module"
+
+# USB rule
+ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="1b8e", ATTRS{idProduct}=="0641", ENV{W2_BUS_TYPE}="usb", GOTO="load_module"
+
 GOTO="end"
 
 LABEL="load_module"
-ENV{MODALIAS}=="?*", ENV{SUBSYSTEM}=="sdio", RUN{builtin}+="kmod load w2_comm", RUN{builtin}+="kmod load w2"
+RUN+="/sbin/modprobe w2_comm w2_bus_type=$env{W2_BUS_TYPE}", RUN+="/sbin/modprobe w2"
 
 LABEL="end"

@@ -2,8 +2,8 @@
 # Copyright (C) 2025-present Team CoreELEC (https://coreelec.org)
 
 PKG_NAME="w2-aml"
-PKG_VERSION="8ee10fa2d66cbff8d607382476dafdff971395a4"
-PKG_SHA256="c5cfdea29ca6107f6174b0849ee672c2fafedf6b5091b064aa3d5b8832e6d281"
+PKG_VERSION="3f7484c4bb4476f13f95aa538f6954416c6a8c07"
+PKG_SHA256=""
 PKG_ARCH="arm aarch64"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/CoreELEC/w2-aml"
@@ -25,5 +25,6 @@ makeinstall_target() {
 
   mkdir -p ${INSTALL}/$(get_full_firmware_dir)
     cp ${PKG_BUILD}/common/aml_w2_*.txt ${INSTALL}/$(get_full_firmware_dir)
-    cp ${PKG_BUILD}/common/wifi_w2_*sdio.bin ${INSTALL}/$(get_full_firmware_dir)
+    cp ${PKG_BUILD}/common/wifi_w2_fw_sdio.bin ${INSTALL}/$(get_full_firmware_dir)
+    cp ${PKG_BUILD}/common/wifi_w2_fw_usb.bin ${INSTALL}/$(get_full_firmware_dir)
 }
