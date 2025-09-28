@@ -78,14 +78,20 @@ load_dovi() {
   # Android 11
   dmsetup create --concise "$(parse-android-dynparts /dev/super)"
 
-  local active_slot=$(fw_printenv active_slot 2>/dev/null | awk -F '=' '/active_slot=/ {print $2}')
+  local active_slot=""
 
   if [ -b /dev/mapper/dynpart-system_a ]; then
     active_slot="_a"
   elif [ -b /dev/mapper/dynpart-system_b ]; then
     active_slot="_b"
-  else
-    active_slot=""
+  fi
+
+  # Xiaomi Android 14
+  if [ -b /dev/oem${active_slot} ]; then
+    mount -o ro /dev/oem${active_slot} /android/oem
+  
+    DOVI_KO_ANDROID="/android/oem/overlay/dovi.ko"
+    insmod_dovi && umount_partitions && return
   fi
 
   if [ -b /dev/mapper/dynpart-odm${active_slot} ]; then
