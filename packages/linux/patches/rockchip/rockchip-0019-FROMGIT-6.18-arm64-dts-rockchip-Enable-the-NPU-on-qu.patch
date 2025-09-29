@@ -1,7 +1,7 @@
-From b59b36b24b31976982f01055372b9b522284f4f7 Mon Sep 17 00:00:00 2001
+From 25b5483190a906b9c1ac3c9d25546ad41b9e9c0b Mon Sep 17 00:00:00 2001
 From: Tomeu Vizoso <tomeu@tomeuvizoso.net>
 Date: Mon, 21 Jul 2025 11:17:36 +0200
-Subject: [PATCH 019/113] FROMGIT(6.18): arm64: dts: rockchip: Enable the NPU
+Subject: [PATCH 019/115] FROMGIT(6.18): arm64: dts: rockchip: Enable the NPU
  on quartzpro64
 
 Enable the nodes added in a previous commit to the rk3588s device tree.

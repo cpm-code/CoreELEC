@@ -1,7 +1,7 @@
-From 8f2aaea3a01a5aec1e345b52e8cc42cc853a3560 Mon Sep 17 00:00:00 2001
+From c0f9036411effeffef31b216147f3a3f456f8c68 Mon Sep 17 00:00:00 2001
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Date: Wed, 3 Sep 2025 21:51:01 +0300
-Subject: [PATCH 054/113] FROMLIST(v4): drm/rockchip: dw_hdmi_qp: Improve error
+Subject: [PATCH 054/115] FROMLIST(v4): drm/rockchip: dw_hdmi_qp: Improve error
  handling with dev_err_probe()
 
 The error handling in dw_hdmi_qp_rockchip_bind() is quite inconsistent,

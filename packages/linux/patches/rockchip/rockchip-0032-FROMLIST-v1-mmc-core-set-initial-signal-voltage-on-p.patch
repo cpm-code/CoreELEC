@@ -1,7 +1,7 @@
-From 3c2a1b56da4d4a137c79450977f8f66ede38235a Mon Sep 17 00:00:00 2001
+From a812a54e6b081d9d572c84e21ca18b95919f9654 Mon Sep 17 00:00:00 2001
 From: Jonas Karlman <jonas@kwiboo.se>
 Date: Sun, 17 Feb 2019 22:14:38 +0000
-Subject: [PATCH 032/113] FROMLIST(v1): mmc: core: set initial signal voltage
+Subject: [PATCH 032/115] FROMLIST(v1): mmc: core: set initial signal voltage
  on power off
 
 Some boards have SD card connectors where the power rail cannot be switched

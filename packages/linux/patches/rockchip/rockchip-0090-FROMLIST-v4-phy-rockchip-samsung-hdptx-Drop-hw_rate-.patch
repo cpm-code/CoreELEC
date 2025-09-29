@@ -1,7 +1,7 @@
-From 809dafc9a1ec60907dd77324a8193fb06c5218b7 Mon Sep 17 00:00:00 2001
+From 420720e33d691d482bc3b40dc24fc7c6ec5cab6e Mon Sep 17 00:00:00 2001
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Date: Fri, 1 Aug 2025 17:10:15 +0300
-Subject: [PATCH 090/113] FROMLIST(v4): phy: rockchip: samsung-hdptx: Drop
+Subject: [PATCH 090/115] FROMLIST(v4): phy: rockchip: samsung-hdptx: Drop
  hw_rate driver data
 
 The ->hw_rate member of struct rk_hdptx_phy was mainly used to keep

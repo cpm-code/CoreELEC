@@ -1,7 +1,7 @@
-From 6c92a6c587ea30abd4eeab4e787ec537ce7f4279 Mon Sep 17 00:00:00 2001
+From 14668daca7639deabb66542fa80fed8732d609dc Mon Sep 17 00:00:00 2001
 From: Christian Hewitt <christianshewitt@gmail.com>
 Date: Wed, 17 Sep 2025 11:17:20 +0000
-Subject: [PATCH 004/113] LOCAL: drm/rockchip: vop2: rk3568: change
+Subject: [PATCH 004/115] LOCAL: drm/rockchip: vop2: rk3568: change
  Esmart/Cluster/Smart ordering
 
 Order Esmart planes before Cluster planes and Smart planes so Kodi

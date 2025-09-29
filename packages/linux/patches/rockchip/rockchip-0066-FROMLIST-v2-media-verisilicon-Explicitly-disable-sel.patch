@@ -1,7 +1,7 @@
-From 5b54b1f6ace36d92449924078e99c7948786264e Mon Sep 17 00:00:00 2001
+From 3594845d25d435c3cfe2be78e6c7ee9e6660a7f5 Mon Sep 17 00:00:00 2001
 From: Paul Kocialkowski <paulk@sys-base.io>
 Date: Thu, 28 Aug 2025 01:49:00 +0000
-Subject: [PATCH 066/113] FROMLIST(v2): media: verisilicon: Explicitly disable
+Subject: [PATCH 066/115] FROMLIST(v2): media: verisilicon: Explicitly disable
  selection api ioctls for decoders
 
 Call the dedicated v4l2_disable_ioctl helper instead of manually

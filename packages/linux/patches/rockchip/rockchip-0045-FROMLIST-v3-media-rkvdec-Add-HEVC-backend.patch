@@ -1,7 +1,7 @@
-From f3738d58ce76f1cc1852b4c05f897abaf27ad6a6 Mon Sep 17 00:00:00 2001
+From c61f821a181a92ed572b004fe4e15899423a10e3 Mon Sep 17 00:00:00 2001
 From: Jonas Karlman <jonas@kwiboo.se>
 Date: Fri, 5 Sep 2025 16:19:19 +0000
-Subject: [PATCH 045/113] FROMLIST(v3): media: rkvdec: Add HEVC backend
+Subject: [PATCH 045/115] FROMLIST(v3): media: rkvdec: Add HEVC backend
 
 The Rockchip VDEC supports the HEVC codec with the Main and Main10
 Profile up to Level 5.1 High tier: 4096x2304@60 fps.

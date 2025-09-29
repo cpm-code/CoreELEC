@@ -1,7 +1,7 @@
-From 7fe9eeaee3d92649de595694906140e40786451e Mon Sep 17 00:00:00 2001
+From bbb86f6b5704481146cf5f9a529fe861a29cc7f5 Mon Sep 17 00:00:00 2001
 From: Detlev Casanova <detlev.casanova@collabora.com>
 Date: Tue, 10 Jun 2025 14:53:27 -0400
-Subject: [PATCH 074/113] DETLEV(v3): media: rkvdec: Add RCB and SRAM support
+Subject: [PATCH 074/115] DETLEV(v3): media: rkvdec: Add RCB and SRAM support
 
 The RCB (Rows and Cols Buffers) are a set of buffers used by other
 variations of the decoder to store temporary data.

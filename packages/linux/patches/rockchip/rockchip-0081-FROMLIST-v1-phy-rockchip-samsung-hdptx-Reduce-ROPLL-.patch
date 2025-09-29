@@ -1,7 +1,7 @@
-From 05cceaa47b83ac21458e296311c6d024418363ea Mon Sep 17 00:00:00 2001
+From cc70b8972a0372f79f03f132159c6f992ee7b2f0 Mon Sep 17 00:00:00 2001
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Date: Thu, 5 Jun 2025 20:09:27 +0300
-Subject: [PATCH 081/113] FROMLIST(v1): phy: rockchip: samsung-hdptx: Reduce
+Subject: [PATCH 081/115] FROMLIST(v1): phy: rockchip: samsung-hdptx: Reduce
  ROPLL loop bandwidth
 
 Due to its relatively low frequency, a noise stemming from the 24MHz PLL

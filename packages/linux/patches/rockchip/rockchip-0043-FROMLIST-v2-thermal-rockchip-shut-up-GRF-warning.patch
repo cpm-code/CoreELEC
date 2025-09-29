@@ -1,7 +1,7 @@
-From 54166452c61a7d21d43a50e21c21792d0d385bcf Mon Sep 17 00:00:00 2001
+From 496de91353b0f7908e60b103ed182035f52ceb99 Mon Sep 17 00:00:00 2001
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
 Date: Wed, 20 Aug 2025 19:40:48 +0200
-Subject: [PATCH 043/113] FROMLIST(v2): thermal: rockchip: shut up GRF warning
+Subject: [PATCH 043/115] FROMLIST(v2): thermal: rockchip: shut up GRF warning
 
 Most of the recent Rockchip devices do not have a GRF associated
 with the tsadc IP. Let's avoid printing a warning on those devices.

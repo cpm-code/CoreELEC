@@ -1,7 +1,7 @@
-From 1331c13da64a5d6d1d1549915bd1095c4049aab4 Mon Sep 17 00:00:00 2001
+From 57f07e83c8a32f10c53fd99abc95a79383839ba5 Mon Sep 17 00:00:00 2001
 From: Alex Bee <knaerzche@gmail.com>
 Date: Sun, 10 Aug 2025 21:24:35 +0000
-Subject: [PATCH 049/113] FROMLIST(v3): media: rkvdec: Disable QoS for HEVC and
+Subject: [PATCH 049/115] FROMLIST(v3): media: rkvdec: Disable QoS for HEVC and
  VP9 on RK3328
 
 The RK3328 VDEC has a HW quirk that require QoS to be disabled when HEVC

@@ -1,7 +1,7 @@
-From bb3b472271a88205c003910c06021164934f8cc0 Mon Sep 17 00:00:00 2001
+From c3e8dc2c9fce5bdd07ec42689f5be928a7743c73 Mon Sep 17 00:00:00 2001
 From: Anton Kirilov <anton.kirilov@arm.com>
 Date: Thu, 7 Aug 2025 18:00:11 +0100
-Subject: [PATCH 009/113] FROMGIT(6.18): arm64: dts: rockchip: Enable HDMI
+Subject: [PATCH 009/115] FROMGIT(6.18): arm64: dts: rockchip: Enable HDMI
  audio output for NanoPi R6C/R6S
 
 Enable HDMI audio output for FriendlyElec NanoPi R6C/R6S boards.

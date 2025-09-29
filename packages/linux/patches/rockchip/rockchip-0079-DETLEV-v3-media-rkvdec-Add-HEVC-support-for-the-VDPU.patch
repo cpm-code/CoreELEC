@@ -1,7 +1,7 @@
-From 056194f77cd326c5db064daf90df3720b006f920 Mon Sep 17 00:00:00 2001
+From 4e3311924b57fd6d541a50139c26f2216210017b Mon Sep 17 00:00:00 2001
 From: Detlev Casanova <detlev.casanova@collabora.com>
 Date: Wed, 11 Jun 2025 17:04:28 -0400
-Subject: [PATCH 079/113] DETLEV(v3): media: rkvdec: Add HEVC support for the
+Subject: [PATCH 079/115] DETLEV(v3): media: rkvdec: Add HEVC support for the
  VDPU383 variant
 
 The VDPU383 decoder is used on the RK3576 SoC and has support for HEVC.

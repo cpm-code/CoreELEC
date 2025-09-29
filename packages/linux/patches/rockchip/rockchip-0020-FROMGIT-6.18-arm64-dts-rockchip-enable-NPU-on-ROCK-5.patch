@@ -1,7 +1,7 @@
-From 4c41bac5057293ba1e191069e16299bca6734b64 Mon Sep 17 00:00:00 2001
+From a230ae962e366720c5404571b917a4ce247713cd Mon Sep 17 00:00:00 2001
 From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 Date: Mon, 21 Jul 2025 09:17:00 +0000
-Subject: [PATCH 020/113] FROMGIT(6.18): arm64: dts: rockchip: enable NPU on
+Subject: [PATCH 020/115] FROMGIT(6.18): arm64: dts: rockchip: enable NPU on
  ROCK 5B/5B+/5T
 
 The NPU on the ROCK5B uses the same regulator for both the sram-supply

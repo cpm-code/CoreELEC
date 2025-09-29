@@ -1,7 +1,7 @@
-From 85693440805f264d814dc576ed31d75d3584fcfd Mon Sep 17 00:00:00 2001
+From 4af60800340f93fead57b58d038826401abb0341 Mon Sep 17 00:00:00 2001
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Date: Wed, 4 Jun 2025 10:25:49 +0300
-Subject: [PATCH 087/113] FROMLIST(v4): phy: rockchip: samsung-hdptx: Enable
+Subject: [PATCH 087/115] FROMLIST(v4): phy: rockchip: samsung-hdptx: Enable
  lane output in common helper
 
 In preparation to support FRL mode, move the PHY lane output enablement

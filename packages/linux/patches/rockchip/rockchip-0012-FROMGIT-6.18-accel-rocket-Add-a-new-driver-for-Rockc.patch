@@ -1,7 +1,7 @@
-From 5d8fb8343951f599a0a4096e667e177452408beb Mon Sep 17 00:00:00 2001
+From bcb10e4e21562a9b84340b6cfe894adc8469e034 Mon Sep 17 00:00:00 2001
 From: Tomeu Vizoso <tomeu@tomeuvizoso.net>
 Date: Mon, 21 Jul 2025 11:17:29 +0200
-Subject: [PATCH 012/113] FROMGIT(6.18): accel/rocket: Add a new driver for
+Subject: [PATCH 012/115] FROMGIT(6.18): accel/rocket: Add a new driver for
  Rockchip's NPU
 
 This initial version supports the NPU as shipped in the RK3588 SoC and
@@ -79,10 +79,10 @@ index 000000000000..70f97bccf100
 +
 +* RK3588
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 520fb4e379a3..afddc0e6dba3 100644
+index 97d958c945e4..b13c0401b076 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -7497,6 +7497,16 @@ T:	git https://gitlab.freedesktop.org/drm/misc/kernel.git
+@@ -7495,6 +7495,16 @@ T:	git https://gitlab.freedesktop.org/drm/misc/kernel.git
  F:	drivers/accel/ivpu/
  F:	include/uapi/drm/ivpu_accel.h
  

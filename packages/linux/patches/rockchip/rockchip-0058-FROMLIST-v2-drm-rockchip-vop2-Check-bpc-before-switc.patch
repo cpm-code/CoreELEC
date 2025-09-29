@@ -1,7 +1,7 @@
-From e929fb875b5f8e89b18ef46936f60004ea69b2bf Mon Sep 17 00:00:00 2001
+From 8ed4dccffc9d1904332541e01b86591414a6a6fa Mon Sep 17 00:00:00 2001
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Date: Mon, 25 Aug 2025 13:08:32 +0300
-Subject: [PATCH 058/113] FROMLIST(v2): drm/rockchip: vop2: Check bpc before
+Subject: [PATCH 058/115] FROMLIST(v2): drm/rockchip: vop2: Check bpc before
  switching DCLK source
 
 When making use of the HDMI PHY PLL as a VOP2 DCLK source, it's output

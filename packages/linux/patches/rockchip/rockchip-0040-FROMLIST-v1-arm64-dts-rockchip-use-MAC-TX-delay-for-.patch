@@ -1,7 +1,7 @@
-From 17eeb58cbeadedfa75674e09e01bd0b44c624c29 Mon Sep 17 00:00:00 2001
+From b73d19762f95276f342d72f60eec282ba386f185 Mon Sep 17 00:00:00 2001
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
 Date: Thu, 24 Jul 2025 16:31:25 +0200
-Subject: [PATCH 040/113] FROMLIST(v1): arm64: dts: rockchip: use MAC TX delay
+Subject: [PATCH 040/115] FROMLIST(v1): arm64: dts: rockchip: use MAC TX delay
  for ROCK 4D
 
 According to the Ethernet controller device tree binding "rgmii-id"

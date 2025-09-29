@@ -1,7 +1,7 @@
-From b936852059e45b5016707026f99e7d8b6ad86450 Mon Sep 17 00:00:00 2001
+From fd606b0aac0c30988d7b9c773714d6bf5682bbd6 Mon Sep 17 00:00:00 2001
 From: Alex Bee <knaerzche@gmail.com>
 Date: Sat, 21 Aug 2021 17:04:46 +0200
-Subject: [PATCH 026/113] FROMGIT(6.18): arm64: dts: rockchip: add USB3 on
+Subject: [PATCH 026/115] FROMGIT(6.18): arm64: dts: rockchip: add USB3 on
  Beelink A1
 
 Enable USB3 for the Beelink A1 set-top box.

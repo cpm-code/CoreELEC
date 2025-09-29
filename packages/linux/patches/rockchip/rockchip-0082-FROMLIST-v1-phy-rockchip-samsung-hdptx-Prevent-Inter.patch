@@ -1,7 +1,7 @@
-From e7c818d4e5eef9dea9a7ec5697438f7cec9ecaec Mon Sep 17 00:00:00 2001
+From 84e82c991d6d342346f0a15f9197acb0d0bbcec6 Mon Sep 17 00:00:00 2001
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Date: Thu, 5 Jun 2025 22:33:29 +0300
-Subject: [PATCH 082/113] FROMLIST(v1): phy: rockchip: samsung-hdptx: Prevent
+Subject: [PATCH 082/115] FROMLIST(v1): phy: rockchip: samsung-hdptx: Prevent
  Inter-Pair Skew from exceeding the limits
 
 Fixup PHY deskew FIFO to prevent the phase of D2 lane going ahead of

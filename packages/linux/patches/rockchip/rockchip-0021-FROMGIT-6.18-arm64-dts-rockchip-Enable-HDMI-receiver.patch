@@ -1,7 +1,7 @@
-From c13c281a5bd4e4a8d94d01becc92d784b45c7b47 Mon Sep 17 00:00:00 2001
+From 603f1e3cdefd4236f413795cb2f498f89f6b1fb9 Mon Sep 17 00:00:00 2001
 From: Maud Spierings <maud_spierings@hotmail.com>
 Date: Sat, 23 Aug 2025 14:43:51 +0200
-Subject: [PATCH 021/113] FROMGIT(6.18): arm64: dts: rockchip: Enable HDMI
+Subject: [PATCH 021/115] FROMGIT(6.18): arm64: dts: rockchip: Enable HDMI
  receiver on orangepi 5 plus
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8

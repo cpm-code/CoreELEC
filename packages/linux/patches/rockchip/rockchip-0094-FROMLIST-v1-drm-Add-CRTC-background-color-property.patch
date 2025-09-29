@@ -1,7 +1,7 @@
-From 8dae522a64e50919fd704ded94b3f3a900e47fc3 Mon Sep 17 00:00:00 2001
+From c271e223ff73d210a4de36345c7054d40a66c088 Mon Sep 17 00:00:00 2001
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Date: Tue, 19 Aug 2025 11:21:35 +0300
-Subject: [PATCH 094/113] FROMLIST(v1): drm: Add CRTC background color property
+Subject: [PATCH 094/115] FROMLIST(v1): drm: Add CRTC background color property
 
 Some display controllers can be hardware programmed to show non-black
 colors for pixels that are either not covered by any plane or are

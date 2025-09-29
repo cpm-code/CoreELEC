@@ -1,7 +1,7 @@
-From a546b39d18dbe347a8fca613e2516b5ab1455bab Mon Sep 17 00:00:00 2001
+From 34369dc397309c1df47a78fb5a309ba988ca8249 Mon Sep 17 00:00:00 2001
 From: Jonas Karlman <jonas@kwiboo.se>
 Date: Sun, 10 Aug 2025 21:24:33 +0000
-Subject: [PATCH 047/113] FROMLIST(v3): media: rkvdec: Implement capability
+Subject: [PATCH 047/115] FROMLIST(v3): media: rkvdec: Implement capability
  filtering
 
 Add filtering of coded formats and controls depending on a variant

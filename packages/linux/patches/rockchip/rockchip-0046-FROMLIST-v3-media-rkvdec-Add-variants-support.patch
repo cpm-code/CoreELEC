@@ -1,7 +1,7 @@
-From 0f399549d6ad29ca704b040df3876442a5a1e339 Mon Sep 17 00:00:00 2001
+From f561f7dad8605c3b0f6c14581cf25693314f379c Mon Sep 17 00:00:00 2001
 From: Alex Bee <knaerzche@gmail.com>
 Date: Fri, 5 Sep 2025 16:19:20 +0000
-Subject: [PATCH 046/113] FROMLIST(v3): media: rkvdec: Add variants support
+Subject: [PATCH 046/115] FROMLIST(v3): media: rkvdec: Add variants support
 
 Different versions of the Rockchip VDEC IP exists and one way they can
 differ is what decoding formats are supported.

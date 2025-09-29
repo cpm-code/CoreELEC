@@ -1,7 +1,7 @@
-From dc89a8432a8cc971cd5be8d50bb63688b247683f Mon Sep 17 00:00:00 2001
+From 9a25d6f78a00b856487a4ada9fb836ec95f8d6ae Mon Sep 17 00:00:00 2001
 From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 Date: Mon, 25 Aug 2025 17:34:41 +0200
-Subject: [PATCH 034/113] FROMLIST(v7): dt-bindings: iommu: verisilicon: Add
+Subject: [PATCH 034/115] FROMLIST(v7): dt-bindings: iommu: verisilicon: Add
  binding for VSI IOMMU
 
 Add a device tree binding for the Verisilicon (VSI) IOMMU.

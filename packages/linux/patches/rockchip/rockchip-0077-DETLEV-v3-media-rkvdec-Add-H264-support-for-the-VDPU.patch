@@ -1,7 +1,7 @@
-From 913a2a709988a2c79d633d2580613033253d02d5 Mon Sep 17 00:00:00 2001
+From faa4948d6b2738b57c64af43586b67c2f4ad71da Mon Sep 17 00:00:00 2001
 From: Detlev Casanova <detlev.casanova@collabora.com>
 Date: Tue, 10 Jun 2025 15:53:52 -0400
-Subject: [PATCH 077/113] DETLEV(v3): media: rkvdec: Add H264 support for the
+Subject: [PATCH 077/115] DETLEV(v3): media: rkvdec: Add H264 support for the
  VDPU381 variant
 
 This decoder variant is found in Rockchip RK3588 SoC family.

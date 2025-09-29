@@ -1,7 +1,7 @@
-From 2821e9a052529c84f737797f364d8d9971234119 Mon Sep 17 00:00:00 2001
+From 92340edd65c26939defcb566e0f52a5c6b554abe Mon Sep 17 00:00:00 2001
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Date: Wed, 3 Sep 2025 21:50:59 +0300
-Subject: [PATCH 052/113] FROMLIST(v4): drm/bridge: dw-hdmi-qp: Add CEC support
+Subject: [PATCH 052/115] FROMLIST(v4): drm/bridge: dw-hdmi-qp: Add CEC support
 
 Add support for the CEC interface of the Synopsys DesignWare HDMI QP TX
 controller.

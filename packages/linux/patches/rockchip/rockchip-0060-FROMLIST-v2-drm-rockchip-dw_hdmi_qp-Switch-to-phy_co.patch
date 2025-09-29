@@ -1,7 +1,7 @@
-From 671efd7753fe87c1cc6be0bab8a2cfaca26e7ed8 Mon Sep 17 00:00:00 2001
+From 6de3f2c64e01c308f57b59e33f9eaacc92766785 Mon Sep 17 00:00:00 2001
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Date: Mon, 25 Aug 2025 13:08:34 +0300
-Subject: [PATCH 060/113] FROMLIST(v2): drm/rockchip: dw_hdmi_qp: Switch to
+Subject: [PATCH 060/115] FROMLIST(v2): drm/rockchip: dw_hdmi_qp: Switch to
  phy_configure()
 
 Stop relying on phy_set_bus_width() based workaround to setup the TMDS

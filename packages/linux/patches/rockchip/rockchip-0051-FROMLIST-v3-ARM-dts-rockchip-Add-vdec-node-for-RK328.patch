@@ -1,7 +1,7 @@
-From e328a077d1580493ccb50d1ddbc4bba453faeed3 Mon Sep 17 00:00:00 2001
+From 86935dda9ff68ef761c4f61595c4d3fa4577e6b4 Mon Sep 17 00:00:00 2001
 From: Alex Bee <knaerzche@gmail.com>
 Date: Sun, 10 Aug 2025 21:24:37 +0000
-Subject: [PATCH 051/113] FROMLIST(v3): ARM: dts: rockchip: Add vdec node for
+Subject: [PATCH 051/115] FROMLIST(v3): ARM: dts: rockchip: Add vdec node for
  RK3288
 
 RK3288 contains a Rockchip VDEC block that only support HEVC

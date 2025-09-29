@@ -1,7 +1,7 @@
-From eeb2a21bb307f837a1461ab04acb83a248bb22c3 Mon Sep 17 00:00:00 2001
+From 3cafae6f56cb5af273fd1e1351d9095c99bbd02f Mon Sep 17 00:00:00 2001
 From: Alex Bee <knaerzche@gmail.com>
 Date: Mon, 1 Mar 2021 21:24:15 +0100
-Subject: [PATCH 031/113] FROMGIT(6.18): ARM: dts: rockchip: add CEC pinctrl to
+Subject: [PATCH 031/115] FROMGIT(6.18): ARM: dts: rockchip: add CEC pinctrl to
  rk3288-miqi
 
 Enable CEC control on the HDMI port for MiQi.

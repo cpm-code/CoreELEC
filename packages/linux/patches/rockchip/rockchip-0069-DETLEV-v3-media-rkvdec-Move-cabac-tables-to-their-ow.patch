@@ -1,7 +1,7 @@
-From fd25bb5be59256183a78f714f6d78fee8aadde0a Mon Sep 17 00:00:00 2001
+From da8031f7ee6bd18d0b263003a52941bddcd6952a Mon Sep 17 00:00:00 2001
 From: Detlev Casanova <detlev.casanova@collabora.com>
 Date: Tue, 10 Jun 2025 10:34:55 -0400
-Subject: [PATCH 069/113] DETLEV(v3): media: rkvdec: Move cabac tables to their
+Subject: [PATCH 069/115] DETLEV(v3): media: rkvdec: Move cabac tables to their
  own source file
 
 This is in preparation to add support for new variants that will use the

@@ -1,7 +1,7 @@
-From 59f83b7f89768445c82a4785eac9807160fbec26 Mon Sep 17 00:00:00 2001
+From 3911e5f6705be8e37c1490d7cfd73b88193d93e0 Mon Sep 17 00:00:00 2001
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Date: Mon, 25 Aug 2025 13:08:33 +0300
-Subject: [PATCH 059/113] FROMLIST(v2): drm/bridge: dw-hdmi-qp: Handle platform
+Subject: [PATCH 059/115] FROMLIST(v2): drm/bridge: dw-hdmi-qp: Handle platform
  supported formats and color depth
 
 Extend struct dw_hdmi_qp_plat_data to include the supported display

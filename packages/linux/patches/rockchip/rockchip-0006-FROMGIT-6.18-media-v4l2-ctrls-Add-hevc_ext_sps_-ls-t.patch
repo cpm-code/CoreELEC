@@ -1,7 +1,7 @@
-From 081a347e0bd349cd7c1cfcec1b0610e86f5f128c Mon Sep 17 00:00:00 2001
+From d227a0e32a1011d50fe456f14c9d531e58d1f6f5 Mon Sep 17 00:00:00 2001
 From: Detlev Casanova <detlev.casanova@collabora.com>
 Date: Thu, 24 Jul 2025 14:10:19 -0400
-Subject: [PATCH 006/113] FROMGIT(6.18): media: v4l2-ctrls: Add
+Subject: [PATCH 006/115] FROMGIT(6.18): media: v4l2-ctrls: Add
  hevc_ext_sps_[ls]t_rps controls
 
 The vdpu381 decoder found on newer Rockchip SoC need the information

@@ -1,7 +1,7 @@
-From f92e4fef12f5d0b74f35a2dcfb41cee998bd0596 Mon Sep 17 00:00:00 2001
+From 7e16a8d0ee3c03be3de10d369f030d2b2fb36d10 Mon Sep 17 00:00:00 2001
 From: Detlev Casanova <detlev.casanova@collabora.com>
 Date: Wed, 11 Jun 2025 12:28:56 -0400
-Subject: [PATCH 070/113] DETLEV(v3): media: rkvdec: Use structs to represent
+Subject: [PATCH 070/115] DETLEV(v3): media: rkvdec: Use structs to represent
  the HW RPS
 
 This is in preparation to add support for other variants of the decoder.

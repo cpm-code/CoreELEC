@@ -1,7 +1,7 @@
-From 29765f5282144d4dbf1d32de6a68b0c44a46c64a Mon Sep 17 00:00:00 2001
+From 53b54435aa502964da12ccf343e538091148254d Mon Sep 17 00:00:00 2001
 From: Tomeu Vizoso <tomeu@tomeuvizoso.net>
 Date: Mon, 21 Jul 2025 11:17:35 +0200
-Subject: [PATCH 018/113] FROMGIT(6.18): arm64: dts: rockchip: Add nodes for
+Subject: [PATCH 018/115] FROMGIT(6.18): arm64: dts: rockchip: Add nodes for
  NPU and its MMU to rk3588-base
 
 See Chapter 36 "RKNN" from the RK3588 TRM (Part 1).

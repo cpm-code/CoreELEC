@@ -1,7 +1,7 @@
-From 4e175c0b45625bda97e578684b0ddd49d5d8135d Mon Sep 17 00:00:00 2001
+From 938e491064ec093e8872273df02054864db00c5d Mon Sep 17 00:00:00 2001
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
 Date: Wed, 20 Aug 2025 19:40:49 +0200
-Subject: [PATCH 044/113] FROMLIST(v2): dt-bindings: thermal: rockchip: tighten
+Subject: [PATCH 044/115] FROMLIST(v2): dt-bindings: thermal: rockchip: tighten
  grf requirements
 
 Instead of having an optional rockchip,grf property, forbid using it on

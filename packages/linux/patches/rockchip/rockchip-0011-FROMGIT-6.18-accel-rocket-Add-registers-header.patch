@@ -1,7 +1,7 @@
-From 1bfa0435b166d9ab892fe5319b41afa4a34f7644 Mon Sep 17 00:00:00 2001
+From ca57af55ab091d151cecc6326bdb03ba9f22fc20 Mon Sep 17 00:00:00 2001
 From: Tomeu Vizoso <tomeu@tomeuvizoso.net>
 Date: Mon, 21 Jul 2025 11:17:28 +0200
-Subject: [PATCH 011/113] FROMGIT(6.18): accel/rocket: Add registers header
+Subject: [PATCH 011/115] FROMGIT(6.18): accel/rocket: Add registers header
 
 A XML file was generated with the data from the TRM, and then this
 header was generated from it.

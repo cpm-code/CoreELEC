@@ -1,7 +1,7 @@
-From 64bebb0ebb38e8fce7814308a1c7591076521566 Mon Sep 17 00:00:00 2001
+From 716ea6cf6900c0be5e12fed5661451410c1937d4 Mon Sep 17 00:00:00 2001
 From: Detlev Casanova <detlev.casanova@collabora.com>
 Date: Thu, 17 Jul 2025 17:56:18 -0400
-Subject: [PATCH 038/113] FROMLIST(v1): drm/bridge: dw-hdmi-qp: Return 0 in
+Subject: [PATCH 038/115] FROMLIST(v1): drm/bridge: dw-hdmi-qp: Return 0 in
  audio prepare when disconnected
 
 To configure audio registers, the clock of the video port in use must be

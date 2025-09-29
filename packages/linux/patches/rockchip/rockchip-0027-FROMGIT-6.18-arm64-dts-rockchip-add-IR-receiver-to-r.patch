@@ -1,7 +1,7 @@
-From ed0575e542fa52ce31403b3e2523a23dcfe48368 Mon Sep 17 00:00:00 2001
+From c62b6f1757b847bc4e19415fb097268c07863400 Mon Sep 17 00:00:00 2001
 From: Alex Bee <knaerzche@gmail.com>
 Date: Sat, 27 Feb 2021 18:01:13 +0100
-Subject: [PATCH 027/113] FROMGIT(6.18): arm64: dts: rockchip: add IR receiver
+Subject: [PATCH 027/115] FROMGIT(6.18): arm64: dts: rockchip: add IR receiver
  to rk3328-roc
 
 Add the ir-receiver and ir pinctrl nodes to enable the IR receiver

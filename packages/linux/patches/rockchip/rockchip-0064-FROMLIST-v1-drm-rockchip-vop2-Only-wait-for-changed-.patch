@@ -1,7 +1,7 @@
-From a28c0ccd253ccfe71781c4874be2f82cfb5e1494 Mon Sep 17 00:00:00 2001
+From 00e3dd6007ad4df54eba8e9bd4587af54159d2bf Mon Sep 17 00:00:00 2001
 From: Andy Yan <andy.yan@rock-chips.com>
 Date: Fri, 18 Jul 2025 14:41:14 +0800
-Subject: [PATCH 064/113] FROMLIST(v1): drm/rockchip: vop2: Only wait for
+Subject: [PATCH 064/115] FROMLIST(v1): drm/rockchip: vop2: Only wait for
  changed layer cfg done when there is pending cfgdone bits
 
 The write of cfgdone bits always done at .atomic_flush.

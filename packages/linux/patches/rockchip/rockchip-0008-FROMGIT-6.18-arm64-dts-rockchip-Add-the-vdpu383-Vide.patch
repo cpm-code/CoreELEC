@@ -1,7 +1,7 @@
-From 720d2af42c13b1da8e9a3974697e9906d2535b6c Mon Sep 17 00:00:00 2001
+From bd70bf7ee0262a9631c0caaa598525e0e21f93bd Mon Sep 17 00:00:00 2001
 From: Detlev Casanova <detlev.casanova@collabora.com>
 Date: Mon, 23 Jun 2025 12:07:18 -0400
-Subject: [PATCH 008/113] FROMGIT(6.18): arm64: dts: rockchip: Add the vdpu383
+Subject: [PATCH 008/115] FROMGIT(6.18): arm64: dts: rockchip: Add the vdpu383
  Video Decoder on rk3576
 
 Add the vdpu383 Video Decoder variant to the RK3576 device tree.

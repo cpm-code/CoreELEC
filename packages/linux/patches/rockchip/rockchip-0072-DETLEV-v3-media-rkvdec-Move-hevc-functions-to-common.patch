@@ -1,7 +1,7 @@
-From f2fe86de819775aab379dbdffdcfa49bff5b1e8d Mon Sep 17 00:00:00 2001
+From d8020863e2d3dc0fa2b61d5e33b18a2713d4f44f Mon Sep 17 00:00:00 2001
 From: Detlev Casanova <detlev.casanova@collabora.com>
 Date: Fri, 15 Aug 2025 17:24:37 -0400
-Subject: [PATCH 072/113] DETLEV(v3): media: rkvdec: Move hevc functions to
+Subject: [PATCH 072/115] DETLEV(v3): media: rkvdec: Move hevc functions to
  common file
 
 This is a preparation commit to add support for new variants of the

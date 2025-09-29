@@ -1,7 +1,7 @@
-From f9b0dceb3122ab09d22300b8e8374466f4f16b84 Mon Sep 17 00:00:00 2001
+From 3a0974dfa9dda2128b54e49efa2ed402f30cabbe Mon Sep 17 00:00:00 2001
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Date: Fri, 10 Jan 2025 22:48:01 +0200
-Subject: [PATCH 096/113] [WIP-SCRAMB] drm/bridge: Add ->detect_ctx() hook
+Subject: [PATCH 096/115] [WIP-SCRAMB] drm/bridge: Add ->detect_ctx() hook
 
 Add a ->detect() variant that also provides a drm_modeset_acquire_ctx
 reference for greater flexibility in operation, e.g. to support adding

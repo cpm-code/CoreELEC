@@ -1,7 +1,7 @@
-From ab90388d1569247b46cdec1d98085ebdb387708d Mon Sep 17 00:00:00 2001
+From b2b1ad36a5e99c2b46e640264a0ff55df48dbe07 Mon Sep 17 00:00:00 2001
 From: Jonas Karlman <jonas@kwiboo.se>
 Date: Sun, 10 Aug 2025 21:24:36 +0000
-Subject: [PATCH 050/113] FROMLIST(v3): media: dt-bindings: rockchip,vdec: Add
+Subject: [PATCH 050/115] FROMLIST(v3): media: dt-bindings: rockchip,vdec: Add
  RK3288 compatible
 
 Add a RK3288 compatible for a version of the Rockchip VDEC IP that only

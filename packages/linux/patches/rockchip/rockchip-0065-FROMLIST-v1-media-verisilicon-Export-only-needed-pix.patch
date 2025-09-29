@@ -1,7 +1,7 @@
-From 727dece5ed15a37ea74babe4c862a191316ed005 Mon Sep 17 00:00:00 2001
+From e26647c737c2ca1e5f8992517019803280c9fa39 Mon Sep 17 00:00:00 2001
 From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 Date: Tue, 24 Jun 2025 14:29:38 +0200
-Subject: [PATCH 065/113] FROMLIST(v1): media: verisilicon: Export only needed
+Subject: [PATCH 065/115] FROMLIST(v1): media: verisilicon: Export only needed
  pixels formats.
 
 When enumerating the pixels formats check if the context

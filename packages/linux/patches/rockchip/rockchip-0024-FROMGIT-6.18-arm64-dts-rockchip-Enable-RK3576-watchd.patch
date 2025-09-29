@@ -1,7 +1,7 @@
-From d16813b1b07478fd4c7a13015b2a2e655769d3be Mon Sep 17 00:00:00 2001
+From 11d77b90fb706be7537f953b6a40e00b21d17975 Mon Sep 17 00:00:00 2001
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
 Date: Mon, 18 Aug 2025 19:18:40 +0200
-Subject: [PATCH 024/113] FROMGIT(6.18): arm64: dts: rockchip: Enable RK3576
+Subject: [PATCH 024/115] FROMGIT(6.18): arm64: dts: rockchip: Enable RK3576
  watchdog
 
 The RK3576 watchdog does not need any board specific resources, so

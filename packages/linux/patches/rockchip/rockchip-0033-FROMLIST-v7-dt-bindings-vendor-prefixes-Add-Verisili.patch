@@ -1,7 +1,7 @@
-From e46c50bfa09554ebc5646e958789b0288a69be67 Mon Sep 17 00:00:00 2001
+From d174ca3a8bfe219eb07b0ec0d94ffe1f9a339760 Mon Sep 17 00:00:00 2001
 From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 Date: Mon, 25 Aug 2025 17:34:40 +0200
-Subject: [PATCH 033/113] FROMLIST(v7): dt-bindings: vendor-prefixes: Add
+Subject: [PATCH 033/115] FROMLIST(v7): dt-bindings: vendor-prefixes: Add
  Verisilicon
 
 Verisilicon Microelectronics is a company based in Shanghai, China,
