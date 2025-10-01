@@ -3,8 +3,8 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="openssl"
-PKG_VERSION="3.5.3"
-PKG_SHA256="c9489d2abcf943cdc8329a57092331c598a402938054dc3a22218aea8a8ec3bf"
+PKG_VERSION="3.5.4"
+PKG_SHA256="967311f84955316969bdb1d8d4b983718ef42338639c621ec4c34fddef355e99"
 PKG_LICENSE="Apache-2.0"
 PKG_SITE="https://openssl-library.org"
 PKG_URL="https://github.com/openssl/openssl/releases/download/${PKG_NAME}-${PKG_VERSION}/${PKG_NAME}-${PKG_VERSION}.tar.gz"
