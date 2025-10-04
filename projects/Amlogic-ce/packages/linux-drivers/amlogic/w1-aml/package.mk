@@ -2,8 +2,8 @@
 # Copyright (C) 2022-present Team CoreELEC (https://coreelec.org)
 
 PKG_NAME="w1-aml"
-PKG_VERSION="57b5c4e92856ac76f4bb1c6b3ff2adbf19b1c75a"
-PKG_SHA256="12c5c2c84632ad8a96fcb89a832a201947e372944a32b3249fcf82ec2cfbeee2"
+PKG_VERSION="e8a82e1e4bc931361d5497c7f5f902484f454f5b"
+PKG_SHA256=""
 PKG_ARCH="arm aarch64"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/CoreELEC/w1-aml"
@@ -29,9 +29,9 @@ make_target() {
 }
 
 makeinstall_target() {
-  mkdir -p ${INSTALL}/$(get_full_module_dir)/${PKG_NAME}
-    find ${PKG_BUILD}/project_w1/vmac/ -name \*.ko -not -path '*/\.*' -exec cp {} ${INSTALL}/$(get_full_module_dir)/${PKG_NAME} \;
+  mkdir -p ${INSTALL}/$(get_full_module_dir)/aml
+    find ${PKG_BUILD}/project_w1/vmac/ -name \*.ko -not -path '*/\.*' -exec cp {} ${INSTALL}/$(get_full_module_dir)/aml \;
 
-  mkdir -p ${INSTALL}/$(get_full_firmware_dir)/w1
-    cp ${PKG_BUILD}/project_w1/vmac/aml_wifi*.txt ${INSTALL}/$(get_full_firmware_dir)/w1
+  mkdir -p ${INSTALL}/$(get_full_firmware_dir)/aml
+    cp ${PKG_BUILD}/project_w1/vmac/aml_wifi*.txt ${INSTALL}/$(get_full_firmware_dir)/aml
 }
