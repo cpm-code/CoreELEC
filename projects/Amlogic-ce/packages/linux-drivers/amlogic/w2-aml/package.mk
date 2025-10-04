@@ -2,7 +2,7 @@
 # Copyright (C) 2025-present Team CoreELEC (https://coreelec.org)
 
 PKG_NAME="w2-aml"
-PKG_VERSION="3f7484c4bb4476f13f95aa538f6954416c6a8c07"
+PKG_VERSION="5fb96cb8f3895b649fd81b888b8981e2bd3beba2"
 PKG_SHA256=""
 PKG_ARCH="arm aarch64"
 PKG_LICENSE="GPL"
@@ -20,11 +20,11 @@ make_target() {
 }
 
 makeinstall_target() {
-  mkdir -p ${INSTALL}/$(get_full_module_dir)/${PKG_NAME}
-    find ${PKG_BUILD}/aml_drv/ -name \*.ko -not -path '*/\.*' -exec cp {} ${INSTALL}/$(get_full_module_dir)/${PKG_NAME} \;
+  mkdir -p ${INSTALL}/$(get_full_module_dir)/aml
+    find ${PKG_BUILD}/aml_drv/ -name \*.ko -not -path '*/\.*' -exec cp {} ${INSTALL}/$(get_full_module_dir)/aml \;
 
-  mkdir -p ${INSTALL}/$(get_full_firmware_dir)
-    cp ${PKG_BUILD}/common/aml_w2_*.txt ${INSTALL}/$(get_full_firmware_dir)
-    cp ${PKG_BUILD}/common/wifi_w2_fw_sdio.bin ${INSTALL}/$(get_full_firmware_dir)
-    cp ${PKG_BUILD}/common/wifi_w2_fw_usb.bin ${INSTALL}/$(get_full_firmware_dir)
+  mkdir -p ${INSTALL}/$(get_full_firmware_dir)/aml
+    cp ${PKG_BUILD}/common/aml_w2_*.txt ${INSTALL}/$(get_full_firmware_dir)/aml
+    cp ${PKG_BUILD}/common/wifi_w2_fw_sdio.bin ${INSTALL}/$(get_full_firmware_dir)/aml
+    cp ${PKG_BUILD}/common/wifi_w2_fw_usb.bin ${INSTALL}/$(get_full_firmware_dir)/aml
 }
