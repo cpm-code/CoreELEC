@@ -1,0 +1,16 @@
+[Unit]
+Description=Attach W1/W2 BT chip
+Wants=bluetooth.service
+Before=bluetooth.service
+StartLimitInterval=60
+StartLimitBurst=2
+
+[Service]
+Type=simple
+ExecStartPre=/usr/sbin/rfkill unblock bluetooth
+ExecStart=/bin/sh -c '/usr/sbin/aml_hciattach -n -d 1 "$([ -c /dev/stpbt ] && echo /dev/stpbt || echo /dev/aml_btusb)"'
+ExecStopPost=/usr/sbin/rfkill block bluetooth
+Restart=never
+RestartSec=2
+LimitNPROC=1
+TimeoutStopSec=1s

@@ -10,6 +10,6 @@ ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="1b8e", ATTRS{idProduct}=="064
 GOTO="end"
 
 LABEL="load_module"
-RUN+="/sbin/modprobe w2_comm w2_bus_type=$env{W2_BUS_TYPE}", RUN+="/sbin/modprobe w2"
+RUN+="/sbin/modprobe w2_comm w2_bus_type=$env{W2_BUS_TYPE}", RUN+="/sbin/modprobe w2", TAG+="systemd", ENV{SYSTEMD_WANTS}+="aml_bt.service"
 
 LABEL="end"
