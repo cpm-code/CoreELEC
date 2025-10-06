@@ -2,7 +2,7 @@
 # Copyright (C) 2025-present Team CoreELEC (https://coreelec.org)
 
 PKG_NAME="aml_bt"
-PKG_VERSION="710c8112a41b228c4519a232d04633ad8ec634ce"
+PKG_VERSION="359bffae5e96716f1b023580d82b279447b5fac2"
 PKG_SHA256=""
 PKG_ARCH="aarch64"
 PKG_LICENSE="GPL"
@@ -25,7 +25,7 @@ make_target() {
   kernel_make -C ${PKG_BUILD}/aml_bt/sdio_driver_bt \
     M=${PKG_BUILD}/aml_bt/sdio_driver_bt \
     KERNEL_SRC=$(kernel_path)
-    
+
   echo
   echo "build w2"
   kernel_make -C ${PKG_BUILD}/aml_bt/w2 \
