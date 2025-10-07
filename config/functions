@@ -396,7 +396,6 @@ setup_toolchain() {
       export RANLIB="ranlib"
       export OBJCOPY="objcopy"
       export OBJDUMP="objdump"
-      export STRIP="strip"
       export CPPFLAGS="$HOST_CPPFLAGS"
       export CFLAGS="$HOST_CFLAGS"
       export CXXFLAGS="$HOST_CXXFLAGS"
@@ -405,7 +404,6 @@ setup_toolchain() {
       export TARGET_CC="${TARGET_PREFIX}gcc"
       export TARGET_CXX="${TARGET_PREFIX}g++"
       export TARGET_AR="${TARGET_PREFIX}ar"
-      export TARGET_STRIP="${TARGET_PREFIX}strip"
       export TARGET_CFLAGS="$TARGET_CFLAGS"
       export TARGET_CXXFLAGS="$TARGET_CXXFLAGS"
       export TARGET_LDFLAGS="$TARGET_LDFLAGS"
@@ -420,6 +418,11 @@ setup_toolchain() {
       export _python_sysroot="$SYSROOT_PREFIX"
       export _python_prefix=/usr
       export _python_exec_prefix=/usr
+      # STRIP is used outside meson and is supposed to
+      # point to target version. Meson doesn't use this
+      # environment variable anyway.
+      export STRIP="${TARGET_PREFIX}strip"
+      export HOST_STRIP="strip"
       ;;
 
     target:*|init:*)
@@ -572,7 +575,7 @@ create_meson_conf_host() {
 c = '$CC'
 cpp = '$CXX'
 ar = '$AR'
-strip = '$STRIP'
+strip = '$HOST_STRIP'
 pkg-config = '$PKG_CONFIG'
 llvm-config = '$TOOLCHAIN/bin/llvm-config'
 libgcrypt-config = '$SYSROOT_PREFIX/usr/bin/libgcrypt-config'
@@ -613,7 +616,7 @@ c_ld = '$linker'
 cpp = '$TARGET_CXX'
 cpp_ld = '$linker'
 ar = '$TARGET_AR'
-strip = '$TARGET_STRIP'
+strip = '$STRIP'
 pkg-config = '$PKG_CONFIG'
 llvm-config = '$SYSROOT_PREFIX/usr/bin/llvm-config'
 libgcrypt-config = '$SYSROOT_PREFIX/usr/bin/libgcrypt-config'
