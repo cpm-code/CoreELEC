@@ -2,7 +2,7 @@
 # Copyright (C) 2025-present Team CoreELEC (https://coreelec.org)
 
 PKG_NAME="w2-aml"
-PKG_VERSION="1618b73adf57038040a5959e4040e11d1efc2c91"
+PKG_VERSION="caabab742672bf9b9744cc7502958a981656a521"
 PKG_SHA256=""
 PKG_ARCH="arm aarch64"
 PKG_LICENSE="GPL"
