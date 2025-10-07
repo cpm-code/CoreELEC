@@ -30,5 +30,5 @@ makeinstall_target() {
   cp ${PKG_BUILD}/src/SDIO/driver_fw/driver/aic8800/*/*.ko ${INSTALL}/$(get_full_module_dir)/${PKG_NAME}
 
   mkdir -p ${INSTALL}/$(get_full_firmware_dir)/aic8800D80
-  cp ${PKG_BUILD}/src/SDIO/driver_fw/fw/aic8800/* ${INSTALL}/$(get_full_firmware_dir)/aic8800D80
+  cp ${PKG_BUILD}/src/SDIO/driver_fw/fw/aic8800*/* ${INSTALL}/$(get_full_firmware_dir)/aic8800D80
 }
