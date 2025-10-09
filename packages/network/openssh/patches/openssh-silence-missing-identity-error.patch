@@ -2,7 +2,7 @@ diff --git a/sshconnect2.c b/sshconnect2.c
 index d6af0b9..22c0aa6 100644
 --- a/sshconnect2.c
 +++ b/sshconnect2.c
-@@ -1524,9 +1524,7 @@
+@@ -1527,9 +1527,7 @@
  	struct stat st;
  
  	if (stat(id->filename, &st) == -1) {
