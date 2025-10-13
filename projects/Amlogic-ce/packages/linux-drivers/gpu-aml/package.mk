@@ -2,8 +2,8 @@
 # Copyright (C) 2018-present Team CoreELEC (https://coreelec.org)
 
 PKG_NAME="gpu-aml"
-PKG_VERSION="ac61da7ac21f4ec57149f348f723bef5c86acff1"
-PKG_SHA256="9ba9d1c471d88b908d670e30ac8b8dc04f920856e98c2b985821ec7bbd796113"
+PKG_VERSION="f11ecbdec0866ffd99efbcf7104ebdf84e5173f9"
+PKG_SHA256=""
 PKG_LICENSE="GPL"
 PKG_SITE="https://coreelec.org"
 PKG_URL="https://github.com/CoreELEC/gpu-aml/archive/${PKG_VERSION}.tar.gz"
@@ -14,7 +14,7 @@ PKG_IS_KERNEL_PKG="yes"
 PKG_TOOLCHAIN="manual"
 
 pre_make_target() {
-  GPU_DRIVERS_ARCHITECTURE_REVISION="bifrost/r37p0:n valhall/r44p0:n:jm valhall/r44p0:y:csf"
+  GPU_DRIVERS_ARCHITECTURE_REVISION="bifrost/r44p0:n valhall/r44p0:n:jm valhall/r44p0:y:csf"
 }
 
 make_target() {
