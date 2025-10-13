@@ -2,8 +2,8 @@
 # Copyright (C) 2018-present Team CoreELEC (https://coreelec.org)
 
 PKG_NAME="opengl-meson"
-PKG_VERSION="11418b559cd1673790e5addf47c8f8b658aaa99d"
-PKG_SHA256="b19e88caf6bf23445027ca85c4e06a55f372d5eb040d67cd0da501b8fb67d83a"
+PKG_VERSION="e8876882426dd283c95bc30e98ccfd13954426db"
+PKG_SHA256=""
 PKG_LICENSE="nonfree"
 PKG_SITE="http://openlinux.amlogic.com:8000/download/ARM/filesystem/"
 PKG_URL="https://github.com/CoreELEC/opengl-meson/archive/${PKG_VERSION}.tar.gz"
@@ -13,10 +13,9 @@ PKG_TOOLCHAIN="manual"
 
 makeinstall_target() {
   mkdir -p ${INSTALL}/usr/lib
-    cp -p lib/arm64/gondul/r12p0/fbdev/libMali.so ${INSTALL}/usr/lib/libMali.gondul.g12b.so
-    cp -p lib/arm64/dvalin/r12p0/fbdev/libMali.so ${INSTALL}/usr/lib/libMali.dvalin.g12a.so
-    cp -p lib/arm64/gondul/r37p0/fbdev/libMali_r1p0.so ${INSTALL}/usr/lib/libMali.gondul.so
-    cp -p lib/arm64/dvalin/r37p0/fbdev/libMali.so ${INSTALL}/usr/lib/libMali.dvalin.so
+    cp -p lib/arm64/gondul/r44p0/fbdev/libMali.so ${INSTALL}/usr/lib/libMali.gondul.g12b.so
+    cp -p lib/arm64/gondul/r44p0/fbdev/libMali_r1p0.so ${INSTALL}/usr/lib/libMali.gondul.so
+    cp -p lib/arm64/dvalin/r44p0/fbdev/libMali.so ${INSTALL}/usr/lib/libMali.dvalin.so
     cp -p lib/arm64/valhall/r44p0/wayland/libMali_g57_dmaheap.so ${INSTALL}/usr/lib/libMali.valhall.g57.so
     cp -p lib/arm64/valhall/r44p0/wayland/libMali_g310_dmaheap.so ${INSTALL}/usr/lib/libMali.valhall.g310.so
 
