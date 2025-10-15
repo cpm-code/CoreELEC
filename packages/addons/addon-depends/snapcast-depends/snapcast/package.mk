@@ -2,8 +2,8 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="snapcast"
-PKG_VERSION="0.33.0"
-PKG_SHA256="5da21ab4a609550308be389d6af628628a89b6beb1d6e996ad2e4960e8e36d1d"
+PKG_VERSION="0.34.0"
+PKG_SHA256="a2918ea4d1f9b2df9c4247fd71bd452ea03a5d20ac44f60a736df90488858944"
 PKG_LICENSE="GPLv3"
 PKG_SITE="https://github.com/badaix/snapcast"
 PKG_URL="https://github.com/badaix/snapcast/archive/v${PKG_VERSION}.tar.gz"
