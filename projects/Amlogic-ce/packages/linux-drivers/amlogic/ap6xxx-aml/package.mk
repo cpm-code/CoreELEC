@@ -2,7 +2,7 @@
 # Copyright (C) 2022-present Team CoreELEC (https://coreelec.org)
 
 PKG_NAME="ap6xxx-aml"
-PKG_VERSION="1fcadec4bac13791bbed6b1199be85d5544d5230"
+PKG_VERSION="f0e3ac5bbf1fd11d7177d0af9cf7f122fcaef8be"
 PKG_SHA256=""
 PKG_ARCH="arm aarch64"
 PKG_LICENSE="GPL"
@@ -17,14 +17,6 @@ PKG_TOOLCHAIN="manual"
 make_target() {
   echo
   echo "building ap6275s and others"
-  kernel_make -C  ${PKG_BUILD}/bcmdhd.101.10.361.x \
-       M=${PKG_BUILD}/bcmdhd.101.10.361.x \
-       PWD=${PKG_BUILD}/bcmdhd.101.10.361.x \
-       KERNEL_SRC=$(kernel_path) \
-       CONFIG_BCMDHD_DISABLE_WOWLAN=y \
-       CONFIG_BCMDHD_SDIO=y \
-       bcmdhd_sdio
-
   kernel_make -C  ${PKG_BUILD}/bcmdhd.101.10.591.x \
        M=${PKG_BUILD}/bcmdhd.101.10.591.x \
        PWD=${PKG_BUILD}/bcmdhd.101.10.591.x \
