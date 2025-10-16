@@ -15,7 +15,7 @@ makeinstall_target() {
   mkdir -p ${INSTALL}/usr/lib
     cp -p lib/arm64/gondul/r44p0/fbdev/libMali.so ${INSTALL}/usr/lib/libMali.gondul.g12b.so
     cp -p lib/arm64/gondul/r44p0/fbdev/libMali_r1p0.so ${INSTALL}/usr/lib/libMali.gondul.so
-    cp -p lib/arm64/dvalin/r44p0/gbm/libMali.so ${INSTALL}/usr/lib/libMali.dvalin.so
+    cp -p lib/arm64/dvalin/r44p0/fbdev/libMali.so ${INSTALL}/usr/lib/libMali.dvalin.so
     cp -p lib/arm64/valhall/r44p0/wayland/libMali_g57_dmaheap.so ${INSTALL}/usr/lib/libMali.valhall.g57.so
     cp -p lib/arm64/valhall/r44p0/wayland/libMali_g310_dmaheap.so ${INSTALL}/usr/lib/libMali.valhall.g310.so
 
