@@ -47,7 +47,7 @@ rm -f "${STAMP_URL}" "${STAMP_SHA}"
 NBGET=10
 NBCHKS=2
 while [ ${NBGET} -gt 0 ] && [ ${NBCHKS} -gt 0 ]; do
-  for url in "${PKG_URL}" "${PACKAGE_MIRROR}"; do
+  for url in "${PKG_URL}" ${PACKAGE_MIRROR}; do
     rm -f "${PACKAGE}"
     if ${GET_CMD} "${url}"; then
       CALC_SHA256=$(sha256sum "${PACKAGE}" | cut -d" " -f1)
