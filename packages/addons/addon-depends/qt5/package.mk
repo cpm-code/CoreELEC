@@ -98,7 +98,6 @@ PKG_CONFIGURE_OPTS_TARGET="-prefix /usr
                            -skip qtwebchannel
                            -skip qtwebengine
                            -skip qtwebglplugin
-                           -skip qtwebsockets
                            -skip qtwebview
                            -skip qtwinextras
                            -skip qtx11extras
