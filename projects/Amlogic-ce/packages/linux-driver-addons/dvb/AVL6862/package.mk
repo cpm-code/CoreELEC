@@ -2,9 +2,9 @@
 # Copyright (C) 2024-present Team CoreELEC (https://coreelec.org)
 
 PKG_NAME="AVL6862"
-PKG_VERSION="08a8babc0bb31e53fe074177ae0584c84fbca333"
+PKG_VERSION="58a40b25cdef6d2c822665aa9dfb8d6562e5b268"
 PKG_SHA256=""
-PKG_REV="2"
+PKG_REV="3"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/CoreELEC"
 PKG_URL="https://github.com/CoreELEC/media_tree_aml/archive/${PKG_VERSION}.tar.gz"
