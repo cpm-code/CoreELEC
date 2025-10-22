@@ -224,6 +224,10 @@ devices = \
         'dtb': 'meson-g12b-odroid-n2.dtb',
         'config': 'odroid-n2_defconfig'
       },
+      'odroid-n2l': {
+        'dtb': 'meson-g12b-odroid-n2l.dtb',
+        'config': 'odroid-n2l_defconfig'
+      },
       'radxa-zero': {
         'dtb': 'meson-g12a-radxa-zero.dtb',
         'config': 'radxa-zero_defconfig'

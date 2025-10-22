@@ -2,8 +2,8 @@
 # Copyright (C) 2023-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="bcm2835-utils"
-PKG_VERSION="b7651d86d71a172b2208c67b2e360cbcb4f9d98f"
-PKG_SHA256="d96de4b95f3cd69a9f14000802e05ee364b3be7ebee45c988ff5b7ee38b0acb1"
+PKG_VERSION="c3d0bfe3a8fc3404bebf2fe149b1bf595ee0f30b"
+PKG_SHA256="10a36f19bd9d25aa267fc68c35cc56956312c19fdcc05f57459bb0a5f9c0561a"
 PKG_ARCH="arm aarch64"
 PKG_LICENSE="BSD-3-Clause"
 PKG_SITE="https://github.com/raspberrypi/utils"
