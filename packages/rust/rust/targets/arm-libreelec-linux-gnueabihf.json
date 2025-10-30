@@ -19,5 +19,5 @@
     "unix"
   ],
   "target-mcount": "\u0001__gnu_mcount_nc",
-  "target-pointer-width": "32"
+  "target-pointer-width": 32
 }

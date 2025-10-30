@@ -26,6 +26,5 @@
     "unix"
   ],
   "target-mcount": "\u0001_mcount",
-  "target-pointer-width": "64"
+  "target-pointer-width": 64
 }
-
