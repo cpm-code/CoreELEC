@@ -2,9 +2,9 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="peripheral.xarcade"
-PKG_VERSION="22.0.1-Piers"
-PKG_SHA256="c88574779fdce588adf509b5f543b12bdc25e7b023c9d7dc6169cd2473b2f25e"
-PKG_REV="3"
+PKG_VERSION="22.0.2-Piers"
+PKG_SHA256="fe004117b8d2c953e438962b878a5b11d9c772867391863f92dd7c2c827d3ca1"
+PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/kodi-game/peripheral.xarcade"
