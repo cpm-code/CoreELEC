@@ -4,7 +4,7 @@
 PKG_NAME="pvr.sledovanitv.cz"
 PKG_VERSION="22.5.2-Piers"
 PKG_SHA256="9ad6a42794d003336c0eb56050ee883f89b6f8e166b678762cef32168f9a6588"
-PKG_REV="1"
+PKG_REV="2"
 PKG_ARCH="any"
 PKG_LICENSE="GPLv2"
 PKG_SITE="https://github.com/palinek/pvr.sledovanitv.cz"

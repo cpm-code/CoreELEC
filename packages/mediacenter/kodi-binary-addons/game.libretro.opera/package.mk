@@ -4,7 +4,7 @@
 PKG_NAME="game.libretro.opera"
 PKG_VERSION="1.0.0.48-Omega"
 PKG_SHA256="63185f6d1e939a70b4de8ea094c3b660669d7193992c1624acf20da0c8c44dc7"
-PKG_REV="2"
+PKG_REV="3"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/kodi-game/game.libretro.opera"

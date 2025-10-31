@@ -4,7 +4,7 @@
 PKG_NAME="game.libretro.beetle-pcfx"
 PKG_VERSION="0.9.36.43-Omega"
 PKG_SHA256="db7d2a28087c6eb258d0388915fba35bf2ffe0b2409c6c2dda52c9e1fc5d69bf"
-PKG_REV="3"
+PKG_REV="4"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/kodi-game/game.libretro.beetle-pcfx"

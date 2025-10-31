@@ -4,7 +4,7 @@
 PKG_NAME="game.libretro.vice_xvic"
 PKG_VERSION="3.8.0.23-Omega"
 PKG_SHA256="faaea7b932271012c4c271bcec699fccd95b2ae1c4ce7bb2054e99316e2c948b"
-PKG_REV="3"
+PKG_REV="4"
 PKG_ARCH="any"
 PKG_LICENSE="GPLv2"
 PKG_SITE="https://github.com/kodi-game/game.libretro.vice_xvic"

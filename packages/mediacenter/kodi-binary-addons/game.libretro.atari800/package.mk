@@ -4,7 +4,7 @@
 PKG_NAME="game.libretro.atari800"
 PKG_VERSION="3.1.0.38-Omega"
 PKG_SHA256="6d02201613662a56d98ee83acf138ee9622872c79112593ed87eb1e3eff43198"
-PKG_REV="3"
+PKG_REV="4"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/kodi-game/game.libretro.atari800"

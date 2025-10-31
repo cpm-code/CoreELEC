@@ -4,7 +4,7 @@
 PKG_NAME="game.libretro.dosbox-pure"
 PKG_VERSION="0.9.9.33-Omega"
 PKG_SHA256="380920d8fc1e42124cb62b2f46d7b7eca3c18f5774f9b72939c01e9a509d04bb"
-PKG_REV="3"
+PKG_REV="4"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/kodi-game/game.libretro.dosbox-pure"
