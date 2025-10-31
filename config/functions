@@ -340,6 +340,12 @@ setup_toolchain() {
     TARGET_CXXFLAGS+=" $CXXFLAGS_OPTIM_DEFAULT"
   fi
 
+  # Only build host binaries with native when BUILD_REUSABLE is not set
+  if [ -z "${BUILD_REUSABLE}" ]; then
+    HOST_CFLAGS+=" $HOST_CFLAGS_OPTIM_NATIVE"
+    HOST_CXXFLAGS+=" $HOST_CFLAGS_OPTIM_NATIVE"
+  fi
+
   # position-independent code
   if flag_enabled "pic" "no"; then
     TARGET_CFLAGS+=" $CFLAGS_OPTIM_PIC"
