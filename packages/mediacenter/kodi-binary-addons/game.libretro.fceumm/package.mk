@@ -2,9 +2,9 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="game.libretro.fceumm"
-PKG_VERSION="0.0.1.57-Omega"
-PKG_SHA256="4abaecd52f59674910673dab7c091b30e8b7a95451dee86bde1ad63b39bafb82"
-PKG_REV="4"
+PKG_VERSION="0.0.1.60-Omega"
+PKG_SHA256="5c292ca898192cb9fb6accdd4707f0094319e713eeff41daac8fe0cf50c59521"
+PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/kodi-game/game.libretro.fceumm"

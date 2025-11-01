@@ -2,9 +2,9 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="game.libretro.virtualjaguar"
-PKG_VERSION="2.1.0.44-Omega"
-PKG_SHA256="5b7525064544cf8c784f406ea1ce4c4f3ad7486be84010eb18de17c3d3c72048"
-PKG_REV="4"
+PKG_VERSION="2.1.0.45-Omega"
+PKG_SHA256="18877e3fd08f0a37990a0a3657a28d3c2417b1a4fcf5d6a759b0c3cdcde78d19"
+PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/kodi-game/game.libretro.virtualjaguar"
