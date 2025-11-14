@@ -1,4 +1,4 @@
-FROM ubuntu:plucky
+FROM ubuntu:questing
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -15,17 +15,16 @@ ENV LANG=en_US.UTF-8 \
 RUN useradd docker -U -G sudo -m -s /bin/bash \
  && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-RUN apt-get update
-
-RUN apt-get install -y \
+RUN apt-get update \
+ && apt-get install -y \
     curl bash bc gcc-15 cpp-15 sed patch patchutils tar bzip2 gzip xz-utils zstd perl gawk gperf zip \
       unzip diffutils lzop make file g++-15 xfonts-utils xsltproc default-jre-headless python3 \
       libc6-dev libncurses5-dev libjson-perl libxml-parser-perl libparse-yapp-perl rdfind \
-      golang-1.24-go git openssh-client rsync upx-ucl \
+      golang-1.25-go git openssh-client rsync upx-ucl \
     --no-install-recommends \
-    && ln -s /usr/lib/go-1.24 /usr/lib/go \
-    && ln -s /usr/lib/go-1.24/bin/go /usr/bin/go \
-    && ln -s /usr/lib/go-1.24/bin/gofmt /usr/bin/gofmt
+    && ln -s /usr/lib/go-1.25 /usr/lib/go \
+    && ln -s /usr/lib/go-1.25/bin/go /usr/bin/go \
+    && ln -s /usr/lib/go-1.25/bin/gofmt /usr/bin/gofmt
 
 RUN if [ "$(uname -m)" = "aarch64" ]; then \
   apt-get install -y libc6-amd64-cross qemu-user-binfmt --no-install-recommends; \

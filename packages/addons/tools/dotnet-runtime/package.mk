@@ -2,7 +2,7 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="dotnet-runtime"
-PKG_REV="0"
+PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="MIT"
 PKG_SITE="https://dotnet.microsoft.com/"
@@ -35,9 +35,9 @@ addon() {
           ${ADDON_BUILD}/${PKG_ADDON_ID}/bin/shared/Microsoft.NETCore.App/$(get_pkg_version aspnet9-runtime)
 
     # aspnet8-runtime
-    sed -e "s/\"tfm\": \"net8.0\"/&,\n    \"configProperties\": {\n      \"System.Globalization.AppLocalIcu\": \"$(get_pkg_version icu | cut -f 1 -d -)\"\n    }/" \
+    sed -e "s/\"tfm\": \"net8.0\"/&,\n    \"configProperties\": {\n      \"System.Globalization.AppLocalIcu\": \"$(get_pkg_version icu | cut -f 1 -d .)\"\n    }/" \
       -i ${ADDON_BUILD}/${PKG_ADDON_ID}/bin/shared/Microsoft.NETCore.App/$(get_pkg_version aspnet8-runtime)/Microsoft.NETCore.App.runtimeconfig.json
     # aspnet9-runtime
-    sed -e "s/\"tfm\": \"net9.0\"/&,\n    \"configProperties\": {\n      \"System.Globalization.AppLocalIcu\": \"$(get_pkg_version icu | cut -f 1 -d -)\"\n    }/" \
+    sed -e "s/\"tfm\": \"net9.0\"/&,\n    \"configProperties\": {\n      \"System.Globalization.AppLocalIcu\": \"$(get_pkg_version icu | cut -f 1 -d .)\"\n    }/" \
       -i ${ADDON_BUILD}/${PKG_ADDON_ID}/bin/shared/Microsoft.NETCore.App/$(get_pkg_version aspnet9-runtime)/Microsoft.NETCore.App.runtimeconfig.json
 }

@@ -71,8 +71,7 @@ post_makeinstall_target() {
   # bluez looks in /etc/firmware/
     ln -sf /usr/lib/firmware ${INSTALL}/etc/firmware
 
-  # pulseaudio checks for bluez via pkgconfig but lib is not actually needed
-    sed -i 's/-lbluetooth//g' ${PKG_BUILD}/lib/bluez.pc
+  # kodi requires bluez pkgconfig
     cp -P ${PKG_BUILD}/lib/bluez.pc ${SYSROOT_PREFIX}/usr/lib/pkgconfig
 }
 

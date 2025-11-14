@@ -2,9 +2,9 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="mariadb"
-PKG_VERSION="11.8.3"
-PKG_REV="0"
-PKG_SHA256="1014a85c768de8f9e9c6d4bf0b42617f3b1588be1ad371f71674ea32b87119c0"
+PKG_VERSION="11.8.4"
+PKG_REV="1"
+PKG_SHA256="81af7770211b8336be927b983be6a0ed8b0d33ee5c4abad47e01b800294921cb"
 PKG_LICENSE="GPL2"
 PKG_SITE="https://mariadb.org"
 PKG_URL="https://archive.mariadb.org/${PKG_NAME}-${PKG_VERSION}/source/${PKG_NAME}-${PKG_VERSION}.tar.gz"
@@ -37,7 +37,6 @@ configure_package() {
     -DWITHOUT_HASHICORP_KEY_MANAGEMENT=ON \
     -DWITH_EXTRA_CHARSETS=complex \
     -DWITH_SSL=system \
-    -DDEFAULT_SSL_VERIFY_SERVER_CERT=OFF \
     -DWITH_SSL=${SYSROOT_PREFIX}/usr \
     -DWITH_JEMALLOC=OFF \
     -DWITHOUT_TOKUDB=1 \

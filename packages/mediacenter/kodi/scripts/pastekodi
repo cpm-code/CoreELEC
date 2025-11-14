@@ -90,6 +90,8 @@ fi
 
   journalctl -a -b -0 -o short-precise | cat_data "journalctl -a -b -0"
 
+  cat_file "/var/log/Xorg.0.log" # x86 legacy
+
   kmsprint | cat_data "kmsprint"
 
   if [ "${DISTRO_PROJECT}" = "RPi" ]; then

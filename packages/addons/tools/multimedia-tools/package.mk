@@ -3,7 +3,7 @@
 
 PKG_NAME="multimedia-tools"
 PKG_VERSION="1.0"
-PKG_REV="0"
+PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://libreelec.tv"
@@ -36,9 +36,6 @@ addon() {
   mkdir -p ${ADDON_BUILD}/${PKG_ADDON_ID}/bin/
     # alsamixer
     cp -P $(get_install_dir alsa-utils)/.noinstall/alsamixer ${ADDON_BUILD}/${PKG_ADDON_ID}/bin/
-
-    # arecord
-    cp -PL $(get_install_dir alsa-utils)/usr/bin/arecord ${ADDON_BUILD}/${PKG_ADDON_ID}/bin/
 
     # mediainfo
     cp -P $(get_install_dir mediainfo)/usr/bin/mediainfo ${ADDON_BUILD}/${PKG_ADDON_ID}/bin

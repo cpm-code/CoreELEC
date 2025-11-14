@@ -2,9 +2,9 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="inadyn"
-PKG_VERSION="2.12.0"
-PKG_SHA256="b87775a9751799a5042847efa6618da1fcdb49d970a7d38f9e8acf55e93b2830"
-PKG_REV="0"
+PKG_VERSION="2.13.0"
+PKG_SHA256="07dbb25c37744ed0dc6a05938456d6e490e56a3229b720c994b8e633346d5c6d"
+PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPLv2"
 PKG_SITE="http://troglobit.com/inadyn.html"

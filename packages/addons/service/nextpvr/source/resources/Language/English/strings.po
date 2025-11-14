@@ -38,11 +38,11 @@ msgid "Rescan m3u file(s) and update URLs"
 msgstr ""
 
 msgctxt "#30009"
-msgid "Toggle custom HLS transcoding with default"
+msgid "Transcode options"
 msgstr ""
 
 msgctxt "#30010"
-msgid "Change HLS transcoding mode, default will not work on all platforms"
+msgid "Change FFmpeg video transcoding options for web streaming"
 msgstr ""
 
 msgctxt "#30011"
@@ -82,6 +82,10 @@ msgid "Transcode set to custom"
 msgstr ""
 
 msgctxt "#30020"
+msgid "Transcode not changed"
+msgstr ""
+
+msgctxt "#30030"
 msgid "Restart server now"
 msgstr ""
 
@@ -139,4 +143,52 @@ msgstr ""
 
 msgctxt "#30050"
 msgid "Delay service launch on boot to specified uptime (seconds)"
+msgstr ""
+
+msgctxt "#30051"
+msgid "Choose video preset"
+msgstr ""
+
+msgctxt "#30052"
+msgid "Manage FFmpeg video transcoding option"
+msgstr ""
+
+msgctxt "#30053"
+msgid "Set crf value"
+msgstr ""
+
+msgctxt "#30054"
+msgid "Constant Rate Factor (crf) quality. High to low with 18-28 recommended"
+msgstr ""
+
+msgctxt "#31000"
+msgid "copy"
+msgstr ""
+
+msgctxt "#31001"
+msgid "default"
+msgstr ""
+
+msgctxt "#31002"
+msgid "ultrafast"
+msgstr ""
+
+msgctxt "#31003"
+msgid "superfast"
+msgstr ""
+
+msgctxt "#31004"
+msgid "veryfast"
+msgstr ""
+
+msgctxt "#31005"
+msgid "faster"
+msgstr ""
+
+msgctxt "#31006"
+msgid "fast"
+msgstr ""
+
+msgctxt "#31007"
+msgid "medium"
 msgstr ""

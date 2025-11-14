@@ -1,6 +1,18 @@
+diff -Nur a/cmd/podman/machine/cp.go b/cmd/podman/machine/cp.go
+--- a/cmd/podman/machine/cp.go	2025-11-11 13:51:07.000000000 +0000
++++ b/cmd/podman/machine/cp.go	2025-11-12 02:46:50.166152560 +0000
+@@ -36,7 +36,7 @@
+ 		PersistentPreRunE: machinePreRunE,
+ 		RunE:              cp,
+ 		Args:              cobra.ExactArgs(2),
+-		Example:           `podman machine cp ~/ca.crt podman-machine-default:/etc/containers/certs.d/ca.crt`,
++		Example:           `podman machine cp ~/ca.crt podman-machine-default:/storage/.kodi/addons/service.system.podman/etc/containers/certs.d/ca.crt`,
+ 		ValidArgsFunction: autocompleteMachineCp,
+ 	}
+ 
 diff -Nur a/pkg/api/handlers/libpod/swagger_spec.go b/pkg/api/handlers/libpod/swagger_spec.go
---- a/pkg/api/handlers/libpod/swagger_spec.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/pkg/api/handlers/libpod/swagger_spec.go	2024-11-22 09:32:20.604644984 +0000
+--- a/pkg/api/handlers/libpod/swagger_spec.go	2025-11-11 13:51:07.000000000 +0000
++++ b/pkg/api/handlers/libpod/swagger_spec.go	2025-11-12 02:46:49.941963866 +0000
 @@ -13,7 +13,7 @@
  )
  
@@ -11,8 +23,8 @@ diff -Nur a/pkg/api/handlers/libpod/swagger_spec.go b/pkg/api/handlers/libpod/sw
  func ServeSwagger(w http.ResponseWriter, r *http.Request) {
  	path := DefaultPodmanSwaggerSpec
 diff -Nur a/pkg/machine/define/config.go b/pkg/machine/define/config.go
---- a/pkg/machine/define/config.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/pkg/machine/define/config.go	2024-11-22 09:32:20.631311705 +0000
+--- a/pkg/machine/define/config.go	2025-11-11 13:51:07.000000000 +0000
++++ b/pkg/machine/define/config.go	2025-11-12 02:46:49.966411753 +0000
 @@ -3,7 +3,7 @@
  import "os"
  
@@ -23,9 +35,9 @@ diff -Nur a/pkg/machine/define/config.go b/pkg/machine/define/config.go
  	DefaultMachineName  = "podman-machine-default"
  )
 diff -Nur a/pkg/machine/ignition/ignition.go b/pkg/machine/ignition/ignition.go
---- a/pkg/machine/ignition/ignition.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/pkg/machine/ignition/ignition.go	2024-11-22 09:32:20.637978385 +0000
-@@ -381,7 +381,7 @@
+--- a/pkg/machine/ignition/ignition.go	2025-11-11 13:51:07.000000000 +0000
++++ b/pkg/machine/ignition/ignition.go	2025-11-12 02:46:49.973770855 +0000
+@@ -329,7 +329,7 @@
  	files = append(files, File{
  		Node: Node{
  			Group: GetNodeGrp("root"),
@@ -35,10 +47,10 @@ diff -Nur a/pkg/machine/ignition/ignition.go b/pkg/machine/ignition/ignition.go
  		},
  		FileEmbedded1: FileEmbedded1{
 diff -Nur a/pkg/machine/wsl/machine.go b/pkg/machine/wsl/machine.go
---- a/pkg/machine/wsl/machine.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/pkg/machine/wsl/machine.go	2024-11-22 09:32:20.637978385 +0000
-@@ -180,7 +180,7 @@
- 		return fmt.Errorf("could not configure systemd settings for guest OS: %w", err)
+--- a/pkg/machine/wsl/machine.go	2025-11-11 13:51:07.000000000 +0000
++++ b/pkg/machine/wsl/machine.go	2025-11-12 02:46:49.972525456 +0000
+@@ -189,7 +189,7 @@
+ 		return err
  	}
  
 -	if err := wslPipe(containersConf, dist, "sh", "-c", "cat > /etc/containers/containers.conf"); err != nil {
@@ -46,7 +58,7 @@ diff -Nur a/pkg/machine/wsl/machine.go b/pkg/machine/wsl/machine.go
  		return fmt.Errorf("could not create containers.conf for guest OS: %w", err)
  	}
  
-@@ -192,7 +192,7 @@
+@@ -201,7 +201,7 @@
  		return err
  	}
  
@@ -55,7 +67,7 @@ diff -Nur a/pkg/machine/wsl/machine.go b/pkg/machine/wsl/machine.go
  		return fmt.Errorf("could not create podman-machine file for guest OS: %w", err)
  	}
  
-@@ -265,7 +265,7 @@
+@@ -274,7 +274,7 @@
  }
  
  func configureRegistries(dist string) error {
@@ -65,8 +77,8 @@ diff -Nur a/pkg/machine/wsl/machine.go b/pkg/machine/wsl/machine.go
  		return fmt.Errorf("could not configure registries on guest OS: %w", err)
  	}
 diff -Nur a/pkg/systemd/generate/containers_test.go b/pkg/systemd/generate/containers_test.go
---- a/pkg/systemd/generate/containers_test.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/pkg/systemd/generate/containers_test.go	2024-11-22 09:32:20.611311664 +0000
+--- a/pkg/systemd/generate/containers_test.go	2025-11-11 13:51:07.000000000 +0000
++++ b/pkg/systemd/generate/containers_test.go	2025-11-12 02:46:49.946879065 +0000
 @@ -1045,7 +1045,7 @@
  				StopTimeout:       22,
  				PodmanVersion:     "CI",
@@ -383,8 +395,8 @@ diff -Nur a/pkg/systemd/generate/containers_test.go b/pkg/systemd/generate/conta
  				RestartSec:        15,
  			},
 diff -Nur a/pkg/systemd/generate/pods_test.go b/pkg/systemd/generate/pods_test.go
---- a/pkg/systemd/generate/pods_test.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/pkg/systemd/generate/pods_test.go	2024-11-22 09:32:20.611311664 +0000
+--- a/pkg/systemd/generate/pods_test.go	2025-11-11 13:51:07.000000000 +0000
++++ b/pkg/systemd/generate/pods_test.go	2025-11-12 02:46:49.947651543 +0000
 @@ -485,7 +485,7 @@
  				PIDFile:          "/run/containers/storage/overlay-containers/639c53578af4d84b8800b4635fa4e680ee80fd67e0e6a2d4eea48d1e3230f401/userdata/conmon.pid",
  				StopTimeout:      42,
@@ -521,9 +533,9 @@ diff -Nur a/pkg/systemd/generate/pods_test.go b/pkg/systemd/generate/pods_test.g
  				RequiredServices: []string{"container-1", "container-2"},
  				CreateCommand:    []string{"podman", "pod", "create", "--name", "foo", "bar=arg with space"},
 diff -Nur a/pkg/systemd/quadlet/quadlet.go b/pkg/systemd/quadlet/quadlet.go
---- a/pkg/systemd/quadlet/quadlet.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/pkg/systemd/quadlet/quadlet.go	2024-11-22 09:32:20.611311664 +0000
-@@ -23,9 +23,9 @@
+--- a/pkg/systemd/quadlet/quadlet.go	2025-11-11 13:51:07.000000000 +0000
++++ b/pkg/systemd/quadlet/quadlet.go	2025-11-12 02:46:49.948301227 +0000
+@@ -22,9 +22,9 @@
  	// Directory for temporary Quadlet files (sysadmin owned)
  	UnitDirTemp = "/run/containers/systemd"
  	// Directory for global Quadlet files (sysadmin owned)
@@ -534,10 +546,10 @@ diff -Nur a/pkg/systemd/quadlet/quadlet.go b/pkg/systemd/quadlet/quadlet.go
 +	UnitDirDistro = "/storage/.kodi/userdata/addon_data/service.system.podman/podman/etc/containers/systemd"
  
  	// Names of commonly used systemd/quadlet group names
- 	ContainerGroup  = "Container"
+ 	ArtifactGroup   = "Artifact"
 diff -Nur a/pkg/trust/registries.go b/pkg/trust/registries.go
---- a/pkg/trust/registries.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/pkg/trust/registries.go	2024-11-22 09:32:20.627978364 +0000
+--- a/pkg/trust/registries.go	2025-11-11 13:51:07.000000000 +0000
++++ b/pkg/trust/registries.go	2025-11-12 02:46:49.964970113 +0000
 @@ -29,7 +29,7 @@
  }
  
@@ -548,9 +560,9 @@ diff -Nur a/pkg/trust/registries.go b/pkg/trust/registries.go
  // userRegistriesDir is the path to the per user registries.d.
  var userRegistriesDir = filepath.FromSlash(".config/containers/registries.d")
 diff -Nur a/test/e2e/common_test.go b/test/e2e/common_test.go
---- a/test/e2e/common_test.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/test/e2e/common_test.go	2024-11-22 09:32:20.821312090 +0000
-@@ -314,7 +314,7 @@
+--- a/test/e2e/common_test.go	2025-11-11 13:51:07.000000000 +0000
++++ b/test/e2e/common_test.go	2025-11-12 02:46:50.152532118 +0000
+@@ -337,7 +337,7 @@
  	}
  
  	networkBackend := Netavark
@@ -560,8 +572,8 @@ diff -Nur a/test/e2e/common_test.go b/test/e2e/common_test.go
  		networkConfigDir = filepath.Join(root, "etc", "networks")
  	}
 diff -Nur a/test/e2e/create_test.go b/test/e2e/create_test.go
---- a/test/e2e/create_test.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/test/e2e/create_test.go	2024-11-22 09:32:20.824645430 +0000
+--- a/test/e2e/create_test.go	2025-11-11 13:51:07.000000000 +0000
++++ b/test/e2e/create_test.go	2025-11-12 02:46:50.155501286 +0000
 @@ -355,7 +355,7 @@
  			Expect(session).To(ExitWithError(125, "open /no/such/file: no such file or directory"))
  		}
@@ -572,8 +584,8 @@ diff -Nur a/test/e2e/create_test.go b/test/e2e/create_test.go
  		Expect(session).Should(ExitCleanly())
  	})
 diff -Nur a/test/e2e/import_test.go b/test/e2e/import_test.go
---- a/test/e2e/import_test.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/test/e2e/import_test.go	2024-11-22 09:32:20.814645410 +0000
+--- a/test/e2e/import_test.go	2025-11-11 13:51:07.000000000 +0000
++++ b/test/e2e/import_test.go	2025-11-12 02:46:50.144455458 +0000
 @@ -175,7 +175,7 @@
  		importImage.WaitWithDefaultTimeout()
  		Expect(importImage).To(ExitWithError(125, "open /no/such/file: no such file or directory"))
@@ -584,8 +596,8 @@ diff -Nur a/test/e2e/import_test.go b/test/e2e/import_test.go
  		Expect(result).Should(ExitCleanly())
  	})
 diff -Nur a/test/e2e/load_test.go b/test/e2e/load_test.go
---- a/test/e2e/load_test.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/test/e2e/load_test.go	2024-11-22 09:32:20.814645410 +0000
+--- a/test/e2e/load_test.go	2025-11-11 13:51:07.000000000 +0000
++++ b/test/e2e/load_test.go	2025-11-12 02:46:50.145414947 +0000
 @@ -85,7 +85,7 @@
  		rmi.WaitWithDefaultTimeout()
  		Expect(rmi).Should(ExitCleanly())
@@ -596,23 +608,25 @@ diff -Nur a/test/e2e/load_test.go b/test/e2e/load_test.go
  		if IsRemote() {
  			Expect(result).To(ExitWithError(125, "unknown flag: --signature-policy"))
 diff -Nur a/test/e2e/push_test.go b/test/e2e/push_test.go
---- a/test/e2e/push_test.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/test/e2e/push_test.go	2024-11-22 09:32:20.814645410 +0000
-@@ -198,11 +198,11 @@
- 			// Ideally, this should set SystemContext.RegistriesDirPath, but Podman currently doesn’t
- 			// expose that as an option. So, for now, modify /etc/directly, and skip testing sigstore if
+--- a/test/e2e/push_test.go	2025-11-11 13:51:07.000000000 +0000
++++ b/test/e2e/push_test.go	2025-11-12 02:46:50.147326750 +0000
+@@ -244,13 +244,13 @@
  			// we don’t have permission to do so.
+ 			lookasideDir, err := filepath.Abs(filepath.Join(podmanTest.TempDir, "test-lookaside"))
+ 			Expect(err).ToNot(HaveOccurred())
 -			systemRegistriesDAddition := "/etc/containers/registries.d/podman-test-only-temporary-addition.yaml"
 +			systemRegistriesDAddition := "/storage/.kodi/addons/service.system.podman/etc/containers/registries.d/podman-test-only-temporary-addition.yaml"
- 			cmd := exec.Command("cp", "testdata/sigstore-registries.d-fragment.yaml", systemRegistriesDAddition)
- 			output, err := cmd.CombinedOutput()
+ 			registriesDFragment, err := os.ReadFile("testdata/sigstore-registries.d-fragment.yaml")
+ 			Expect(err).ToNot(HaveOccurred())
+ 			registriesDFragment = bytes.ReplaceAll(registriesDFragment, []byte("@lookasideDir@"), []byte(lookasideDir))
+ 			err = os.WriteFile(systemRegistriesDAddition, registriesDFragment, 0644)
  			if err != nil {
--				GinkgoWriter.Printf("Skipping sigstore tests because /etc/containers/registries.d isn’t writable: %s\n", string(output))
-+				GinkgoWriter.Printf("Skipping sigstore tests because /storage/.kodi/addons/service.system.podman/etc/containers/registries.d isn’t writable: %s\n", string(output))
+-				GinkgoWriter.Printf("Skipping sigstore tests because /etc/containers/registries.d isn’t writable: %s\n", err)
++				GinkgoWriter.Printf("Skipping sigstore tests because /storage/.kodi/addons/service.system.podman/etc/containers/registries.d isn’t writable: %s\n", err)
  			} else {
+ 				By("pushing and pulling with --sign-by-sigstore-private-key")
  				defer func() {
- 					err := os.Remove(systemRegistriesDAddition)
-@@ -268,16 +268,16 @@
+@@ -351,16 +351,16 @@
  	})
  
  	It("podman push to local registry with authorization", func() {
@@ -632,7 +646,7 @@ diff -Nur a/test/e2e/push_test.go b/test/e2e/push_test.go
  
  		cwd, _ := os.Getwd()
  		certPath := filepath.Join(cwd, "../", "certs")
-@@ -316,7 +316,7 @@
+@@ -399,7 +399,7 @@
  		Expect(push).Should(Exit(0))
  		Expect(push.ErrorToString()).To(ContainSubstring("Writing manifest to image destination"))
  
@@ -642,9 +656,9 @@ diff -Nur a/test/e2e/push_test.go b/test/e2e/push_test.go
  
  		push = podmanTest.Podman([]string{"push", "--creds=podmantest:wrongpasswd", ALPINE, "localhost:5004/credstest"})
 diff -Nur a/test/e2e/run_test.go b/test/e2e/run_test.go
---- a/test/e2e/run_test.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/test/e2e/run_test.go	2024-11-22 09:32:20.811312070 +0000
-@@ -125,7 +125,7 @@
+--- a/test/e2e/run_test.go	2025-11-11 13:51:07.000000000 +0000
++++ b/test/e2e/run_test.go	2025-11-12 02:46:50.142915934 +0000
+@@ -143,7 +143,7 @@
  		}
  		Expect(session).To(ExitWithError(125, "open /no/such/file: no such file or directory"))
  
@@ -654,8 +668,8 @@ diff -Nur a/test/e2e/run_test.go b/test/e2e/run_test.go
  		Expect(session).Should(Exit(0))
  		Expect(session.ErrorToString()).To(ContainSubstring("Getting image source signatures"))
 diff -Nur a/test/e2e/save_test.go b/test/e2e/save_test.go
---- a/test/e2e/save_test.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/test/e2e/save_test.go	2024-11-22 09:32:20.807978730 +0000
+--- a/test/e2e/save_test.go	2025-11-11 13:51:07.000000000 +0000
++++ b/test/e2e/save_test.go	2025-11-12 02:46:50.139108728 +0000
 @@ -29,7 +29,7 @@
  		SkipIfRemote("--signature-policy N/A for remote")
  		outfile := filepath.Join(podmanTest.TempDir, "alpine.tar")
@@ -689,14 +703,14 @@ diff -Nur a/test/e2e/save_test.go b/test/e2e/save_test.go
 +  sigstore: file:///storage/.kodi/userdata/addon_data/service.system.podman/podman/sigstore
 +  sigstore-staging: file:///storage/.kodi/userdata/addon_data/service.system.podman/podman/sigstore
  `
--		Expect(os.WriteFile("/etc/containers/registries.d/default.yaml", []byte(sigstore), 0755)).To(Succeed())
-+		Expect(os.WriteFile("/storage/.kodi/addons/service.system.podman/etc/containers/registries.d/default.yaml", []byte(sigstore), 0755)).To(Succeed())
+-		Expect(os.WriteFile("/etc/containers/registries.d/default.yaml", []byte(sigstore), 0o755)).To(Succeed())
++		Expect(os.WriteFile("/storage/.kodi/addons/service.system.podman/etc/containers/registries.d/default.yaml", []byte(sigstore), 0o755)).To(Succeed())
  
  		pushedImage := fmt.Sprintf("localhost:%d/alpine", port)
  		session = podmanTest.Podman([]string{"tag", ALPINE, pushedImage})
 diff -Nur a/test/e2e/system_reset_test.go b/test/e2e/system_reset_test.go
---- a/test/e2e/system_reset_test.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/test/e2e/system_reset_test.go	2024-11-22 09:32:20.807978730 +0000
+--- a/test/e2e/system_reset_test.go	2025-11-11 13:51:07.000000000 +0000
++++ b/test/e2e/system_reset_test.go	2025-11-12 02:46:50.139811614 +0000
 @@ -45,7 +45,7 @@
  		Expect(session).Should(ExitCleanly())
  
@@ -706,9 +720,21 @@ diff -Nur a/test/e2e/system_reset_test.go b/test/e2e/system_reset_test.go
  
  		session = podmanTest.Podman([]string{"images", "-n"})
  		session.WaitWithDefaultTimeout()
-diff -Nur a/vendor/github.com/containers/common/libnetwork/network/interface_freebsd.go b/vendor/github.com/containers/common/libnetwork/network/interface_freebsd.go
---- a/vendor/github.com/containers/common/libnetwork/network/interface_freebsd.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/vendor/github.com/containers/common/libnetwork/network/interface_freebsd.go	2024-11-22 09:32:21.437980016 +0000
+diff -Nur a/vendor/github.com/opencontainers/selinux/go-selinux/selinux_linux.go b/vendor/github.com/opencontainers/selinux/go-selinux/selinux_linux.go
+--- a/vendor/github.com/opencontainers/selinux/go-selinux/selinux_linux.go	2025-11-11 13:51:07.000000000 +0000
++++ b/vendor/github.com/opencontainers/selinux/go-selinux/selinux_linux.go	2025-11-12 02:46:50.506104950 +0000
+@@ -23,7 +23,7 @@
+ 
+ const (
+ 	minSensLen       = 2
+-	contextFile      = "/usr/share/containers/selinux/contexts"
++	contextFile      = "/storage/.kodi/userdata/addon_data/service.system.podman/podman/etc/containers/selinux/contexts"
+ 	selinuxDir       = "/etc/selinux/"
+ 	selinuxUsersDir  = "contexts/users"
+ 	defaultContexts  = "contexts/default_contexts"
+diff -Nur a/vendor/go.podman.io/common/libnetwork/network/interface_freebsd.go b/vendor/go.podman.io/common/libnetwork/network/interface_freebsd.go
+--- a/vendor/go.podman.io/common/libnetwork/network/interface_freebsd.go	2025-11-11 13:51:07.000000000 +0000
++++ b/vendor/go.podman.io/common/libnetwork/network/interface_freebsd.go	2025-11-12 02:46:50.614900979 +0000
 @@ -4,7 +4,7 @@
  	// cniConfigDir is the directory where cni configuration is found
  	cniConfigDir = "/usr/local/etc/cni/net.d/"
@@ -718,21 +744,21 @@ diff -Nur a/vendor/github.com/containers/common/libnetwork/network/interface_fre
  	// netavarkRunDir is the run directory for the rootful temporary network files such as the ipam db
  	netavarkRunDir = "/var/run/containers/networks"
  )
-diff -Nur a/vendor/github.com/containers/common/libnetwork/network/interface_linux.go b/vendor/github.com/containers/common/libnetwork/network/interface_linux.go
---- a/vendor/github.com/containers/common/libnetwork/network/interface_linux.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/vendor/github.com/containers/common/libnetwork/network/interface_linux.go	2024-11-22 09:32:21.437980016 +0000
+diff -Nur a/vendor/go.podman.io/common/libnetwork/network/interface_linux.go b/vendor/go.podman.io/common/libnetwork/network/interface_linux.go
+--- a/vendor/go.podman.io/common/libnetwork/network/interface_linux.go	2025-11-11 13:51:07.000000000 +0000
++++ b/vendor/go.podman.io/common/libnetwork/network/interface_linux.go	2025-11-12 02:46:50.614919785 +0000
 @@ -4,7 +4,7 @@
- 	// cniConfigDir is the directory where cni configuration is found
+ 	// cniConfigDir is the directory where cni configuration is found.
  	cniConfigDir = "/etc/cni/net.d/"
- 	// netavarkConfigDir is the config directory for the rootful network files
+ 	// netavarkConfigDir is the config directory for the rootful network files.
 -	netavarkConfigDir = "/etc/containers/networks"
 +	netavarkConfigDir = "/storage/.kodi/addons/service.system.podman/etc/containers/networks"
- 	// netavarkRunDir is the run directory for the rootful temporary network files such as the ipam db
+ 	// netavarkRunDir is the run directory for the rootful temporary network files such as the ipam db.
  	netavarkRunDir = "/run/containers/networks"
  )
-diff -Nur a/vendor/github.com/containers/common/pkg/config/config_bsd.go b/vendor/github.com/containers/common/pkg/config/config_bsd.go
---- a/vendor/github.com/containers/common/pkg/config/config_bsd.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/vendor/github.com/containers/common/pkg/config/config_bsd.go	2024-11-22 09:32:21.434646676 +0000
+diff -Nur a/vendor/go.podman.io/common/pkg/config/config_bsd.go b/vendor/go.podman.io/common/pkg/config/config_bsd.go
+--- a/vendor/go.podman.io/common/pkg/config/config_bsd.go	2025-11-11 13:51:07.000000000 +0000
++++ b/vendor/go.podman.io/common/pkg/config/config_bsd.go	2025-11-12 02:46:50.610877585 +0000
 @@ -11,7 +11,7 @@
  
  	// DefaultSignaturePolicyPath is the default value for the
@@ -742,9 +768,9 @@ diff -Nur a/vendor/github.com/containers/common/pkg/config/config_bsd.go b/vendo
  )
  
  var defaultHelperBinariesDir = []string{
-diff -Nur a/vendor/github.com/containers/common/pkg/config/config_darwin.go b/vendor/github.com/containers/common/pkg/config/config_darwin.go
---- a/vendor/github.com/containers/common/pkg/config/config_darwin.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/vendor/github.com/containers/common/pkg/config/config_darwin.go	2024-11-22 09:32:21.434646676 +0000
+diff -Nur a/vendor/go.podman.io/common/pkg/config/config_darwin.go b/vendor/go.podman.io/common/pkg/config/config_darwin.go
+--- a/vendor/go.podman.io/common/pkg/config/config_darwin.go	2025-11-11 13:51:07.000000000 +0000
++++ b/vendor/go.podman.io/common/pkg/config/config_darwin.go	2025-11-12 02:46:50.610923508 +0000
 @@ -9,7 +9,7 @@
  
  	// DefaultSignaturePolicyPath is the default value for the
@@ -754,10 +780,10 @@ diff -Nur a/vendor/github.com/containers/common/pkg/config/config_darwin.go b/ve
  )
  
  var defaultHelperBinariesDir = []string{
-diff -Nur a/vendor/github.com/containers/common/pkg/config/config_linux.go b/vendor/github.com/containers/common/pkg/config/config_linux.go
---- a/vendor/github.com/containers/common/pkg/config/config_linux.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/vendor/github.com/containers/common/pkg/config/config_linux.go	2024-11-22 09:32:21.434646676 +0000
-@@ -13,7 +13,7 @@
+diff -Nur a/vendor/go.podman.io/common/pkg/config/config_linux.go b/vendor/go.podman.io/common/pkg/config/config_linux.go
+--- a/vendor/go.podman.io/common/pkg/config/config_linux.go	2025-11-11 13:51:07.000000000 +0000
++++ b/vendor/go.podman.io/common/pkg/config/config_linux.go	2025-11-12 02:46:50.611919966 +0000
+@@ -14,7 +14,7 @@
  
  	// DefaultSignaturePolicyPath is the default value for the
  	// policy.json file.
@@ -766,9 +792,9 @@ diff -Nur a/vendor/github.com/containers/common/pkg/config/config_linux.go b/ven
  )
  
  func selinuxEnabled() bool {
-diff -Nur a/vendor/github.com/containers/common/pkg/config/config_windows.go b/vendor/github.com/containers/common/pkg/config/config_windows.go
---- a/vendor/github.com/containers/common/pkg/config/config_windows.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/vendor/github.com/containers/common/pkg/config/config_windows.go	2024-11-22 09:32:21.434646676 +0000
+diff -Nur a/vendor/go.podman.io/common/pkg/config/config_windows.go b/vendor/go.podman.io/common/pkg/config/config_windows.go
+--- a/vendor/go.podman.io/common/pkg/config/config_windows.go	2025-11-11 13:51:07.000000000 +0000
++++ b/vendor/go.podman.io/common/pkg/config/config_windows.go	2025-11-12 02:46:50.611279921 +0000
 @@ -12,7 +12,7 @@
  
  	// DefaultSignaturePolicyPath is the default value for the
@@ -778,10 +804,10 @@ diff -Nur a/vendor/github.com/containers/common/pkg/config/config_windows.go b/v
  
  	// Mount type for mounting host dir
  	_typeBind = "bind"
-diff -Nur a/vendor/github.com/containers/common/pkg/config/default.go b/vendor/github.com/containers/common/pkg/config/default.go
---- a/vendor/github.com/containers/common/pkg/config/default.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/vendor/github.com/containers/common/pkg/config/default.go	2024-11-22 09:32:21.434646676 +0000
-@@ -23,7 +23,7 @@
+diff -Nur a/vendor/go.podman.io/common/pkg/config/default.go b/vendor/go.podman.io/common/pkg/config/default.go
+--- a/vendor/go.podman.io/common/pkg/config/default.go	2025-11-11 13:51:07.000000000 +0000
++++ b/vendor/go.podman.io/common/pkg/config/default.go	2025-11-12 02:46:50.611042929 +0000
+@@ -24,7 +24,7 @@
  
  const (
  	// _defaultGraphRoot points to the default path of the graph root.
@@ -790,18 +816,18 @@ diff -Nur a/vendor/github.com/containers/common/pkg/config/default.go b/vendor/g
  
  	// _defaultTransport is a prefix that we apply to an image name to check
  	// docker hub first for the image.
-@@ -74,7 +74,7 @@
+@@ -100,7 +100,7 @@
  	// ErrInvalidArg indicates that an invalid argument was passed.
  	ErrInvalidArg = errors.New("invalid argument")
  	// DefaultHooksDirs defines the default hooks directory.
 -	DefaultHooksDirs = []string{"/usr/share/containers/oci/hooks.d"}
 +	DefaultHooksDirs = []string{"/storage/.kodi/userdata/addon_data/service.system.podman/podman/etc/containers/oci/hooks.d"}
  	// DefaultCdiSpecDirs defines the default cdi spec directories.
- 	DefaultCdiSpecDirs = []string{"/etc/cdi"}
+ 	DefaultCdiSpecDirs = []string{"/etc/cdi", "/var/run/cdi"}
  	// DefaultCapabilities is the default for the default_capabilities option in the containers.conf file.
-diff -Nur a/vendor/github.com/containers/common/pkg/hooks/hooks.go b/vendor/github.com/containers/common/pkg/hooks/hooks.go
---- a/vendor/github.com/containers/common/pkg/hooks/hooks.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/vendor/github.com/containers/common/pkg/hooks/hooks.go	2024-11-22 09:32:21.431313336 +0000
+diff -Nur a/vendor/go.podman.io/common/pkg/hooks/hooks.go b/vendor/go.podman.io/common/pkg/hooks/hooks.go
+--- a/vendor/go.podman.io/common/pkg/hooks/hooks.go	2025-11-11 13:51:07.000000000 +0000
++++ b/vendor/go.podman.io/common/pkg/hooks/hooks.go	2025-11-12 02:46:50.607708604 +0000
 @@ -20,10 +20,10 @@
  
  const (
@@ -815,9 +841,9 @@ diff -Nur a/vendor/github.com/containers/common/pkg/hooks/hooks.go b/vendor/gith
  )
  
  // Manager provides an opaque interface for managing CRI-O hooks.
-diff -Nur a/vendor/github.com/containers/common/pkg/machine/machine.go b/vendor/github.com/containers/common/pkg/machine/machine.go
---- a/vendor/github.com/containers/common/pkg/machine/machine.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/vendor/github.com/containers/common/pkg/machine/machine.go	2024-11-22 09:32:21.437980016 +0000
+diff -Nur a/vendor/go.podman.io/common/pkg/machine/machine.go b/vendor/go.podman.io/common/pkg/machine/machine.go
+--- a/vendor/go.podman.io/common/pkg/machine/machine.go	2025-11-11 13:51:07.000000000 +0000
++++ b/vendor/go.podman.io/common/pkg/machine/machine.go	2025-11-12 02:46:50.613783525 +0000
 @@ -12,7 +12,7 @@
  }
  
@@ -827,26 +853,26 @@ diff -Nur a/vendor/github.com/containers/common/pkg/machine/machine.go b/vendor/
  	Wsl        = "wsl"
  	Qemu       = "qemu"
  	AppleHV    = "applehv"
-diff -Nur a/vendor/github.com/containers/common/pkg/subscriptions/subscriptions.go b/vendor/github.com/containers/common/pkg/subscriptions/subscriptions.go
---- a/vendor/github.com/containers/common/pkg/subscriptions/subscriptions.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/vendor/github.com/containers/common/pkg/subscriptions/subscriptions.go	2024-11-22 09:32:21.431313336 +0000
+diff -Nur a/vendor/go.podman.io/common/pkg/subscriptions/subscriptions.go b/vendor/go.podman.io/common/pkg/subscriptions/subscriptions.go
+--- a/vendor/go.podman.io/common/pkg/subscriptions/subscriptions.go	2025-11-11 13:51:07.000000000 +0000
++++ b/vendor/go.podman.io/common/pkg/subscriptions/subscriptions.go	2025-11-12 02:46:50.609322186 +0000
 @@ -20,10 +20,10 @@
  var (
  	// DefaultMountsFile holds the default mount paths in the form
- 	// "host_path:container_path"
+ 	// "host_path:container_path".
 -	DefaultMountsFile = "/usr/share/containers/mounts.conf"
 +	DefaultMountsFile = "/storage/.kodi/userdata/addon_data/service.system.podman/podman/etc/containers/mounts.conf"
  	// OverrideMountsFile holds the default mount paths in the form
- 	// "host_path:container_path" overridden by the user
+ 	// "host_path:container_path" overridden by the user.
 -	OverrideMountsFile = "/etc/containers/mounts.conf"
 +	OverrideMountsFile = "/storage/.kodi/addons/service.system.podman/etc/containers/mounts.conf"
  	// UserOverrideMountsFile holds the default mount paths in the form
- 	// "host_path:container_path" overridden by the rootless user
+ 	// "host_path:container_path" overridden by the rootless user.
  	UserOverrideMountsFile = filepath.Join(os.Getenv("HOME"), ".config/containers/mounts.conf")
-diff -Nur a/vendor/github.com/containers/image/v5/docker/registries_d.go b/vendor/github.com/containers/image/v5/docker/registries_d.go
---- a/vendor/github.com/containers/image/v5/docker/registries_d.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/vendor/github.com/containers/image/v5/docker/registries_d.go	2024-11-22 09:32:21.417979975 +0000
-@@ -35,7 +35,7 @@
+diff -Nur a/vendor/go.podman.io/image/v5/docker/registries_d.go b/vendor/go.podman.io/image/v5/docker/registries_d.go
+--- a/vendor/go.podman.io/image/v5/docker/registries_d.go	2025-11-11 13:51:07.000000000 +0000
++++ b/vendor/go.podman.io/image/v5/docker/registries_d.go	2025-11-12 02:46:50.598979711 +0000
+@@ -36,7 +36,7 @@
  var defaultUserDockerDir = filepath.FromSlash(".local/share/containers/sigstore")
  
  // defaultDockerDir is the default lookaside directory for root
@@ -855,9 +881,9 @@ diff -Nur a/vendor/github.com/containers/image/v5/docker/registries_d.go b/vendo
  
  // registryConfiguration is one of the files in registriesDirPath configuring lookaside locations, or the result of merging them all.
  // NOTE: Keep this in sync with docs/registries.d.md!
-diff -Nur a/vendor/github.com/containers/image/v5/pkg/blobinfocache/default.go b/vendor/github.com/containers/image/v5/pkg/blobinfocache/default.go
---- a/vendor/github.com/containers/image/v5/pkg/blobinfocache/default.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/vendor/github.com/containers/image/v5/pkg/blobinfocache/default.go	2024-11-22 09:32:21.411313295 +0000
+diff -Nur a/vendor/go.podman.io/image/v5/pkg/blobinfocache/default.go b/vendor/go.podman.io/image/v5/pkg/blobinfocache/default.go
+--- a/vendor/go.podman.io/image/v5/pkg/blobinfocache/default.go	2025-11-11 13:51:07.000000000 +0000
++++ b/vendor/go.podman.io/image/v5/pkg/blobinfocache/default.go	2025-11-12 02:46:50.591688737 +0000
 @@ -17,7 +17,7 @@
  	// If the format changes in an incompatible way, increase the version number.
  	blobInfoCacheFilename = "blob-info-cache-v1.sqlite"
@@ -867,10 +893,10 @@ diff -Nur a/vendor/github.com/containers/image/v5/pkg/blobinfocache/default.go b
  )
  
  // blobInfoCacheDir returns a path to a blob info cache appropriate for sys and euid.
-diff -Nur a/vendor/github.com/containers/image/v5/pkg/sysregistriesv2/paths_common.go b/vendor/github.com/containers/image/v5/pkg/sysregistriesv2/paths_common.go
---- a/vendor/github.com/containers/image/v5/pkg/sysregistriesv2/paths_common.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/vendor/github.com/containers/image/v5/pkg/sysregistriesv2/paths_common.go	2024-11-22 09:32:21.407979955 +0000
-@@ -5,8 +5,8 @@
+diff -Nur a/vendor/go.podman.io/image/v5/pkg/sysregistriesv2/paths_common.go b/vendor/go.podman.io/image/v5/pkg/sysregistriesv2/paths_common.go
+--- a/vendor/go.podman.io/image/v5/pkg/sysregistriesv2/paths_common.go	2025-11-11 13:51:07.000000000 +0000
++++ b/vendor/go.podman.io/image/v5/pkg/sysregistriesv2/paths_common.go	2025-11-12 02:46:50.590013804 +0000
+@@ -4,8 +4,8 @@
  
  // builtinRegistriesConfPath is the path to the registry configuration file.
  // DO NOT change this, instead see systemRegistriesConfPath above.
@@ -881,10 +907,10 @@ diff -Nur a/vendor/github.com/containers/image/v5/pkg/sysregistriesv2/paths_comm
  // DO NOT change this, instead see systemRegistriesConfDirectoryPath above.
 -const builtinRegistriesConfDirPath = "/etc/containers/registries.conf.d"
 +const builtinRegistriesConfDirPath = "/storage/.kodi/addons/service.system.podman/etc/containers/registries.conf.d"
-diff -Nur a/vendor/github.com/containers/image/v5/pkg/sysregistriesv2/paths_freebsd.go b/vendor/github.com/containers/image/v5/pkg/sysregistriesv2/paths_freebsd.go
---- a/vendor/github.com/containers/image/v5/pkg/sysregistriesv2/paths_freebsd.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/vendor/github.com/containers/image/v5/pkg/sysregistriesv2/paths_freebsd.go	2024-11-22 09:32:21.407979955 +0000
-@@ -5,8 +5,8 @@
+diff -Nur a/vendor/go.podman.io/image/v5/pkg/sysregistriesv2/paths_freebsd.go b/vendor/go.podman.io/image/v5/pkg/sysregistriesv2/paths_freebsd.go
+--- a/vendor/go.podman.io/image/v5/pkg/sysregistriesv2/paths_freebsd.go	2025-11-11 13:51:07.000000000 +0000
++++ b/vendor/go.podman.io/image/v5/pkg/sysregistriesv2/paths_freebsd.go	2025-11-12 02:46:50.589654023 +0000
+@@ -4,8 +4,8 @@
  
  // builtinRegistriesConfPath is the path to the registry configuration file.
  // DO NOT change this, instead see systemRegistriesConfPath above.
@@ -895,27 +921,27 @@ diff -Nur a/vendor/github.com/containers/image/v5/pkg/sysregistriesv2/paths_free
  // DO NOT change this, instead see systemRegistriesConfDirectoryPath above.
 -const builtinRegistriesConfDirPath = "/usr/local/etc/containers/registries.conf.d"
 +const builtinRegistriesConfDirPath = "/usr/local/storage/.kodi/addons/service.system.podman/etc/containers/registries.conf.d"
-diff -Nur a/vendor/github.com/containers/image/v5/signature/policy_paths_common.go b/vendor/github.com/containers/image/v5/signature/policy_paths_common.go
---- a/vendor/github.com/containers/image/v5/signature/policy_paths_common.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/vendor/github.com/containers/image/v5/signature/policy_paths_common.go	2024-11-22 09:32:21.411313295 +0000
-@@ -5,4 +5,4 @@
+diff -Nur a/vendor/go.podman.io/image/v5/signature/policy_paths_common.go b/vendor/go.podman.io/image/v5/signature/policy_paths_common.go
+--- a/vendor/go.podman.io/image/v5/signature/policy_paths_common.go	2025-11-11 13:51:07.000000000 +0000
++++ b/vendor/go.podman.io/image/v5/signature/policy_paths_common.go	2025-11-12 02:46:50.592617792 +0000
+@@ -4,4 +4,4 @@
  
  // builtinDefaultPolicyPath is the policy path used for DefaultPolicy().
  // DO NOT change this, instead see systemDefaultPolicyPath above.
 -const builtinDefaultPolicyPath = "/etc/containers/policy.json"
 +const builtinDefaultPolicyPath = "/storage/.kodi/addons/service.system.podman/etc/containers/policy.json"
-diff -Nur a/vendor/github.com/containers/image/v5/signature/policy_paths_freebsd.go b/vendor/github.com/containers/image/v5/signature/policy_paths_freebsd.go
---- a/vendor/github.com/containers/image/v5/signature/policy_paths_freebsd.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/vendor/github.com/containers/image/v5/signature/policy_paths_freebsd.go	2024-11-22 09:32:21.411313295 +0000
-@@ -5,4 +5,4 @@
+diff -Nur a/vendor/go.podman.io/image/v5/signature/policy_paths_freebsd.go b/vendor/go.podman.io/image/v5/signature/policy_paths_freebsd.go
+--- a/vendor/go.podman.io/image/v5/signature/policy_paths_freebsd.go	2025-11-11 13:51:07.000000000 +0000
++++ b/vendor/go.podman.io/image/v5/signature/policy_paths_freebsd.go	2025-11-12 02:46:50.591819421 +0000
+@@ -4,4 +4,4 @@
  
  // builtinDefaultPolicyPath is the policy path used for DefaultPolicy().
  // DO NOT change this, instead see systemDefaultPolicyPath above.
 -const builtinDefaultPolicyPath = "/usr/local/etc/containers/policy.json"
 +const builtinDefaultPolicyPath = "/usr/local/storage/.kodi/addons/service.system.podman/etc/containers/policy.json"
-diff -Nur a/vendor/github.com/containers/storage/types/options_bsd.go b/vendor/github.com/containers/storage/types/options_bsd.go
---- a/vendor/github.com/containers/storage/types/options_bsd.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/vendor/github.com/containers/storage/types/options_bsd.go	2024-11-22 09:32:21.387979914 +0000
+diff -Nur a/vendor/go.podman.io/storage/types/options_bsd.go b/vendor/go.podman.io/storage/types/options_bsd.go
+--- a/vendor/go.podman.io/storage/types/options_bsd.go	2025-11-11 13:51:07.000000000 +0000
++++ b/vendor/go.podman.io/storage/types/options_bsd.go	2025-11-12 02:46:50.583063083 +0000
 @@ -12,7 +12,7 @@
  
  // defaultConfigFile path to the system wide storage.conf file
@@ -925,9 +951,9 @@ diff -Nur a/vendor/github.com/containers/storage/types/options_bsd.go b/vendor/g
  )
  
  // canUseRootlessOverlay returns true if the overlay driver can be used for rootless containers
-diff -Nur a/vendor/github.com/containers/storage/types/options_darwin.go b/vendor/github.com/containers/storage/types/options_darwin.go
---- a/vendor/github.com/containers/storage/types/options_darwin.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/vendor/github.com/containers/storage/types/options_darwin.go	2024-11-22 09:32:21.387979914 +0000
+diff -Nur a/vendor/go.podman.io/storage/types/options_darwin.go b/vendor/go.podman.io/storage/types/options_darwin.go
+--- a/vendor/go.podman.io/storage/types/options_darwin.go	2025-11-11 13:51:07.000000000 +0000
++++ b/vendor/go.podman.io/storage/types/options_darwin.go	2025-11-12 02:46:50.582927679 +0000
 @@ -4,11 +4,11 @@
  	// these are default path for run and graph root for rootful users
  	// for rootless path is constructed via getRootlessStorageOpts
@@ -943,9 +969,9 @@ diff -Nur a/vendor/github.com/containers/storage/types/options_darwin.go b/vendo
  
  // canUseRootlessOverlay returns true if the overlay driver can be used for rootless containers
  func canUseRootlessOverlay() bool {
-diff -Nur a/vendor/github.com/containers/storage/types/options_linux.go b/vendor/github.com/containers/storage/types/options_linux.go
---- a/vendor/github.com/containers/storage/types/options_linux.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/vendor/github.com/containers/storage/types/options_linux.go	2024-11-22 09:32:21.387979914 +0000
+diff -Nur a/vendor/go.podman.io/storage/types/options_linux.go b/vendor/go.podman.io/storage/types/options_linux.go
+--- a/vendor/go.podman.io/storage/types/options_linux.go	2025-11-11 13:51:07.000000000 +0000
++++ b/vendor/go.podman.io/storage/types/options_linux.go	2025-11-12 02:46:50.582904294 +0000
 @@ -12,13 +12,13 @@
  	// these are default path for run and graph root for rootful users
  	// for rootless path is constructed via getRootlessStorageOpts
@@ -963,9 +989,9 @@ diff -Nur a/vendor/github.com/containers/storage/types/options_linux.go b/vendor
  )
  
  // canUseRootlessOverlay returns true if the overlay driver can be used for rootless containers
-diff -Nur a/vendor/github.com/containers/storage/types/options_windows.go b/vendor/github.com/containers/storage/types/options_windows.go
---- a/vendor/github.com/containers/storage/types/options_windows.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/vendor/github.com/containers/storage/types/options_windows.go	2024-11-22 09:32:21.387979914 +0000
+diff -Nur a/vendor/go.podman.io/storage/types/options_windows.go b/vendor/go.podman.io/storage/types/options_windows.go
+--- a/vendor/go.podman.io/storage/types/options_windows.go	2025-11-11 13:51:07.000000000 +0000
++++ b/vendor/go.podman.io/storage/types/options_windows.go	2025-11-12 02:46:50.582949177 +0000
 @@ -4,13 +4,13 @@
  	// these are default path for run and graph root for rootful users
  	// for rootless path is constructed via getRootlessStorageOpts
@@ -983,15 +1009,3 @@ diff -Nur a/vendor/github.com/containers/storage/types/options_windows.go b/vend
  )
  
  // canUseRootlessOverlay returns true if the overlay driver can be used for rootless containers
-diff -Nur a/vendor/github.com/opencontainers/selinux/go-selinux/selinux_linux.go b/vendor/github.com/opencontainers/selinux/go-selinux/selinux_linux.go
---- a/vendor/github.com/opencontainers/selinux/go-selinux/selinux_linux.go	2024-11-21 13:40:20.000000000 +0000
-+++ b/vendor/github.com/opencontainers/selinux/go-selinux/selinux_linux.go	2024-11-22 09:32:21.287979709 +0000
-@@ -23,7 +23,7 @@
- 
- const (
- 	minSensLen       = 2
--	contextFile      = "/usr/share/containers/selinux/contexts"
-+	contextFile      = "/storage/.kodi/userdata/addon_data/service.system.podman/podman/etc/containers/selinux/contexts"
- 	selinuxDir       = "/etc/selinux/"
- 	selinuxUsersDir  = "contexts/users"
- 	defaultContexts  = "contexts/default_contexts"

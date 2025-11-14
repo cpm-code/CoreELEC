@@ -2,16 +2,15 @@
 # Copyright (C) 2021-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="nextpvr"
-PKG_VERSION="7.0.1~Piers"
-PKG_ADDON_VERSION="7.0.1~1"
-PKG_REV="1"
+PKG_VERSION="7.0.4"
+PKG_REV="3"
 PKG_ARCH="any"
 PKG_LICENSE="NextPVR"
 PKG_SITE="https://nextpvr.com"
 PKG_DEPENDS_TARGET="toolchain libhdhomerun libmediainfo comskip"
 PKG_SECTION="service"
 PKG_SHORTDESC="NextPVR Server"
-PKG_LONGDESC="NextPVR is a personal video recorder application. It allows to watch or record live TV, provides great features like series recordings and web scheduling."
+PKG_LONGDESC="NextPVR ${PKG_VERSION} is an advanced personal video recorder server for Windows, macOS and Linux that allows watching live TV and recordings, and advanced scheduling recordings from client devices and browsers"
 PKG_TOOLCHAIN="manual"
 
 PKG_IS_ADDON="yes"
@@ -24,7 +23,7 @@ addon() {
 }
 
 post_install_addon() {
-  sed -e "s/@NEXTPVR_VERSION@/${PKG_ADDON_VERSION}/g" -i "${INSTALL}/bin/nextpvr-downloader"
+  sed -e "s/@NEXTPVR_VERSION@/${PKG_VERSION}/g" -i "${INSTALL}/bin/nextpvr-downloader"
 
   mkdir -p ${INSTALL}/{lbin,lib.private}
   cp $(get_build_dir libmediainfo)/Project/GNU/Library/.libs/libmediainfo.so ${INSTALL}/lib.private

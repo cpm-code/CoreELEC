@@ -28,6 +28,7 @@ make_host() {
        RANLIB=${RANLIB} \
        CFLAGS="${HOST_CFLAGS}" \
        BUILD_CFLAGS="${HOST_CFLAGS} -I${PKG_BUILD}/libcap/include" \
+       BUILD_LDFLAGS="${HOST_LDFLAGS}" \
        PAM_CAP=no \
        lib=/lib \
        USE_GPERF=no \
@@ -42,6 +43,7 @@ make_target() {
        CFLAGS="${TARGET_CFLAGS}" \
        BUILD_CC=${HOST_CC} \
        BUILD_CFLAGS="${HOST_CFLAGS} -I${PKG_BUILD}/libcap/include" \
+       BUILD_LDFLAGS="${HOST_LDFLAGS}" \
        PAM_CAP=no \
        lib=/lib \
        USE_GPERF=no \

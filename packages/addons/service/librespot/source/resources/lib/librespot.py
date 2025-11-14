@@ -18,6 +18,7 @@ class Librespot:
             "--device-type", "tv",
             "--disable-audio-cache",
             "--disable-credential-cache",
+            "--initial-volume", "100",
             "--name", name,
             "--onevent", target.event_handler.get_onevent(),
             "--quiet",

@@ -21,7 +21,7 @@ pre_configure_target() {
   if [ "${TARGET_ARCH}" = "x86_64" ]; then
     export AS="${TOOLCHAIN}/bin/nasm"
   else
-    PKG_X264_ASM="--disable-asm"
+    export AS="${CC}"
   fi
 }
 
@@ -33,7 +33,6 @@ configure_target() {
     --host="${TARGET_NAME}" \
     --prefix="/usr" \
     --sysroot="${SYSROOT_PREFIX}" \
-    ${PKG_X264_ASM} \
     --disable-cli \
     --enable-lto \
     --enable-pic \

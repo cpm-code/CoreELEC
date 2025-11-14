@@ -3,8 +3,8 @@
 # Copyright (C) 2021-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="vulkan-headers"
-PKG_VERSION="1.4.331"
-PKG_SHA256="7536a34b2b089fc85ce015060d2a114f3f298315104ee43f710e986d923d821b"
+PKG_VERSION="1.4.332"
+PKG_SHA256="2b989481afb301b101fa89e5e2a0e72a3a55e236ef69ac13fa0522b3a2bc8da0"
 PKG_LICENSE="Apache-2.0"
 PKG_SITE="https://github.com/KhronosGroup/Vulkan-Headers"
 PKG_URL="https://github.com/KhronosGroup/Vulkan-Headers/archive/v${PKG_VERSION}.tar.gz"

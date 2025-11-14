@@ -4,7 +4,7 @@
 - Ubuntu
   - jammy     (Ubuntu 22.04)
   - noble     (Ubuntu 24.04)
-  - plucky    (Ubuntu 25.04)
+  - questing  (Ubuntu 25.10)
 - Debian
   - bookworm  (Debian 12)
 
