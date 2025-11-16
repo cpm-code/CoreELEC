@@ -215,13 +215,6 @@ configure_package() {
     KODI_NEON=""
   fi
 
-  if [ "${VDPAU_SUPPORT}" = "yes" -a "${DISPLAYSERVER}" = "x11" ]; then
-    PKG_DEPENDS_TARGET+=" libvdpau"
-    KODI_VDPAU="-DENABLE_VDPAU=ON"
-  else
-    KODI_VDPAU="-DENABLE_VDPAU=OFF"
-  fi
-
   if [ "${VAAPI_SUPPORT}" = yes ]; then
     PKG_DEPENDS_TARGET+=" libva"
     KODI_VAAPI="-DENABLE_VAAPI=ON"
@@ -274,7 +267,6 @@ configure_package() {
                          ${PKG_KODI_LINKER} \
                          ${KODI_ARCH} \
                          ${KODI_NEON} \
-                         ${KODI_VDPAU} \
                          ${KODI_VAAPI} \
                          ${KODI_CEC} \
                          ${KODI_PLATFORM} \

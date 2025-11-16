@@ -130,7 +130,6 @@ show_config() {
   config_message+="\n\n Video Acceleration configuration:"
   config_message+="\n ${dashes}${dashes}"
   config_message+="\n - VA-API Support:\t\t\t ${VAAPI_SUPPORT}"
-  config_message+="\n - VDPAU Support:\t\t\t ${VDPAU_SUPPORT}"
 
   # OS configuration
 

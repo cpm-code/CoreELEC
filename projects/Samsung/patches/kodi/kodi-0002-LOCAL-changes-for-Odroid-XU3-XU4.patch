@@ -17,18 +17,18 @@ diff --git a/cmake/modules/FindGBM.cmake b/cmake/modules/FindGBM.cmake
 index 37a26a7bc4..53cc04663e 100644
 --- a/cmake/modules/FindGBM.cmake
 +++ b/cmake/modules/FindGBM.cmake
-@@ -48,13 +48,5 @@
-                                                                      IMPORTED_LOCATION "${GBM_LIBRARY}"
-                                                                      INTERFACE_INCLUDE_DIRECTORIES "${GBM_INCLUDE_DIR}"
-                                                                      INTERFACE_COMPILE_DEFINITIONS "HAVE_GBM")
+@@ -44,13 +44,6 @@
+ 
+     set(${${CMAKE_FIND_PACKAGE_NAME}_MODULE}_COMPILE_DEFINITIONS HAVE_GBM)
+ 
 -    if(GBM_HAS_BO_MAP)
--      set_property(TARGET ${APP_NAME_LC}::${CMAKE_FIND_PACKAGE_NAME} APPEND PROPERTY
--                                                                            INTERFACE_COMPILE_DEFINITIONS HAS_GBM_BO_MAP)
+-      list(APPEND ${${CMAKE_FIND_PACKAGE_NAME}_MODULE}_COMPILE_DEFINITIONS HAS_GBM_BO_MAP)
 -    endif()
 -    if(GBM_HAS_MODIFIERS)
--      set_property(TARGET ${APP_NAME_LC}::${CMAKE_FIND_PACKAGE_NAME} APPEND PROPERTY
--                                                                            INTERFACE_COMPILE_DEFINITIONS HAS_GBM_MODIFIERS)
+-      list(APPEND ${${CMAKE_FIND_PACKAGE_NAME}_MODULE}_COMPILE_DEFINITIONS HAS_GBM_MODIFIERS)
 -    endif()
+-
+     ADD_TARGET_COMPILE_DEFINITION()
    endif()
  endif()
 diff --git a/system/settings/linux.xml b/system/settings/linux.xml
