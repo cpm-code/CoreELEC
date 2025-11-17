@@ -2,8 +2,8 @@
 # Copyright (C) 2023-present Team CoreELEC (https://coreelec.org)
 
 PKG_NAME="RTL8852BE-aml"
-PKG_VERSION="b28630b2cd48748cb74d02cc3fce238ec6fef411"
-PKG_SHA256="52c0e32e3917a3160e4c468a7bbe9fa21fd75c1ac0eb73883309e4e1cd11f61e"
+PKG_VERSION="a56631b22088c3f2fa2756f74517391c68cf102a"
+PKG_SHA256=""
 PKG_ARCH="arm aarch64"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/CoreELEC/RTL8852BE-aml"
@@ -14,6 +14,10 @@ PKG_LONGDESC="Realtek RTL8852BE-aml Linux driver"
 PKG_IS_KERNEL_PKG="yes"
 PKG_TOOLCHAIN="manual"
 
+pre_configure_target() {
+  export USER_EXTRA_CFLAGS="-D__ANDROID_COMMON_KERNEL__"
+}
+
 make_target() {
   kernel_make -C ${PKG_BUILD}/rtl8852BE \
     M=${PKG_BUILD}/rtl8852BE \
@@ -23,7 +27,9 @@ make_target() {
     CONFIG_SDIO_HCI=n \
     CONFIG_PCI_HCI=y \
     CONFIG_POWER_SAVE=n \
-    CONFIG_RTW_DEBUG=n \
+    CONFIG_RTW_DEBUG=y \
+    CONFIG_RTW_LOG_LEVEL=3 \
+    CONFIG_RTW_PHL_LOG_LEVEL=3 \
     modules
 }
 
