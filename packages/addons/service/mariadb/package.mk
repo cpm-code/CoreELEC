@@ -2,9 +2,9 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="mariadb"
-PKG_VERSION="11.8.4"
-PKG_REV="1"
-PKG_SHA256="81af7770211b8336be927b983be6a0ed8b0d33ee5c4abad47e01b800294921cb"
+PKG_VERSION="11.8.5"
+PKG_REV="2"
+PKG_SHA256="bcb7394569c08877c283e1649869504531bee8caafa30288f078e30d99fcb9f6"
 PKG_LICENSE="GPL2"
 PKG_SITE="https://mariadb.org"
 PKG_URL="https://archive.mariadb.org/${PKG_NAME}-${PKG_VERSION}/source/${PKG_NAME}-${PKG_VERSION}.tar.gz"

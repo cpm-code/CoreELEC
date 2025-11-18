@@ -2,8 +2,8 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="udpxy"
-PKG_VERSION="1.0-25.1"
-PKG_SHA256="a1a16e60895c6b2fd151321db47f5d5373843116f1b98ed9749e6c25a6c44497"
+PKG_VERSION="93d427f0fc181837b8294db072303c3310f88b6d"
+PKG_SHA256="293a7e86e185f55a573a552a21cbb4f4a26fc728f6f195f8e0fc3e134c14be38"
 PKG_LICENSE="GPLv3"
 PKG_SITE="http://www.udpxy.com"
 PKG_URL="https://github.com/pcherenkov/udpxy/archive/${PKG_VERSION}.tar.gz"
