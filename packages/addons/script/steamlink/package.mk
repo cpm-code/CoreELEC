@@ -14,7 +14,7 @@ PKG_LONGDESC="Installs the Steam Link App for Raspberry Pi from Valve for use in
 PKG_TOOLCHAIN="manual"
 
 PKG_IS_ADDON="yes"
-PKG_ADDON_NAME="Raspbery Pi Steam Link"
+PKG_ADDON_NAME="Raspberry Pi Steam Link"
 PKG_ADDON_TYPE="xbmc.python.script"
 PKG_ADDON_PROVIDES="executable"
 
