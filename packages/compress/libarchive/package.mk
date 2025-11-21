@@ -2,8 +2,8 @@
 # Copyright (C) 2017-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="libarchive"
-PKG_VERSION="3.8.2"
-PKG_SHA256="db0dee91561cbd957689036a3a71281efefd131d35d1d98ebbc32720e4da58e2"
+PKG_VERSION="3.8.3"
+PKG_SHA256="90e21f2b89f19391ce7b90f6e48ed9fde5394d23ad30ae256fb8236b38b99788"
 PKG_LICENSE="GPL"
 PKG_SITE="https://www.libarchive.org"
 PKG_URL="https://www.libarchive.org/downloads/${PKG_NAME}-${PKG_VERSION}.tar.xz"
