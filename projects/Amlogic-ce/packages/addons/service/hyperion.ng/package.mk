@@ -2,13 +2,13 @@
 # Copyright (C) 2018-present Team CoreELEC (https://coreelec.org)
 
 PKG_NAME="hyperion.ng"
-PKG_VERSION="2.0.16"
-PKG_SHA256="966a5494b75708c04213e1c28aff5c9a909b689ccc19d52c6c708a270b00ca8a"
-PKG_REV="119"
+PKG_VERSION="2.2.0"
+PKG_SHA256="a95e94087ca2d83fa0bc11a58b6d0da63136a8452815cadb78af46dd26012cad"
+PKG_REV="120"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/hyperion-project/hyperion.ng"
 PKG_URL="https://github.com/hyperion-project/hyperion.ng/archive/${PKG_VERSION}.tar.gz"
-PKG_DEPENDS_TARGET="toolchain Python3 libusb qt5 protobuf flatbuffers:host flatbuffers libjpeg-turbo qmdnsengine mbedtls alsa-lib"
+PKG_DEPENDS_TARGET="toolchain Python3 libusb libdrm libftdi1 qt5 protobuf flatbuffers:host flatbuffers libjpeg-turbo qmdnsengine mbedtls alsa-lib"
 PKG_SECTION="service"
 PKG_SHORTDESC="Hyperion.NG: an AmbiLight controller"
 PKG_LONGDESC="Hyperion.NG(${PKG_VERSION}) is an modern opensource AmbiLight implementation."
