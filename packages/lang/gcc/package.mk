@@ -19,7 +19,7 @@ if [ "${MOLD_SUPPORT}" = "yes" ]; then
 fi
 
 case ${TARGET_ARCH} in
-  arm | riscv64)
+  arm | aarch64 | riscv64)
     OPTS_LIBATOMIC="--enable-libatomic"
     ;;
   *)
@@ -116,6 +116,11 @@ post_make_host() {
   if [ ! "${BUILD_WITH_DEBUG}" = "yes" ]; then
     ${TARGET_PREFIX}strip ${TARGET_NAME}/libgcc/libgcc_s.so*
     ${TARGET_PREFIX}strip ${TARGET_NAME}/libstdc++-v3/src/.libs/libstdc++.so*
+  fi
+
+  if [ "${OPTS_LIBATOMIC}" = "--enable-libatomic" ]; then
+    mkdir -p ${SYSROOT_PREFIX}/usr/lib
+    cp -P ${PKG_BUILD}/.${HOST_NAME}/${TARGET_NAME}/libatomic/.libs/libatomic.so* ${SYSROOT_PREFIX}/usr/lib
   fi
 }
 
