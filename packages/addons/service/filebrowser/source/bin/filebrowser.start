@@ -14,7 +14,7 @@ DATABASE="${ADDON_HOME}/database.db"
 
 if [ ! -f "${DATABASE}" ]; then
   "${FB}" -d "${DATABASE}" config init --minimum-password-length 5
-  "${FB}" -d "${DATABASE}" users add "admin" "libreelec" --perm.admin
+  "${FB}" -d "${DATABASE}" users add "admin" "coreelec" --perm.admin
 fi
 
 exec "${FB}" -d "${DATABASE}" -l stdout -r "/storage" -a "0.0.0.0" -p "${FILEBROWSER_PORT}"
