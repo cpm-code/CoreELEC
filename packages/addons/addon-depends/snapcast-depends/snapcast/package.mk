@@ -11,6 +11,8 @@ PKG_DEPENDS_TARGET="toolchain aixlog alsa-lib asio avahi flac libvorbis popl pul
 PKG_LONGDESC="Synchronous multi-room audio player."
 PKG_BUILD_FLAGS="-sysroot"
 
+PKG_CMAKE_OPTS_TARGET="-DBUILD_WITH_PULSE=ON"
+
 pre_configure_target() {
   CXXFLAGS="${CXXFLAGS} -pthread \
                       -I$(get_install_dir aixlog)/usr/include \

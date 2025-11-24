@@ -22,5 +22,5 @@ msgid "Username: admin"
 msgstr ""
 
 msgctxt "#30004"
-msgid "Password: admin"
+msgid "Password: libreelec"
 msgstr ""
