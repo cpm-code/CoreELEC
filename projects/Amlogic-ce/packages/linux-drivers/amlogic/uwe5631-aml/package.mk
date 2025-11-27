@@ -2,9 +2,9 @@
 # Copyright (C) 2022-present Team CoreELEC (https://coreelec.org)
 
 PKG_NAME="uwe5631-aml"
-PKG_VERSION="7e756e49720943e6f0d15821b2f41b73309a1430"
-PKG_SHA256="4e41ae5cc427ba02a7ba53bdd3fdf7a6908f6d1314f2f764c0947ac82908d750"
-PKG_ARCH="arm aarch64"
+PKG_VERSION="df31fe79d3a5875a23e1d7e25852e35de1c25e43"
+PKG_SHA256=""
+PKG_ARCH="aarch64"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/CoreELEC/uwe5631-aml"
 PKG_URL="https://github.com/CoreELEC/uwe5631-aml/archive/${PKG_VERSION}.tar.gz"
@@ -19,7 +19,7 @@ make_target() {
   kernel_make -C ${PKG_BUILD} \
     M=${PKG_BUILD} \
     KERNEL_SRC=$(kernel_path) \
-    EXTRA_CFLAGS="-fno-pic -Wno-sizeof-pointer-memaccess -Wno-declaration-after-statement -I${PKG_BUILD}/BSP/include -DCUSTOMIZE_WIFI_CFG_PATH=\\\"/lib/firmware/unisoc\\\"" \
+    UNISOC_WIFI_CUS_CONFIG="/lib/firmware/unisoc" \
     modules
 
   echo "making BT"
