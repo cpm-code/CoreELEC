@@ -2,8 +2,8 @@
 # Copyright (C) 2025-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="tmux"
-PKG_VERSION="3.5a"
-PKG_SHA256="16216bd0877170dfcc64157085ba9013610b12b082548c7c9542cc0103198951"
+PKG_VERSION="3.6"
+PKG_SHA256="136db80cfbfba617a103401f52874e7c64927986b65b1b700350b6058ad69607"
 PKG_LICENSE="ISC"
 PKG_SITE="https://github.com/tmux/tmux/wiki"
 PKG_URL="https://github.com/tmux/tmux/releases/download/${PKG_VERSION}/${PKG_NAME}-${PKG_VERSION}.tar.gz"
