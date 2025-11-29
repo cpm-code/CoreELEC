@@ -43,6 +43,12 @@ make_target() {
   ${GOLANG} build -mod=mod -modfile=go.mod -v -o bin/dockerd -a -tags "${PKG_MOBY_BUILDTAGS}" -ldflags "${LDFLAGS}" ./cmd/dockerd
 }
 
+post_make_target() {
+  # fix wrong permissions which prevents folder to be removed without sudo
+  find ${PKG_BUILD} -type f -perm 0444 -exec chmod 0644 {} +
+  find ${PKG_BUILD} -type d -perm 0555 -exec chmod 0755 {} +
+}
+
 makeinstall_target() {
   :
 }
