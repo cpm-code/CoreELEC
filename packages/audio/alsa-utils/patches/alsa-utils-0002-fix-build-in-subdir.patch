@@ -1,0 +1,24 @@
+From 883a3c66bef34c0138f1c87632dff71c36d73408 Mon Sep 17 00:00:00 2001
+From: Rudi Heitbaum <rudi@heitbaum.com>
+Date: Mon, 8 Dec 2025 11:12:34 +0000
+Subject: [PATCH] alsactl: fix build when in subdirectory
+
+create the conf directory as part of the edit recipe
+
+Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
+---
+ alsactl/Makefile.am | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/alsactl/Makefile.am b/alsactl/Makefile.am
+index 48b7c7a6..c8729e04 100644
+--- a/alsactl/Makefile.am
++++ b/alsactl/Makefile.am
+@@ -47,6 +47,7 @@ endif
+ edit = \
+ 	extratest=$$(echo ' $(ALSACTL_UDEV_EXTRATEST)' | sed -e 's/__/ /g' -e 's/^ $$//'); \
+ 	args=$$(echo ' $(ALSACTL_UDEV_ARGS)' | sed -e 's/__/ /g' -e 's/^ $$//'); \
++	mkdir -p conf; \
+ 	$(SED) -r -e 's,@sbindir\@,$(sbindir),g' \
+ 		  -e 's,@mydatadir\@,$(mydatadir),g' \
+ 		  -e 's,@daemonswitch\@,$(ALSACTL_DAEMONSWITCH),g' \

@@ -3,8 +3,8 @@
 # Copyright (C) 2017-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="libinput"
-PKG_VERSION="1.30.0"
-PKG_SHA256="594d970cab7b3738ad99218e7dafc253780f58a7600ab0823d2fcc3941a04e86"
+PKG_VERSION="1.30.1"
+PKG_SHA256="c5169568f337c4a3bda927c42afef3a9d4c891e48a405cba39d57cb4631b9fb0"
 PKG_LICENSE="GPL"
 PKG_SITE="https://www.freedesktop.org/wiki/Software/libinput/"
 PKG_URL="https://gitlab.freedesktop.org/libinput/libinput/-/archive/${PKG_VERSION}/${PKG_NAME}-${PKG_VERSION}.tar.bz2"

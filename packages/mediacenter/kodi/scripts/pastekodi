@@ -94,6 +94,15 @@ fi
 
   kmsprint | cat_data "kmsprint"
 
+  for f in /sys/class/drm/card*/edid; do
+    if [ -e "${f}" ]; then
+      EDID=$(hexdump -v -e '16/1 "%02x ""\n"' "${f}" 2>/dev/null)
+      if [ -n "${EDID}" ]; then
+        echo "${EDID}" | cat_data "${f}"
+      fi
+    fi 
+  done 
+
   if [ "${DISTRO_PROJECT}" = "RPi" ]; then
     vcgencmd bootloader_version | cat_data "Bootloader version"
   fi
