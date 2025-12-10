@@ -2,8 +2,8 @@
 # Copyright (C) 2024-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="double-conversion"
-PKG_VERSION="3.3.1"
-PKG_SHA256="fe54901055c71302dcdc5c3ccbe265a6c191978f3761ce1414d0895d6b0ea90e"
+PKG_VERSION="3.4.0"
+PKG_SHA256="42fd4d980ea86426e457b24bdfa835a6f5ad9517ddb01cdb42b99ab9c8dd5dc9"
 PKG_LICENSE="BSD"
 PKG_SITE="https://github.com/google/double-conversion"
 PKG_URL="https://github.com/google/double-conversion/archive/refs/tags/v${PKG_VERSION}.tar.gz"
