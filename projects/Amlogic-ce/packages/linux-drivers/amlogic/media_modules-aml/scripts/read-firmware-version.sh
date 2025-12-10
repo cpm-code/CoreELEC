@@ -9,14 +9,14 @@ read_firmware_version() {
 
   if [ -f "${firmware_file}" ]; then
     local offset=0
-    magic=$(echo $(hexdump -e '1/4 "%s"' -n 4 -s ${offset} ${firmware_file}) | rev)
+    magic=$(echo $(hexdump -e '4/1 "%_p"' -n 4 -s ${offset} ${firmware_file}) | rev)
 
     if [[ ${magic} != 'NEWP' && ${magic} != 'PACK' ]]; then
       offset=256
-      magic=$(echo $(hexdump -e '1/4 "%s"' -n 4 -s ${offset} ${firmware_file}) | rev)
+      magic=$(echo $(hexdump -e '4/1 "%_p"' -n 4 -s ${offset} ${firmware_file}) | rev)
 
       if [[ ${magic} != 'PACK' ]]; then
-        break
+        return
       fi
     fi
 
