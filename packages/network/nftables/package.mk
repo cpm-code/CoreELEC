@@ -9,10 +9,6 @@ PKG_SITE="https://netfilter.org/projects/${PKG_NAME}"
 PKG_URL="https://netfilter.org/projects/${PKG_NAME}/files/${PKG_NAME}-${PKG_VERSION}.tar.xz"
 PKG_DEPENDS_TARGET="autotools:host gcc:host libnftnl readline"
 PKG_LONGDESC="A userspace library providing a low-level netlink programming interface (API) to the in-kernel nf_tables subsystem."
+PKG_TOOLCHAIN="autotools"
 
 PKG_CONFIGURE_OPTS_TARGET="--without-cli --with-mini-gmp"
-
-pre_configure_target() {
-  # work around bashism in configure script
-  export CONFIG_SHELL="/bin/bash"
-}

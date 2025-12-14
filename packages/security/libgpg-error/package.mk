@@ -3,8 +3,8 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="libgpg-error"
-PKG_VERSION="1.56"
-PKG_SHA256="82c3d2deb4ad96ad3925d6f9f124fe7205716055ab50e291116ef27975d169c0"
+PKG_VERSION="1.58"
+PKG_SHA256="f943aea9a830a8bd938e5124b579efaece24a3225ff4c3d27611a80ce1260c27"
 PKG_LICENSE="GPLv2"
 PKG_SITE="https://www.gnupg.org"
 PKG_URL="https://www.gnupg.org/ftp/gcrypt/libgpg-error/${PKG_NAME}-${PKG_VERSION}.tar.bz2"
