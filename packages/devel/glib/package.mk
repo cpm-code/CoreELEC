@@ -23,12 +23,11 @@ PKG_MESON_OPTS_TARGET="-Ddefault_library=shared \
                        -Dinstalled_tests=false \
                        -Dselinux=disabled \
                        -Dxattr=true \
-                       -Dgtk_doc=false \
-                       -Dman=false \
-                       -Ddtrace=false \
-                       -Dsystemtap=false \
+                       -Ddocumentation=false \
+                       -Dman-pages=disabled \
+                       -Ddtrace=disabled \
+                       -Dsystemtap=disabled \
                        -Dbsymbolic_functions=true \
-                       -Dforce_posix_threads=true \
                        -Dsysprof=disabled \
                        -Dtests=false \
                        -Dintrospection=enabled"
