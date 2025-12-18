@@ -3,8 +3,8 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="systemd"
-PKG_VERSION="258.2"
-PKG_SHA256="05208e76bf1f9b369b1a8159e6631ef67c82f2d27c21e931962026a79bf4ba64"
+PKG_VERSION="259"
+PKG_SHA256="a84123692d1add7f9c48fd11cdf5f901393008c2d2ade667c18f25a20bf1290d"
 PKG_LICENSE="LGPL2.1+"
 PKG_SITE="http://www.freedesktop.org/wiki/Software/systemd"
 PKG_URL="https://github.com/systemd/systemd/archive/v${PKG_VERSION}.tar.gz"
@@ -93,6 +93,7 @@ PKG_MESON_OPTS_TARGET="--libdir=/usr/lib \
                        -Dlink-udev-shared=true \
                        -Dlink-systemctl-shared=true \
                        -Dlink-networkd-shared=false \
+                       -Djournal-storage-default=auto \
                        -Dbashcompletiondir=no \
                        -Dzshcompletiondir=no \
                        -Dkmod-path=/usr/bin/kmod \
