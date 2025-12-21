@@ -22,5 +22,5 @@ PKG_CMAKE_OPTS_TARGET="-DBUILD_SHARED_LIBS=OFF \
                        -Dlzma=OFF \
                        -Dzstd=OFF \
                        -Dwebp=OFF \
-                       -Dcxx=ON \
+                       -Dtiff-cxx=ON \
                        -Djpeg=ON"

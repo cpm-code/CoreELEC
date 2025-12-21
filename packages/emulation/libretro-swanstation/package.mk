@@ -27,12 +27,6 @@ if [ "${VULKAN_SUPPORT}" = "yes" ]; then
   PKG_DEPENDS_TARGET+=" ${VULKAN}"
 fi
 
-PKG_CMAKE_OPTS_TARGET="-DBUILD_NOGUI_FRONTEND=OFF \
-                       -DBUILD_QT_FRONTEND=OFF \
-                       -DBUILD_LIBRETRO_CORE=ON \
-                       -DENABLE_DISCORD_PRESENCE=OFF \
-                       -DUSE_DRMKMS=ON"
-
 makeinstall_target() {
   mkdir -p ${SYSROOT_PREFIX}/usr/lib/cmake/${PKG_NAME}
   cp ${PKG_LIBPATH} ${SYSROOT_PREFIX}/usr/lib/${PKG_LIBNAME}

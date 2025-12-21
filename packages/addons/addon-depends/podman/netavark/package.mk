@@ -2,8 +2,8 @@
 # Copyright (C) 2023-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="netavark"
-PKG_VERSION="1.16.1"
-PKG_SHA256="e655fcd882fe891bcc8328ddcfff3745831c8b1013ae59f012d37ce87175b0b3"
+PKG_VERSION="1.17.1"
+PKG_SHA256="22cdaea57490014c8faf029d0e2d585d9fddcfcb35fc342f812ba79b27d5d3d1"
 PKG_LICENSE="Apache-2.0"
 PKG_SITE="https://github.com/containers/netavark"
 PKG_URL="https://github.com/containers/netavark/archive/v${PKG_VERSION}.tar.gz"
