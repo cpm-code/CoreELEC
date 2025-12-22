@@ -4,7 +4,7 @@
 PKG_NAME="firecube_lightbar"
 PKG_VERSION="72a5d6180e64e686fc21865f0eaf97cc82fc5eb2"
 PKG_SHA256="c5155cc5512ee55dbca2ecfe7522d5e8fe0a07610c895f9489741480e23ea94a"
-PKG_REV="1"
+PKG_REV="0"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/CoreELEC/service.firecube_lightbar"
