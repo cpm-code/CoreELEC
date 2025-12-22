@@ -4,7 +4,7 @@
 PKG_NAME="game.libretro.2048"
 PKG_VERSION="1.0.0.150-Omega"
 PKG_SHA256="72fd0073a8b8eafb32420e1b4b51317b8170600f2e8db3a6ecf9f79d307673a1"
-PKG_REV="1"
+PKG_REV="2"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/kodi-game/game.libretro.2048"

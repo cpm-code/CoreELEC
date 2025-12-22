@@ -9,11 +9,9 @@ Signed-off-by: Vanya Sergeev <vsergeev@gmail.com>
  configure.ac | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configure.ac b/configure.ac
-index 611c33949a..059ac2f883 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -5428,7 +5428,7 @@ fi]))
+@@ -5805,7 +5805,7 @@ fi]))
  dnl if ac_cv_func_getaddrinfo
  ])
  
@@ -22,6 +20,3 @@ index 611c33949a..059ac2f883 100644
  then
    AS_VAR_IF([ipv6], [yes], [
      AC_MSG_ERROR([m4_normalize([
--- 
-2.34.1
-

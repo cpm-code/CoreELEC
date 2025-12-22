@@ -4,7 +4,7 @@
 PKG_NAME="game.libretro.genplus"
 PKG_VERSION="1.7.4.71-Omega"
 PKG_SHA256="e2fdf279d57712000d3248ae123fcb234390afe1865787c4a55e7b27a464b639"
-PKG_REV="1"
+PKG_REV="2"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/kodi-game/game.libretro.genplus"

@@ -86,8 +86,8 @@ check_for_update() {
 
   if [ -z "${upstream_version}" ]; then
     # check if package exists at tracker
-    RMO_API_RESPONSE=$(curl -m 5 -sL "https://release-monitoring.org/api/project/LibreELEC/${PKG_NAME}" || true)
-    upstream_version=$(echo "${RMO_API_RESPONSE}" | jq -r '.version' || true)
+    RMO_API_RESPONSE=$(curl -m 5 -sL "https://release-monitoring.org/api/v2/packages/?name=${PKG_NAME}&distribution=LibreELEC" || true)
+    upstream_version=$(echo "${RMO_API_RESPONSE}" | jq -r '.items[0].version' || true)
 
     # special handling based on release-monitoring formatting
     case ${PKG_NAME} in
@@ -127,7 +127,7 @@ check_for_update() {
       upstream_version="${upstream_latest_commit##*/}"
     fi
   elif [ "${upstream_version}" = "null" ]; then
-    if [[ $(echo "${RMO_API_RESPONSE}" | jq -r '.error') =~ "No package" ]]; then
+    if [[ $(echo "${RMO_API_RESPONSE}" | jq -r '.total_items') =~ "0" ]]; then
       # package is not on tracker or github
       PACKAGES_NOT_REGISTERED+="${PKG_NAME} "
       return

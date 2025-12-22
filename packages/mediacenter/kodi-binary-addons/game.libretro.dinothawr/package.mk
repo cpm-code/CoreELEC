@@ -4,7 +4,7 @@
 PKG_NAME="game.libretro.dinothawr"
 PKG_VERSION="1.0.0.41-Omega"
 PKG_SHA256="47069a7d5dffeb0046e09f0c58cd299b593bb29e077677785afdf363d7eb20e0"
-PKG_REV="1"
+PKG_REV="2"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/kodi-game/game.libretro.dinothawr"

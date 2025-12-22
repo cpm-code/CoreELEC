@@ -3,8 +3,8 @@
 
 PKG_NAME="Python3"
 # When changing PKG_VERSION remember to sync PKG_PYTHON_VERSION!
-PKG_VERSION="3.13.11"
-PKG_SHA256="16ede7bb7cdbfa895d11b0642fa0e523f291e6487194d53cf6d3b338c3a17ea2"
+PKG_VERSION="3.14.2"
+PKG_SHA256="ce543ab854bc256b61b71e9b27f831ffd1bfd60a479d639f8be7f9757cf573e9"
 PKG_LICENSE="OSS"
 PKG_SITE="https://www.python.org/"
 PKG_URL="https://www.python.org/ftp/python/${PKG_VERSION}/${PKG_NAME::-1}-${PKG_VERSION}.tar.xz"
@@ -14,7 +14,7 @@ PKG_LONGDESC="Python3 is an interpreted object-oriented programming language."
 PKG_BUILD_FLAGS="-cfg-libs -cfg-libs:host"
 PKG_TOOLCHAIN="autotools"
 
-PKG_PYTHON_VERSION="python3.13"
+PKG_PYTHON_VERSION="python3.14"
 
 PKG_CONFIGURE_OPTS_HOST="ac_cv_prog_HAS_HG=/bin/false
                          ac_cv_prog_SVNVERSION=/bin/false
