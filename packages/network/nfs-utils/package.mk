@@ -69,6 +69,7 @@ pre_configure_target() {
     --with-statduser=root \
     --with-statedir=/run/nfs \
     --with-rpcgen=${PKG_BUILD}/tools/rpcgen/rpcgen \
+    --libexecdir=/usr/lib \
     --enable-nfsv4 \
     --enable-nfsv41 \
     --enable-tirpc \
