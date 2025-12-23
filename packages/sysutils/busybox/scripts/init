@@ -1052,11 +1052,7 @@ do_aml_autoscript() {
     fi
 
     do_reboot
-  else
-    echo "'reboot update' or 'run update' was not run"
   fi
-
-  echo
 }
 
 prepare_sysroot() {
