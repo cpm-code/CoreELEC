@@ -107,6 +107,8 @@ fi
     vcgencmd bootloader_version | cat_data "Bootloader version"
   fi
 
+  lsblk -Afi | cat_data "lsblk"
+
   cat_file "/flash/config.txt"       # RPi
   cat_file "/flash/distroconfig.txt" # RPi
   cat_file "/flash/cmdline.txt"      # RPi

@@ -56,6 +56,7 @@ PKG_CONFIGURE_OPTS_TARGET="${UTILLINUX_CONFIG_DEFAULT} \
                            --enable-blkid \
                            --enable-lscpu \
                            --enable-lsfd \
+                           --enable-lsblk \
                            --enable-mount \
                            --enable-nologin"
 
