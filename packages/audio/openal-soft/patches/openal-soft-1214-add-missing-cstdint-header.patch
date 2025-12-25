@@ -1,0 +1,31 @@
+From 6dfc37bae1fcb8c010ff8d614b15bbd6c8774269 Mon Sep 17 00:00:00 2001
+From: Rudi Heitbaum <rudi@heitbaum.com>
+Date: Tue, 23 Dec 2025 19:17:10 +1100
+Subject: [PATCH] Fix missing cstdint header
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Fixes:
+    /build/openal-soft-1.25.0/common/altypes.hpp:10:17: error: 'int8_t' in namespace 'std' does not name a type; did you mean 'wint_t'?
+       10 | using i8 = std::int8_t;
+          |                 ^~~~~~
+          |                 wint_t
+
+…
+---
+ common/altypes.hpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/common/altypes.hpp b/common/altypes.hpp
+index e137039aa9..66df70ef6c 100644
+--- a/common/altypes.hpp
++++ b/common/altypes.hpp
+@@ -1,6 +1,7 @@
+ #ifndef AL_TYPES_HPP
+ #define AL_TYPES_HPP
+ 
++#include <cstdint>
+ #include <cstdio>
+ #include <cstddef>
+ 

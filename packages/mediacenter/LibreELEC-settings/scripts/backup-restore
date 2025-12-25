@@ -34,7 +34,7 @@ def find_backup_file():
     try:
         # This search should match what the target generator is checking
         for file in os.listdir(BACKUP_DIR):
-            if file.endswith((".tar", ".tar.gz", ".tar.bz2", ".tar.xz")):
+            if file.endswith((".tar", ".tar.bz2", ".tar.gz", ".tar.xz", ".tar.zst")):
                 return f"{BACKUP_DIR}/{file}"
     except OSError as err:
         print(f"Error: Unable to access backup directory: {err}")
