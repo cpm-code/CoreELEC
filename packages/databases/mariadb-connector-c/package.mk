@@ -32,4 +32,7 @@ post_makeinstall_target() {
   mkdir -p ${PLUGINP}
   mv ${INSTALL}/.tmp/* ${PLUGINP}/
   rmdir ${INSTALL}/.tmp
+
+  # remove shared library
+  rm -f ${SYSROOT_PREFIX}/usr/lib/mariadb/libmariadb.so*
 }
