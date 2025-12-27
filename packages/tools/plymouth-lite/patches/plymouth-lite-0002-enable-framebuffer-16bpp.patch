@@ -1,6 +1,21 @@
---- plymouth-lite-0.6.0/ply-frame-buffer.c	2015-07-02 01:04:37.625076373 +0100
-+++ plymouth-lite-0.6.0.patch/ply-frame-buffer.c	2015-07-02 01:04:42.973076293 +0100
-@@ -184,6 +184,58 @@
+From f89faf289c0fc25d43c672dc365a98166c698172 Mon Sep 17 00:00:00 2001
+From: Stephan Raue <stephan@openelec.tv>
+Date: Sat, 27 Dec 2025 03:04:28 +0000
+Subject: [PATCH 2/2] enable framebuffer 16bpp
+
+Originally from:
+- https://github.com/OpenELEC/OpenELEC.tv/tree/a65b0c6f5999c45dfc88a67b7f539114f11968c7/packages/tools/plymouth-lite
+
+Co-authored-by: MilhouseVH <milhouseVH.github@nmacleod.com>
+---
+ ply-frame-buffer.c | 62 ++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
+
+diff --git a/ply-frame-buffer.c b/ply-frame-buffer.c
+index 1fb8f77..d22a50b 100644
+--- a/ply-frame-buffer.c
++++ b/ply-frame-buffer.c
+@@ -149,6 +149,58 @@ flush_xrgb32 (ply_frame_buffer_t *buffer)
      }
  }
  
@@ -59,7 +74,7 @@
  static const char const *p_visual(int visual)
  {
    static const char const *visuals[] =
-@@ -300,6 +352,16 @@
+@@ -265,6 +317,16 @@ ply_frame_buffer_query_device (ply_frame_buffer_t *buffer)
        buffer->green_bit_position == 8 && buffer->bits_for_green == 8 &&
        buffer->blue_bit_position == 0 && buffer->bits_for_blue == 8)
      buffer->flush = flush_xrgb32;
@@ -76,3 +91,6 @@
    else
      buffer->flush = flush_generic;
  
+-- 
+2.51.0
+

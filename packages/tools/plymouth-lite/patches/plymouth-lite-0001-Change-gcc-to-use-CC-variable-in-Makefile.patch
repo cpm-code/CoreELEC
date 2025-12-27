@@ -1,0 +1,24 @@
+From 91f04ff473f7713df115bcabdc027e6325223c3a Mon Sep 17 00:00:00 2001
+From: Rudi Heitbaum <rudi@heitbaum.com>
+Date: Sat, 27 Dec 2025 01:53:41 +0000
+Subject: [PATCH 1/2] Change gcc to use CC variable in Makefile
+
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index c28a7ed..bebfe3f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,6 +1,6 @@
+ 
+ ply-image: ply-image.c ply-frame-buffer.c Makefile
+-	gcc $(CFLAGS) `pkg-config --cflags libpng`  ply-image.c ply-frame-buffer.c -o ply-image  -lm `pkg-config --libs libpng`
++	$(CC) $(CFLAGS) `pkg-config --cflags libpng`  ply-image.c ply-frame-buffer.c -o ply-image  -lm `pkg-config --libs libpng`
+ 	
+ clean:
+ 	rm -f ply-image *~ gmon.out
+-- 
+2.51.0
+
