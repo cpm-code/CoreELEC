@@ -21,18 +21,16 @@ PKG_CMAKE_OPTS_TARGET="-DWITH_EXTERNAL_ZLIB=ON
                       "
 
 post_makeinstall_target() {
-  # keep modern authentication plugins
-  PLUGINP=${INSTALL}/usr/lib/mariadb/plugin
-  mkdir -p ${INSTALL}/.tmp
-  mv ${PLUGINP}/{caching_sha2_password,client_ed25519,sha256_password}.so ${INSTALL}/.tmp
+  # keep mariadb shared library and modern authentication plugins
+  LIBDIR=${INSTALL}/usr/lib
+  mkdir -p ${INSTALL}/.tmp/mariadb/plugin
+  mv ${LIBDIR}/mariadb/libmariadb.so* ${INSTALL}/.tmp
+  mv ${LIBDIR}/mariadb/plugin/{caching_sha2_password,client_ed25519,sha256_password}.so ${INSTALL}/.tmp/mariadb/plugin
 
   # drop all unneeded
   rm -rf ${INSTALL}/usr
 
-  mkdir -p ${PLUGINP}
-  mv ${INSTALL}/.tmp/* ${PLUGINP}/
+  mkdir -p ${LIBDIR}
+  mv ${INSTALL}/.tmp/* ${LIBDIR}/
   rmdir ${INSTALL}/.tmp
-
-  # remove shared library
-  rm -f ${SYSROOT_PREFIX}/usr/lib/mariadb/libmariadb.so*
 }

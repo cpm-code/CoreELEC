@@ -1,0 +1,8 @@
+function pkg_git_commit() {
+  github_repos="moby/moby"
+  prefix="docker-"
+}
+
+function custom_post_commit() {
+  ${progname} cli ${pkgver}
+}

@@ -247,6 +247,7 @@ configure_package() {
                          -DENABLE_INTERNAL_FFMPEG=OFF \
                          -DDISABLE_FFMPEG_SOURCE_PLUGINS=ON \
                          -DENABLE_INTERNAL_FLATBUFFERS=OFF \
+                         -DENABLE_INTERNAL_MARIADBCLIENT=OFF \
                          -DENABLE_INTERNAL_NLOHMANNJSON=OFF \
                          -DENABLE_INTERNAL_SPDLOG=OFF \
                          -DENABLE_UDEV=ON \
