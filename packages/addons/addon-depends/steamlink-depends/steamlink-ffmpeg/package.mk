@@ -10,6 +10,7 @@ PKG_SITE="https://ffmpeg.org"
 PKG_URL="https://github.com/jc-kynesim/rpi-ffmpeg/archive/${PKG_VERSION}.tar.gz"
 PKG_DEPENDS_TARGET="toolchain zlib bzip2 libdrm openssl libxml2"
 PKG_LONGDESC="FFmpeg is a complete, cross-platform solution to record, convert and stream audio and video."
+PKG_BUILD_FLAGS="-sysroot"
 
 PKG_FFMPEG_BRANCH="test/7.1.2/main"
 
