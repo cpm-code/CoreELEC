@@ -229,7 +229,11 @@ if [ -f $BOOT_ROOT/aml_autoscript ]; then
   fi
 fi
 
-[ "$(stat -c %d "$BOOT_ROOT")" != "$(stat -c %d /storage)" ] && mount -o ro,remount "$BOOT_ROOT"
+boot_src="$(awk -v m="$BOOT_ROOT" '$2==m {print $1; exit}' /proc/mounts)"
+storage_src="$(awk '$2=="/storage" {print $1; exit}' /proc/mounts)"
+if [ -n "$boot_src" ] && [ -n "$storage_src" ] && [ "$boot_src" != "$storage_src" ]; then
+  mount -o ro,remount "$BOOT_ROOT"
+fi
 
 # Leave a hint that we just did an update
 echo "UPDATE" > /storage/.config/boot.hint
