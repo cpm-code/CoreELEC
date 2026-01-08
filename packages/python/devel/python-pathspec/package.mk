@@ -2,8 +2,8 @@
 # Copyright (C) 2025-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="python-pathspec"
-PKG_VERSION="0.12.1"
-PKG_SHA256="dd47a400b58c965c93e1ee6723b8ac562ade44ebfcc12421075ebc8dbe7030a7"
+PKG_VERSION="1.0.1"
+PKG_SHA256="2eb1f891b39863323248b89a714f85b6d48b6e25742738a43f3d83777947a3ef"
 PKG_LICENSE="MPL-2.0"
 PKG_SITE="https://github.com/cpburnz/python-pathspec"
 PKG_URL="https://github.com/cpburnz/python-pathspec/archive/refs/tags/v${PKG_VERSION}.tar.gz"
