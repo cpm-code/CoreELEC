@@ -2,8 +2,8 @@
 # Copyright (C) 2022-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="moby"
-PKG_VERSION="29.1.3"
-PKG_SHA256="a3999adc2099b493d924fe7e1d07dfb4c7cb2887ea5c84c4de95554ee9ac8a07"
+PKG_VERSION="29.1.4"
+PKG_SHA256="2de5074866b5a1f3a207505e25dda591ea6683fd86b9b971e8a5924b5e248a7f"
 PKG_LICENSE="ASL"
 PKG_SITE="https://mobyproject.org/"
 PKG_URL="https://github.com/moby/moby/archive/docker-v${PKG_VERSION}.tar.gz"
@@ -12,13 +12,14 @@ PKG_LONGDESC="Moby is an open-source project created by Docker to enable and acc
 PKG_TOOLCHAIN="manual"
 
 # Git commit of the matching release https://github.com/moby/moby
-export PKG_GIT_COMMIT="fbf3ed25f893e6ce21336f1101590e40a13934f4"
+export PKG_GIT_COMMIT="08440b6ee8b2ba6a8b099a27fe0a06fc6307cadb"
 
 PKG_MOBY_BUILDTAGS="daemon \
                     autogen \
                     exclude_graphdriver_devicemapper \
                     exclude_graphdriver_aufs \
                     exclude_graphdriver_btrfs \
+                    exclude_graphdriver_zfs \
                     journald"
 
 configure_target() {
