@@ -24,6 +24,9 @@ function extra_commit_body() {
     libretro-common)
       commit_msg+="\n\nLog:\n- https://github.com/libretro/libretro-common/compare/${prevpkgver}...${fullhash}"
       ;;
+    mesa)
+      commit_msg+="\n\nRelease notes:\n- https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/docs/relnotes/${pkgver}.rst"
+      ;;
     mumudvb)
       commit_msg+="\n\nLog:\n- https://github.com/braice/MuMuDVB/compare/${prevpkgver}...${fullhash}"
       ;;
@@ -38,6 +41,9 @@ function extra_commit_body() {
     openssl)
       commit_msg+="\n\nRelease notes:\n- https://www.openssl.org"
       commit_msg+="\n\nRelease notes:\n- https://www.openssl.org/news/vulnerabilities.html"
+      ;;
+    oscam)
+      commit_msg+="\n\nLog:\n- https://git.streamboard.tv/common/oscam/-/commits/master"
       ;;
     pipewire)
       commit_msg+="\n\nNews:\n- https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/master/NEWS"
