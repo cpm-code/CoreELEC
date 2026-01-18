@@ -1,5 +1,19 @@
+From fc56538bce4273f7d701647db4f81ae0c25004b0 Mon Sep 17 00:00:00 2001
+From: "H. Peter Anvin (Intel)" <hpa@zytor.com>
+Date: Wed, 15 Oct 2025 20:00:36 -0700
+Subject: [PATCH] Makefile: include $(PROGOBJ) in $(DIRS) dependency
+
+The $(DIRS) dependency didn't include $(PROGOBJ), which could cause
+Make to try to build asm/nasm.o or disasm/ndisasm.o before the
+corresponding object subdirectory had been created.
+
+Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+---
+ Makefile.in          | 4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
 diff --git a/Makefile.in b/Makefile.in
-index 64e0cb2d8be1..eb2adcd7e7c5 100644
+index 64e0cb2d..eb2adcd7 100644
 --- a/Makefile.in
 +++ b/Makefile.in
 @@ -224,7 +224,7 @@ ZLIBOBJ = \
