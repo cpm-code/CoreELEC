@@ -21,11 +21,9 @@ so, when shutdown/reboot is requested:
  .../powermanagement/LogindUPowerSyscall.cpp     |  2 --
  4 files changed, 20 insertions(+), 8 deletions(-)
 
-diff --git a/xbmc/application/Application.cpp b/xbmc/application/Application.cpp
-index 1472a1a86a..367a9f9df6 100644
 --- a/xbmc/application/Application.cpp
 +++ b/xbmc/application/Application.cpp
-@@ -1757,7 +1757,7 @@ bool CApplication::Stop(int exitCode)
+@@ -1753,7 +1753,7 @@ bool CApplication::Stop(int exitCode)
      m_frameMoveGuard.unlock();
  
      CVariant vExitCode(CVariant::VariantTypeObject);
@@ -34,7 +32,7 @@ index 1472a1a86a..367a9f9df6 100644
      CServiceBroker::GetAnnouncementManager()->Announce(ANNOUNCEMENT::System, "OnQuit", vExitCode);
  
      // Abort any active screensaver
-@@ -1789,7 +1789,6 @@ bool CApplication::Stop(int exitCode)
+@@ -1786,7 +1786,6 @@ bool CApplication::Stop(int exitCode)
      // Needs cleaning up
      CServiceBroker::GetAppMessenger()->Stop();
      m_AppFocused = false;
@@ -42,7 +40,7 @@ index 1472a1a86a..367a9f9df6 100644
      CLog::Log(LOGINFO, "Stopping all");
  
      // cancel any jobs from the jobmanager
-@@ -2149,6 +2148,18 @@ void CApplication::StopPlaying()
+@@ -2144,6 +2143,18 @@ void CApplication::StopPlaying()
    }
  }
  
@@ -61,7 +59,7 @@ index 1472a1a86a..367a9f9df6 100644
  bool CApplication::OnMessage(CGUIMessage& message)
  {
    return m_pMsgHandling->OnMessage(message);
-@@ -2359,7 +2370,7 @@ void CApplication::ProcessSlow()
+@@ -2354,7 +2365,7 @@ void CApplication::ProcessSlow()
    if (CPlatformPosix::TestQuitFlag())
    {
      CLog::Log(LOGINFO, "Quitting due to POSIX signal");
@@ -70,8 +68,6 @@ index 1472a1a86a..367a9f9df6 100644
    }
  #endif
  
-diff --git a/xbmc/application/Application.h b/xbmc/application/Application.h
-index 4a0bde63a6..b14d5450c2 100644
 --- a/xbmc/application/Application.h
 +++ b/xbmc/application/Application.h
 @@ -112,6 +112,7 @@ public:
@@ -82,7 +78,7 @@ index 4a0bde63a6..b14d5450c2 100644
    bool Stop(int exitCode);
    const std::string& CurrentFile();
    CFileItem& CurrentFileItem();
-@@ -247,6 +248,7 @@ private:
+@@ -248,6 +249,7 @@ private:
    unsigned int m_ProcessedExternalCalls = 0;      /*!< counts calls which are processed during one "door open" cycle in FrameMove */
    unsigned int m_ProcessedExternalDecay = 0;      /*!< counts to close door after a few frames of no python activity */
    int m_ExitCode{EXITCODE_QUIT};
@@ -90,11 +86,9 @@ index 4a0bde63a6..b14d5450c2 100644
    std::shared_ptr<CFileItem> m_itemCurrentFile; //!< Currently playing file
    CEvent m_playerEvent;
  };
-diff --git a/xbmc/application/ApplicationMessageHandling.cpp b/xbmc/application/ApplicationMessageHandling.cpp
-index 0d7bff1105..22d8972c7d 100644
 --- a/xbmc/application/ApplicationMessageHandling.cpp
 +++ b/xbmc/application/ApplicationMessageHandling.cpp
-@@ -93,12 +93,12 @@ void CApplicationMessageHandling::OnApplicationMessage(MESSAGING::ThreadMessage*
+@@ -114,12 +114,12 @@ void CApplicationMessageHandling::OnAppl
    switch (msg)
    {
      case TMSG_POWERDOWN:
@@ -109,7 +103,7 @@ index 0d7bff1105..22d8972c7d 100644
        break;
  
      case TMSG_SHUTDOWN:
-@@ -119,12 +119,13 @@ void CApplicationMessageHandling::OnApplicationMessage(MESSAGING::ThreadMessage*
+@@ -140,12 +140,13 @@ void CApplicationMessageHandling::OnAppl
  
      case TMSG_RESTART:
      case TMSG_RESET:
@@ -124,11 +118,9 @@ index 0d7bff1105..22d8972c7d 100644
        m_app.Stop(EXITCODE_RESTARTAPP);
  #endif
        break;
-diff --git a/xbmc/platform/linux/powermanagement/LogindUPowerSyscall.cpp b/xbmc/platform/linux/powermanagement/LogindUPowerSyscall.cpp
-index bd04197a51..58b11a9b97 100644
 --- a/xbmc/platform/linux/powermanagement/LogindUPowerSyscall.cpp
 +++ b/xbmc/platform/linux/powermanagement/LogindUPowerSyscall.cpp
-@@ -79,8 +79,6 @@ CLogindUPowerSyscall::~CLogindUPowerSyscall()
+@@ -79,8 +79,6 @@ CLogindUPowerSyscall::~CLogindUPowerSysc
  
  bool CLogindUPowerSyscall::Powerdown()
  {
@@ -137,6 +129,3 @@ index bd04197a51..58b11a9b97 100644
    return LogindSetPowerState("PowerOff");
  }
  
--- 
-2.51.0
-

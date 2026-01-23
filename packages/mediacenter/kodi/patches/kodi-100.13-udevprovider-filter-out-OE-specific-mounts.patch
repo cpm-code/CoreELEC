@@ -9,7 +9,7 @@ Subject: [PATCH] udevprovider: filter out OE specific mounts
 
 --- a/xbmc/platform/linux/storage/UDevProvider.cpp
 +++ b/xbmc/platform/linux/storage/UDevProvider.cpp
-@@ -147,6 +147,20 @@ void CUDevProvider::GetDisks(VECSOURCES&
+@@ -150,6 +150,20 @@ void CUDevProvider::GetDisks(std::vector
        continue;
      }
  

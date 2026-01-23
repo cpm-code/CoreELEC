@@ -7,9 +7,9 @@ Subject: [PATCH] disable minimize
  xbmc/application/ApplicationMessageHandling.cpp | 1 -
  1 file changed, 1 deletion(-)
 
---- a/xbmc/application/ApplicationMessageHandling.cpp	2025-11-15 20:17:36.000000000 +0000
-+++ b/xbmc/application/ApplicationMessageHandling.cpp	2025-11-16 11:54:19.310976094 +0000
-@@ -235,7 +235,6 @@ void CApplicationMessageHandling::OnApplicationMessage(
+--- a/xbmc/application/ApplicationMessageHandling.cpp
++++ b/xbmc/application/ApplicationMessageHandling.cpp
+@@ -256,7 +256,6 @@ void CApplicationMessageHandling::OnAppl
        break;
 
      case TMSG_MINIMIZE:

@@ -1,8 +1,6 @@
-diff --git a/xbmc/GUIInfoManager.cpp b/xbmc/GUIInfoManager.cpp
-index e2aa9643ab89..d258e84f73d4 100644
 --- a/xbmc/GUIInfoManager.cpp
 +++ b/xbmc/GUIInfoManager.cpp
-@@ -1907,7 +1907,7 @@ constexpr std::array<InfoMap, 7> weather = {{
+@@ -1938,7 +1938,7 @@ constexpr std::array<InfoMap, 10> weathe
  ///     <p>
  ///   }
  // clang-format off
@@ -11,7 +9,7 @@ index e2aa9643ab89..d258e84f73d4 100644
      {"hasnetwork",              SYSTEM_ETHERNET_LINK_ACTIVE},
      {"hasmediadvd",             SYSTEM_MEDIA_DVD},
      {"hasmediaaudiocd",         SYSTEM_MEDIA_AUDIO_CD},
-@@ -1955,7 +1955,6 @@ constexpr std::array<InfoMap, 76> system_labels = {{
+@@ -1986,7 +1986,6 @@ constexpr std::array<InfoMap, 76> system
      {"currentcontrol",          SYSTEM_CURRENT_CONTROL},
      {"currentcontrolid",        SYSTEM_CURRENT_CONTROL_ID},
      {"dvdlabel",                SYSTEM_DVD_LABEL},
@@ -19,8 +17,6 @@ index e2aa9643ab89..d258e84f73d4 100644
      {"osversioninfo",           SYSTEM_OS_VERSION_INFO},
      {"kernelversion",           SYSTEM_OS_VERSION_INFO}, // old, not correct name
      {"uptime",                  SYSTEM_UPTIME},
-diff --git a/xbmc/utils/SystemInfo.cpp b/xbmc/utils/SystemInfo.cpp
-index 049d7449528d..83f08e08d1c2 100644
 --- a/xbmc/utils/SystemInfo.cpp
 +++ b/xbmc/utils/SystemInfo.cpp
 @@ -281,7 +281,6 @@ bool CSysInfoJob::DoWork()
@@ -42,8 +38,6 @@ index 049d7449528d..83f08e08d1c2 100644
  }
 
  std::string CSysInfo::GetHddSpaceInfo(int drive, bool shortText)
-diff --git a/xbmc/windows/GUIWindowSystemInfo.cpp b/xbmc/windows/GUIWindowSystemInfo.cpp
-index bf007ccfa687..b7628ae6cc51 100644
 --- a/xbmc/windows/GUIWindowSystemInfo.cpp
 +++ b/xbmc/windows/GUIWindowSystemInfo.cpp
 @@ -147,7 +147,6 @@ void CGUIWindowSystemInfo::FrameMove()

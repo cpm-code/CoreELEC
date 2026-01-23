@@ -14,7 +14,7 @@ Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
 
 --- a/addons/skin.estuary/xml/Settings.xml
 +++ b/addons/skin.estuary/xml/Settings.xml
-@@ -55,9 +55,16 @@
+@@ -56,9 +56,16 @@
  						<icon>icons/settings/sysinfo.png</icon>
  					</item>
  					<item>
@@ -31,7 +31,7 @@ Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
  					</item>
  				</content>
  			</control>
-@@ -111,12 +118,6 @@
+@@ -113,12 +120,6 @@
  						<onclick>ActivateWindow(SystemSettings)</onclick>
  						<icon>icons/settings/system.png</icon>
  					</item>

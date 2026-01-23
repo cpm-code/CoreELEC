@@ -2,8 +2,8 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="imagedecoder.raw"
-PKG_VERSION="22.0.2-Piers"
-PKG_SHA256="76adbe2818c5df9da05089daf2d2bc2ad7747ac0ad6339f58bb5038905cd89ff"
+PKG_VERSION="22.0.3-Piers"
+PKG_SHA256="f208ad90f0b2c55258041144bbfe21d294ef4bf5cb06803760ddb3c4c918490d"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
