@@ -3,8 +3,8 @@
 # Copyright (C) 2019-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="glew"
-PKG_VERSION="2.3.0"
-PKG_SHA256="b261a06dfc8b970e0a1974488530e58dd2390acf68acb05b45235cd6fb17a086"
+PKG_VERSION="2.3.1"
+PKG_SHA256="b64790f94b926acd7e8f84c5d6000a86cb43967bd1e688b03089079799c9e889"
 PKG_LICENSE="BSD"
 PKG_SITE="http://glew.sourceforge.net/"
 PKG_URL="${SOURCEFORGE_SRC}/glew/glew/${PKG_VERSION}/${PKG_NAME}-${PKG_VERSION}.tgz"

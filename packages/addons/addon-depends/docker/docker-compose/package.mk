@@ -2,7 +2,7 @@
 # Copyright (C) 2025-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="docker-compose"
-PKG_VERSION="5.0.1"
+PKG_VERSION="5.0.2"
 PKG_LICENSE="Apache-2.0"
 PKG_SITE="https://github.com/docker/compose"
 PKG_LONGDESC="Define and run multi-container applications with Docker."
@@ -10,15 +10,15 @@ PKG_TOOLCHAIN="manual"
 
 case "${ARCH}" in
   "aarch64")
-    PKG_SHA256="e3b36491a75f92c35ebfbbe6e4741bd2429664edf3971427983d67c0b21e7d1d"
+    PKG_SHA256="ac7810e0cd56a5b58576688196fafa843e07e8241fb91018a736d549ea20a3f3"
     PKG_URL="${PKG_SITE}/releases/download/v${PKG_VERSION}/docker-compose-linux-aarch64"
     ;;
   "arm")
-    PKG_SHA256="f2262cc9e210bf6a01b054ffd96283996e3af66d5a117b70e1b573517c54f152"
+    PKG_SHA256="d9a0742638f15bd91598ce465cca8718490d967cfb1a28305c388f214d09976b"
     PKG_URL="${PKG_SITE}/releases/download/v${PKG_VERSION}/docker-compose-linux-armv7"
     ;;
   "x86_64")
-    PKG_SHA256="cdc1df64412ed009312afbc044b3625144d06c07736e2f7a77fb0460531b9327"
+    PKG_SHA256="2d880f723d3da7c779c54fdaea91a842fca8af55d1397f1ed8d7cbab3dd7af67"
     PKG_URL="${PKG_SITE}/releases/download/v${PKG_VERSION}/docker-compose-linux-x86_64"
     ;;
 esac
