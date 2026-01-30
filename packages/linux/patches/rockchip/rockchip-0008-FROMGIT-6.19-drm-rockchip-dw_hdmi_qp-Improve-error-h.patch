@@ -1,7 +1,7 @@
-From 469c97ec38a3edce060a7954df09fbd79bf35d44 Mon Sep 17 00:00:00 2001
+From e054f4f9a5084230a38c4b482eb7283e78d2a66f Mon Sep 17 00:00:00 2001
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Date: Wed, 3 Sep 2025 21:51:01 +0300
-Subject: [PATCH 008/157] FROMGIT(6.19): drm/rockchip: dw_hdmi_qp: Improve
+Subject: [PATCH 008/148] FROMGIT(6.19): drm/rockchip: dw_hdmi_qp: Improve
  error handling with dev_err_probe()
 
 The error handling in dw_hdmi_qp_rockchip_bind() is quite inconsistent,
@@ -18,7 +18,7 @@ Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
  1 file changed, 24 insertions(+), 38 deletions(-)
 
 diff --git a/drivers/gpu/drm/rockchip/dw_hdmi_qp-rockchip.c b/drivers/gpu/drm/rockchip/dw_hdmi_qp-rockchip.c
-index ed6e8f036f4b..a775d89f20fc 100644
+index 9ac45e7bc987..9d20df85d485 100644
 --- a/drivers/gpu/drm/rockchip/dw_hdmi_qp-rockchip.c
 +++ b/drivers/gpu/drm/rockchip/dw_hdmi_qp-rockchip.c
 @@ -455,10 +455,8 @@ static int dw_hdmi_qp_rockchip_bind(struct device *dev, struct device *master,
@@ -126,5 +126,5 @@ index ed6e8f036f4b..a775d89f20fc 100644
  	return drm_connector_attach_encoder(connector, encoder);
  }
 -- 
-2.34.1
+2.43.0
 

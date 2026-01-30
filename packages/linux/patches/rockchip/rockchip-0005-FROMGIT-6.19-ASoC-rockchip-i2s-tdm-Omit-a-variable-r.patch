@@ -1,7 +1,7 @@
-From 03855596396a8b16f25f92cb1808f7a56431c29a Mon Sep 17 00:00:00 2001
+From 4e56a75fda5f5fa7d34223ef939a6f6b75851e8f Mon Sep 17 00:00:00 2001
 From: Markus Elfring <elfring@users.sourceforge.net>
 Date: Mon, 20 Oct 2025 18:11:58 +0200
-Subject: [PATCH 005/157] FROMGIT(6.19): ASoC: rockchip: i2s-tdm: Omit a
+Subject: [PATCH 005/148] FROMGIT(6.19): ASoC: rockchip: i2s-tdm: Omit a
  variable reassignment in rockchip_i2s_tdm_probe()
 
 An error code was assigned to a variable and checked accordingly.
@@ -31,5 +31,5 @@ index d9a1fab7f403..770b9bfbb384 100644
  	}
  
 -- 
-2.34.1
+2.43.0
 

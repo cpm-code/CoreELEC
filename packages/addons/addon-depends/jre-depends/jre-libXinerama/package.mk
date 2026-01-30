@@ -9,7 +9,7 @@ PKG_URL=""
 PKG_DEPENDS_UNPACK+=" libXinerama"
 PKG_BUILD_FLAGS="-sysroot"
 
-PKG_CONFIGURE_OPTS_TARGET+=" --disable-static --enable-shared"
+PKG_MESON_OPTS_TARGET="-Ddefault_library=shared"
 
 unpack() {
   mkdir -p ${PKG_BUILD}

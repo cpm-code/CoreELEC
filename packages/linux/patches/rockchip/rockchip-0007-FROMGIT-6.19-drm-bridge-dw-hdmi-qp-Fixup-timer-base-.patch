@@ -1,7 +1,7 @@
-From 2fbb44077037451b1bc39d46fb3836671f0c13fb Mon Sep 17 00:00:00 2001
+From 62f73e7b8d97e4d322c61308f38d082a3660a78f Mon Sep 17 00:00:00 2001
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Date: Wed, 3 Sep 2025 21:51:00 +0300
-Subject: [PATCH 007/157] FROMGIT(6.19): drm/bridge: dw-hdmi-qp: Fixup timer
+Subject: [PATCH 007/148] FROMGIT(6.19): drm/bridge: dw-hdmi-qp: Fixup timer
  base setup
 
 Currently the TIMER_BASE_CONFIG0 register gets initialized to a fixed
@@ -26,7 +26,7 @@ Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
  2 files changed, 10 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-qp.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-qp.c
-index fc98953672b6..4ba7b339eff6 100644
+index 0d9d651cee28..2c0fbeeaeefe 100644
 --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-qp.c
 +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-qp.c
 @@ -161,6 +161,7 @@ struct dw_hdmi_qp {
@@ -35,9 +35,9 @@ index fc98953672b6..4ba7b339eff6 100644
  
 +	unsigned long ref_clk_rate;
  	struct regmap *regm;
+ 	int main_irq;
  
- 	unsigned long tmds_char_rate;
-@@ -1210,13 +1211,11 @@ static void dw_hdmi_qp_init_hw(struct dw_hdmi_qp *hdmi)
+@@ -1211,13 +1212,11 @@ static void dw_hdmi_qp_init_hw(struct dw_hdmi_qp *hdmi)
  {
  	dw_hdmi_qp_write(hdmi, 0, MAINUNIT_0_INT_MASK_N);
  	dw_hdmi_qp_write(hdmi, 0, MAINUNIT_1_INT_MASK_N);
@@ -52,7 +52,7 @@ index fc98953672b6..4ba7b339eff6 100644
  	dw_hdmi_qp_mod(hdmi, 0, I2CM_FM_EN, I2CM_INTERFACE_CONTROL0);
  
  	/* Clear DONE and ERROR interrupts */
-@@ -1262,6 +1261,13 @@ struct dw_hdmi_qp *dw_hdmi_qp_bind(struct platform_device *pdev,
+@@ -1263,6 +1262,13 @@ struct dw_hdmi_qp *dw_hdmi_qp_bind(struct platform_device *pdev,
  	hdmi->phy.ops = plat_data->phy_ops;
  	hdmi->phy.data = plat_data->phy_data;
  
@@ -65,9 +65,9 @@ index fc98953672b6..4ba7b339eff6 100644
 +
  	dw_hdmi_qp_init_hw(hdmi);
  
- 	ret = devm_request_threaded_irq(dev, plat_data->main_irq,
+ 	hdmi->main_irq = plat_data->main_irq;
 diff --git a/include/drm/bridge/dw_hdmi_qp.h b/include/drm/bridge/dw_hdmi_qp.h
-index b4a9b739734e..76ecf3130199 100644
+index 1bdac35b32d7..71ad6280c691 100644
 --- a/include/drm/bridge/dw_hdmi_qp.h
 +++ b/include/drm/bridge/dw_hdmi_qp.h
 @@ -24,6 +24,7 @@ struct dw_hdmi_qp_plat_data {
@@ -79,5 +79,5 @@ index b4a9b739734e..76ecf3130199 100644
  
  struct dw_hdmi_qp *dw_hdmi_qp_bind(struct platform_device *pdev,
 -- 
-2.34.1
+2.43.0
 
