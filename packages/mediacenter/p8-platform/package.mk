@@ -3,8 +3,8 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="p8-platform"
-PKG_VERSION="ba6a67e5767457c45f69088b83101d77e4f143e7"
-PKG_SHA256="ed6b56e5b336e744ce45eead89f16401baa097a92d1c15472e78abc151bfdb4a"
+PKG_VERSION="p8-platform-20260129"
+PKG_SHA256="216b10c8d8f6d99c34e89be8a400449ad205b57f40b24e750b804922ed5afba1"
 PKG_LICENSE="GPL"
 PKG_SITE="http://www.kodi.tv"
 PKG_URL="https://github.com/xbmc/platform/archive/${PKG_VERSION}.tar.gz"
