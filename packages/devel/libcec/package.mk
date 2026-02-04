@@ -3,8 +3,8 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="libcec"
-PKG_VERSION="7.0.0"
-PKG_SHA256="7f9e57ae9fad37649adb6749b8f1310a71ccf3e92ae8b2d1cc9e8ae2d1da83f8"
+PKG_VERSION="7.1.1"
+PKG_SHA256=""
 PKG_LICENSE="GPL"
 PKG_SITE="http://libcec.pulse-eight.com/"
 PKG_URL="https://github.com/Pulse-Eight/libcec/archive/libcec-${PKG_VERSION}.tar.gz"
@@ -16,7 +16,7 @@ PKG_CMAKE_OPTS_TARGET="-DBUILD_SHARED_LIBS=1 \
                        -DSKIP_PYTHON_WRAPPER=1 \
                        -DHAVE_IMX_API=0 \
                        -DHAVE_AOCEC_API=1 \
-                       -DHAVE_GIT_BIN=0 \
+                       -DGIT_BIN=0 \
                        -DHAVE_RPI_LIB=0"
 
 # libX11 and xrandr to read the sink's EDID, used to determine the PC's HDMI physical address
