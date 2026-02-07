@@ -4,7 +4,7 @@
 # Copyright (C) 2022-present Team CoreELEC (https://coreelec.tv)
 
 PKG_NAME="kodi"
-PKG_VERSION="fbfd39d9bfdee5d6c39b05940c629c0875c075bc"
+PKG_VERSION="fec67b7690506d83801018e20d533e14275a8a2e"
 PKG_SHA256=""
 PKG_LICENSE="GPL"
 PKG_SITE="http://www.kodi.tv"
