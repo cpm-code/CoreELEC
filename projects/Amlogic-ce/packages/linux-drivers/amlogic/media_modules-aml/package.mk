@@ -3,7 +3,7 @@
 
 PKG_NAME="media_modules-aml"
 PKG_VERSION="51b75a47631d2e09092d454e12387ceb3542cf35"
-PKG_SHA256="8f65fb69aa082519655eeaa33ddac51f6d63b1823ded81e5e3c978ce9529f4ea"
+PKG_SHA256=""
 PKG_LICENSE="GPL"
 PKG_SITE="https://coreelec.org"
 PKG_URL="https://api.github.com/repos/cpm-code/media_modules-aml/tarball/$PKG_VERSION"
