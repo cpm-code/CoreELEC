@@ -2,12 +2,12 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="nmap"
-PKG_VERSION="7.98"
-PKG_SHA256="ce847313eaae9e5c9f21708e42d2ab7b56c7e0eb8803729a3092f58886d897e6"
+PKG_VERSION="7.95"
+PKG_SHA256="e14ab530e47b5afd88f1c8a2bac7f89cd8fe6b478e22d255c5b9bddb7a1c5778"
 PKG_LICENSE="GPL"
 PKG_SITE="https://nmap.org/"
 PKG_URL="https://nmap.org/dist/${PKG_NAME}-${PKG_VERSION}.tar.bz2"
-PKG_DEPENDS_TARGET="toolchain openssl dbus libnl"
+PKG_DEPENDS_TARGET="toolchain openssl"
 PKG_LONGDESC="Free Security Scanned for Network."
 PKG_BUILD_FLAGS="-sysroot"
 
@@ -28,5 +28,4 @@ pre_configure_target() {
     rm -rf .${TARGET_NAME}
 
   export CPPFLAGS="${CPPFLAGS} -Iliblua"
-  export LIBS="${LIBS} -ldbus-1 -lnl-3 -lnl-genl-3"
 }

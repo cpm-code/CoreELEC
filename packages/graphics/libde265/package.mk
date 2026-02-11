@@ -2,8 +2,8 @@
 # Copyright (C) 2019-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="libde265"
-PKG_VERSION="1.0.16"
-PKG_SHA256="b92beb6b53c346db9a8fae968d686ab706240099cdd5aff87777362d668b0de7"
+PKG_VERSION="1.0.15"
+PKG_SHA256="00251986c29d34d3af7117ed05874950c875dd9292d016be29d3b3762666511d"
 PKG_LICENSE="LGPLv3"
 PKG_SITE="http://www.libde265.org"
 PKG_URL="https://github.com/strukturag/libde265/releases/download/v${PKG_VERSION}/${PKG_NAME}-${PKG_VERSION}.tar.gz"

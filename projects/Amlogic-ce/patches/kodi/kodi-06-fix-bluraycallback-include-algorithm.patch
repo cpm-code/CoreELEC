@@ -1,0 +1,17 @@
+Fix build with GCC 14+ where std::remove resolves to C remove() if <algorithm> isn't included.
+
+diff --git a/xbmc/filesystem/BlurayCallback.cpp b/xbmc/filesystem/BlurayCallback.cpp
+index 7b1a9d4a54..e6f3a2b1a9 100644
+--- a/xbmc/filesystem/BlurayCallback.cpp
++++ b/xbmc/filesystem/BlurayCallback.cpp
+@@ -9,6 +9,8 @@
+ 
+ #include "BlurayCallback.h"
+ 
++#include <algorithm>
++
+ #include "FileItem.h"
+ #include "filesystem/Directory.h"
+ #include "filesystem/File.h"
+ #include "utils/URIUtils.h"
+ #include "utils/log.h"

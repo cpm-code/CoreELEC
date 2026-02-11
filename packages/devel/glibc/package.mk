@@ -3,8 +3,8 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="glibc"
-PKG_VERSION="2.42"
-PKG_SHA256="d1775e32e4628e64ef930f435b67bb63af7599acb6be2b335b9f19f16509f17f"
+PKG_VERSION="2.40"
+PKG_SHA256="19a890175e9263d748f627993de6f4b1af9cd21e03f080e4bfb3a1fac10205a2"
 PKG_LICENSE="GPL"
 PKG_SITE="https://www.gnu.org/software/libc/"
 PKG_URL="https://ftp.gnu.org/pub/gnu/glibc/${PKG_NAME}-${PKG_VERSION}.tar.xz"
@@ -18,10 +18,10 @@ case "${LINUX}" in
     OPT_ENABLE_KERNEL=4.9.0
     ;;
   amlogic-5.*)
-    OPT_ENABLE_KERNEL=5.15.0
+    OPT_ENABLE_KERNEL=5.4.0
     ;;
   *)
-    OPT_ENABLE_KERNEL=6.12.0
+    OPT_ENABLE_KERNEL=6.1.0
     ;;
 esac
 

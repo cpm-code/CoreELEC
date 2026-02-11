@@ -18,9 +18,7 @@ PKG_PATCH_DIRS="$LINUX"
 
 post_unpack() {
   sed -i 's,-Wall,,g; s,-Werror,,g' ${PKG_BUILD}/AIO/drivers/qcacld-new/Kbuild
-  sed -i 's,CDEFINES :=,CDEFINES := -Wno-misleading-indentation -Wno-unused-variable -Wno-unused-function -Wno-error=incompatible-pointer-types -Wno-error=int-conversion,g' ${PKG_BUILD}/AIO/drivers/qcacld-new/Kbuild
-  # GCC 15 treats incompatible-pointer-types as error by default
-  echo 'EXTRA_CFLAGS += -Wno-incompatible-pointer-types -Wno-int-conversion' >> ${PKG_BUILD}/AIO/drivers/qcacld-new/Kbuild
+  sed -i 's,CDEFINES :=,CDEFINES := -Wno-misleading-indentation -Wno-unused-variable -Wno-unused-function,g' ${PKG_BUILD}/AIO/drivers/qcacld-new/Kbuild
 }
 
 pre_make_target() {

@@ -4,12 +4,12 @@
 # Copyright (C) 2022-present Team CoreELEC (https://coreelec.org)
 
 PKG_NAME="pygobject"
-PKG_VERSION="3.55.1"
-PKG_SHA256="1558d013f7d4c4f9dc47a7245b1dc6a8e91ea1d43ce67959aef4f7331a586eff"
+PKG_VERSION="3.50.0"
+PKG_SHA256="8d836e75b5a881d457ee1622cae4a32bcdba28a0ba562193adb3bbb472472212"
 PKG_ARCH="any"
 PKG_LICENSE="LGPL"
 PKG_SITE="http://www.pygtk.org/"
-PKG_URL="http://ftp.gnome.org/pub/GNOME/sources/pygobject/$(get_pkg_version_maj_min)/${PKG_NAME}-${PKG_VERSION}.tar.gz"
+PKG_URL="http://ftp.gnome.org/pub/GNOME/sources/pygobject/$(get_pkg_version_maj_min)/${PKG_NAME}-${PKG_VERSION}.tar.xz"
 PKG_DEPENDS_TARGET="toolchain Python3 glib libffi pgi"
 PKG_NEED_UNPACK="$(get_pkg_directory glib) $(get_build_dir glib)"
 PKG_LONGDESC="A convenient wrapper for the GObject+ library for use in Python programs."

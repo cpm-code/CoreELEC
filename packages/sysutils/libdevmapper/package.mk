@@ -3,8 +3,8 @@
 # Copyright (C) 2018-present Team CoreELEC (https://coreelec.org)
 
 PKG_NAME="libdevmapper"
-PKG_VERSION="2.03.34"
-PKG_SHA256="3f4e78e7d6c49228b4d173ea08ebe158873d54457fba7d31d2abebdddd0e75b9"
+PKG_VERSION="2.03.25"
+PKG_SHA256="4bea6fd2e5af9cdb3e27b48b4efa8d89210d9bfa13df900e092e404720a59b1d"
 PKG_ARCH="any"
 PKG_LICENSE="GPLv2 LGPL2.1"
 PKG_SITE="https://sourceware.org/lvm2"

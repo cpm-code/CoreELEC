@@ -178,7 +178,7 @@ mkdir -p $BASEDIR/$LOGDIR
 
 # pack logfiles
   mkdir -p /storage/logfiles
-  simple_zip.py -j -f "/storage/logfiles/log-${DATE}.zip" -i "${BASEDIR}/${LOGDIR}"
+  zip -jq /storage/logfiles/log-$DATE.zip $BASEDIR/$LOGDIR/*
 
 # remove logdir
   rm -rf ${BASEDIR:?}/$LOGDIR

@@ -17,8 +17,8 @@ PKG_PATCH_DIRS="$LINUX"
 
 case "$LINUX" in
   amlogic-4.9)
-    PKG_VERSION="f25ad11a741c18d4780df9c85da9480e065b3aae"
-    PKG_SHA256=""
+    PKG_VERSION="e70015621ac4a34c8568f1a444f61055c6d98575"
+    PKG_SHA256="b47f7b9c172d8d6df4cf58aa5a000b45d67d98f6bb9688ae7798b4380a976c3d"
     PKG_URL="https://api.github.com/repos/cpm-code/linux-amlogic/tarball/$PKG_VERSION"
     PKG_USETOKEN="yes"
     PKG_SOURCE_NAME="linux-$LINUX-$PKG_VERSION.tar.gz"

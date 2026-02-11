@@ -2,13 +2,13 @@
 # Copyright (C) 2021-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="nvidia"
-PKG_VERSION="590.48.01"
-PKG_SHA256="d57a303ef837d27fa875e871e69a5caacf2a6239bbad2542d179cfb01c0c4ae5"
+PKG_VERSION="550.107.02"
+PKG_SHA256="94299354125c6aa1c98fd7f9ebb26a73b6a39205c84b4790888c1949c890b0a3"
 PKG_ARCH="x86_64"
 PKG_LICENSE="nonfree"
 PKG_SITE="https://www.nvidia.com/en-us/drivers/unix/"
 PKG_URL="http://us.download.nvidia.com/XFree86/Linux-x86_64/${PKG_VERSION}/NVIDIA-Linux-x86_64-${PKG_VERSION}-no-compat32.run"
-PKG_DEPENDS_TARGET="toolchain util-macros libglvnd nvidia_egl-gbm"
+PKG_DEPENDS_TARGET="toolchain util-macros libglvnd"
 PKG_LONGDESC="The GBM/Wayland graphic driver for NVIDIA GPUs supporting the GeForce 700 Series & above."
 PKG_TOOLCHAIN="manual"
 
@@ -41,15 +41,17 @@ makeinstall_target() {
     cp -P kernel/nvidia-uvm.ko     ${INSTALL}/$(get_full_module_dir)/nvidia
     cp -P kernel/nvidia-modeset.ko ${INSTALL}/$(get_full_module_dir)/nvidia
 
-  # GSP firmware files
-  mkdir -p ${INSTALL}/$(get_full_firmware_dir)/nvidia/${PKG_VERSION}
-    cp firmware/gsp*.bin           ${INSTALL}/$(get_full_firmware_dir)/nvidia/${PKG_VERSION}
-
   # GBM
   mkdir -p ${INSTALL}/usr/lib/gbm
     cp -p libnvidia-allocator.so.${PKG_VERSION}     ${INSTALL}/usr/lib
     ln -sf libnvidia-allocator.so.${PKG_VERSION}    ${INSTALL}/usr/lib/liballocator.so.0
     ln -sf ../libnvidia-allocator.so.${PKG_VERSION} ${INSTALL}/usr/lib/gbm/nvidia-drm_gbm.so
+
+  mkdir -p ${INSTALL}/usr/share/egl/egl_external_platform.d
+    cp -p 15_nvidia_gbm.json          ${INSTALL}/usr/share/egl/egl_external_platform.d
+    cp -p libnvidia-egl-gbm.so.1.1.1  ${INSTALL}/usr/lib
+    ln -sf libnvidia-egl-gbm.so.1.1.1 ${INSTALL}/usr/lib/libnvidia-egl-gbm.so.1
+    ln -sf libnvidia-egl-gbm.so.1     ${INSTALL}/usr/lib/libnvidia-egl-gbm.so
 
   # GLVND
   mkdir -p ${INSTALL}/usr/share/glvnd/egl_vendor.d
@@ -57,8 +59,8 @@ makeinstall_target() {
 
   # Wayland
   mkdir -p ${INSTALL}/usr/lib
-    cp -p libnvidia-egl-wayland.so.1.1.20  ${INSTALL}/usr/lib/
-    ln -sf libnvidia-egl-wayland.so.1.1.20 ${INSTALL}/usr/lib/libnvidia-egl-wayland.so.1
+    cp -p libnvidia-egl-wayland.so.1.1.13  ${INSTALL}/usr/lib/
+    ln -sf libnvidia-egl-wayland.so.1.1.13 ${INSTALL}/usr/lib/libnvidia-egl-wayland.so.1
     ln -sf libnvidia-egl-wayland.so.1     ${INSTALL}/usr/lib/libnvidia-egl-wayland.so
 
   mkdir -p ${INSTALL}/usr/share/egl/egl_external_platform.d
@@ -88,6 +90,10 @@ makeinstall_target() {
     mkdir -p ${INSTALL}/usr/lib
       cp -P libnvidia-glvkspirv.so.${PKG_VERSION}  ${INSTALL}/usr/lib
       ln -sf libnvidia-glvkspirv.so.${PKG_VERSION} ${INSTALL}/usr/lib/libnvidia-glvkspirv.so
+
+      cp -p libnvidia-vulkan-producer.so.${PKG_VERSION}  ${INSTALL}/usr/lib
+      ln -sf libnvidia-vulkan-producer.so.${PKG_VERSION} ${INSTALL}/usr/lib/libnvidia-vulkan-producer.so.1
+      ln -sf libnvidia-vulkan-producer.so.1              ${INSTALL}/usr/lib/libnvidia-vulkan-producer.so
 
     mkdir -p ${INSTALL}/usr/share/vulkan/implicit_layer.d
       sed "s#libGLX_nvidia.so.0#libEGL_nvidia.so.0#" nvidia_layers.json >${INSTALL}/usr/share/vulkan/implicit_layer.d/nvidia_layers.json

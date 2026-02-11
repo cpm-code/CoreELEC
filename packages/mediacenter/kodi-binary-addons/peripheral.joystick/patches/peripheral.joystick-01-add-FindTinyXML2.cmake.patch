@@ -1,0 +1,32 @@
+diff --git a/cmake/FindTinyXML2.cmake b/cmake/FindTinyXML2.cmake
+new file mode 100644
+index 0000000..d1e6d4a
+--- /dev/null
++++ b/cmake/FindTinyXML2.cmake
+@@ -0,0 +1,25 @@
++find_path(TINYXML2_INCLUDE_DIR
++  NAMES tinyxml2.h
++)
++
++find_library(TINYXML2_LIBRARY
++  NAMES tinyxml2
++)
++
++include(FindPackageHandleStandardArgs)
++find_package_handle_standard_args(TinyXML2
++  REQUIRED_VARS TINYXML2_LIBRARY TINYXML2_INCLUDE_DIR
++)
++
++if (TinyXML2_FOUND)
++  set(TinyXML2_INCLUDE_DIRS "${TINYXML2_INCLUDE_DIR}")
++  set(TinyXML2_LIBRARIES "${TINYXML2_LIBRARY}")
++
++  if (NOT TARGET tinyxml2::tinyxml2)
++    add_library(tinyxml2::tinyxml2 UNKNOWN IMPORTED)
++    set_target_properties(tinyxml2::tinyxml2 PROPERTIES
++      IMPORTED_LOCATION "${TINYXML2_LIBRARY}"
++      INTERFACE_INCLUDE_DIRECTORIES "${TINYXML2_INCLUDE_DIR}"
++    )
++  endif()
++endif()
+

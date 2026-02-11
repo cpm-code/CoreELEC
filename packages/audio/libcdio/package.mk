@@ -3,11 +3,11 @@
 # Copyright (C) 2020-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="libcdio"
-PKG_VERSION="2.3.0"
-PKG_SHA256="53e83d284667535a767fd2d31edad1a6701591960459df373a10f1f21e80a7ed"
+PKG_VERSION="2.1.0"
+PKG_SHA256="8550e9589dbd594bfac93b81ecf129b1dc9d0d51e90f9696f1b2f9b2af32712b"
 PKG_LICENSE="GPLv3"
 PKG_SITE="https://www.gnu.org/software/libcdio/"
-PKG_URL="https://github.com/libcdio/libcdio/releases/download/${PKG_VERSION}/${PKG_NAME}-${PKG_VERSION}.tar.bz2"
+PKG_URL="http://ftpmirror.gnu.org/libcdio/${PKG_NAME}-${PKG_VERSION}.tar.bz2"
 PKG_DEPENDS_TARGET="toolchain"
 PKG_LONGDESC="A CD-ROM reading and control library."
 PKG_BUILD_FLAGS="+pic"

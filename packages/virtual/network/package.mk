@@ -6,7 +6,7 @@ PKG_VERSION=""
 PKG_LICENSE="various"
 PKG_SITE="https://libreelec.tv"
 PKG_URL=""
-PKG_DEPENDS_TARGET="toolchain connman netbase ethtool openssh iw wireless-regdb rsync nss ipset"
+PKG_DEPENDS_TARGET="toolchain connman netbase ethtool openssh iw wireless-regdb rsync nss"
 PKG_SECTION="virtual"
 PKG_LONGDESC="Metapackage for various packages to install network support"
 
@@ -28,8 +28,17 @@ fi
 
 if [ "${WIREGUARD_SUPPORT}" = "yes" ]; then
   PKG_DEPENDS_TARGET+=" wireguard-tools"
+
+  if [ "${DEVICE}" = "Amlogic-ng" ]; then
+    PKG_DEPENDS_TARGET="${PKG_DEPENDS_TARGET} wireguard-linux-compat"
+  fi
+fi
+
+if [ "${ISCSI_SUPPORT}" = "yes" ]; then
+  PKG_DEPENDS_TARGET+=" open-iscsi"
 fi
 
 if [ "${NFS_SUPPORT}" = "yes" ]; then
   PKG_DEPENDS_TARGET+=" nfs-utils"
 fi
+

@@ -3,8 +3,8 @@
 # Copyright (C) 2019-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="wpa_supplicant"
-PKG_VERSION="2.11"
-PKG_SHA256="912ea06f74e30a8e36fbb68064d6cdff218d8d591db0fc5d75dee6c81ac7fc0a"
+PKG_VERSION="2.10"
+PKG_SHA256="20df7ae5154b3830355f8ab4269123a87affdea59fe74fe9292a91d0d7e17b2f"
 PKG_LICENSE="GPL"
 PKG_SITE="https://w1.fi/wpa_supplicant/"
 PKG_URL="https://w1.fi/releases/${PKG_NAME}-${PKG_VERSION}.tar.gz"

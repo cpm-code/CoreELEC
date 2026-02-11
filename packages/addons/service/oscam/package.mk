@@ -2,9 +2,9 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="oscam"
-PKG_VERSION="11942"
-PKG_SHA256="cf1017715b2044fa56838288edfc0b0e9f1948b16393e8416dc18ba7dc1f984e"
-PKG_REV="4"
+PKG_VERSION="11799"
+PKG_SHA256="10e7ffb153c66b4f29c21dd5a239d1186f988e918e8ff2673a4ea5fb9073a209"
+PKG_REV="0"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://git.streamboard.tv/common/oscam/-/wikis"
@@ -26,7 +26,7 @@ PKG_CMAKE_OPTS_TARGET="\
   `#Readers` \
   -DCARDREADER_DB2COM=OFF \
   -DCARDREADER_DRECAS=ON \
-  -DCARDREADER_INTERNAL=ON \
+  -DCARDREADER_INTERNAL=OFF \
   -DCARDREADER_MP35=ON \
   -DCARDREADER_PHOENIX=ON \
   -DCARDREADER_SC8IN1=ON \
@@ -63,20 +63,14 @@ PKG_CMAKE_OPTS_TARGET="\
   -DWEBIF_JQUERY=1 \
   -DWITH_DEBUG=0 \
   -DWITH_SSL=1 \
-  -DWITH_STAPI=0 \
-  -DOSCAM_SYSTEM_NAME=Amsmc"
+  -DWITH_STAPI=0"
 
 makeinstall_target() {
   :
 }
 
 addon() {
-  mkdir -p ${ADDON_BUILD}/${PKG_ADDON_ID}/{bin,lib.private}
+  mkdir -p ${ADDON_BUILD}/${PKG_ADDON_ID}/bin
     cp -P ${PKG_BUILD}/.${TARGET_NAME}/oscam ${ADDON_BUILD}/${PKG_ADDON_ID}/bin
     cp -P ${PKG_BUILD}/.${TARGET_NAME}/utils/list_smargo ${ADDON_BUILD}/${PKG_ADDON_ID}/bin
-    cp -L $(get_install_dir pcsc-lite)/usr/lib/libpcsclite.so.1 ${ADDON_BUILD}/${PKG_ADDON_ID}/lib.private
-    cp -L $(get_install_dir pcsc-lite)/usr/lib/libpcsclite_real.so.1 ${ADDON_BUILD}/${PKG_ADDON_ID}/lib.private
-
-  patchelf --add-rpath '${ORIGIN}/../lib.private' ${ADDON_BUILD}/${PKG_ADDON_ID}/bin/oscam
-  patchelf --add-rpath '${ORIGIN}/../lib.private' ${ADDON_BUILD}/${PKG_ADDON_ID}/lib.private/libpcsclite.so.1
 }

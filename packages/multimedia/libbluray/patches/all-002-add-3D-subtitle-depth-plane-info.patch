@@ -276,7 +276,7 @@ diff --git a/src/libbluray/bluray.h b/src/libbluray/bluray.h
 index 1e61fb62..03fb48a6 100644
 --- a/src/libbluray/bluray.h
 +++ b/src/libbluray/bluray.h
-@@ -261,12 +261,14 @@ typedef struct bd_clip {
+@@ -255,12 +255,14 @@ typedef struct bd_clip {
      uint8_t            ig_stream_count;         /**< Number of IG (Interactive Graphics) streams */
      uint8_t            sec_audio_stream_count;  /**< Number of secondary audio streams */
      uint8_t            sec_video_stream_count;  /**< Number of secondary video streams */
@@ -291,35 +291,26 @@ index 1e61fb62..03fb48a6 100644
  
      uint64_t           start_time;  /**< start media time, 90kHz, ("playlist time") */
      uint64_t           in_time;     /**< start timestamp, 90kHz */
-@@ -1138,6 +1138,7 @@ struct clpi_cl *bd_get_clpi(BLURAY *bd, unsigned clip_ref);
+@@ -1132,6 +1134,7 @@ struct clpi_cl *bd_get_clpi(BLURAY *bd, unsigned clip_ref);
  
  /** Testing/debugging: Parse clip information (CLPI) file */
- BD_PUBLIC struct clpi_cl *bd_read_clpi(const char *clpi_file);
+ struct clpi_cl *bd_read_clpi(const char *clpi_file);
 +const struct clpi_cl *bd_get_clpi_file(BLURAY *bd, const char *file);
-
+ 
  /**
   *
-@@ -1153,6 +1153,8 @@ struct mpls_pl *bd_read_mpls(const char *mpls_file);
+@@ -1147,6 +1150,8 @@ struct mpls_pl *bd_read_mpls(const char *mpls_file);
  /** Testing/debugging: Free parsed playlist */
- BD_PUBLIC void bd_free_mpls(struct mpls_pl *);
+ void bd_free_mpls(struct mpls_pl *);
  
 +struct mpls_pl *bd_get_mpls(BLURAY *bd, const char *file);
 +
  /** Testing/debugging: Parse movie objects (MOBJ) file */
- BD_PUBLIC struct mobj_objects *bd_read_mobj(const char *mobj_file);
+ struct mobj_objects *bd_read_mobj(const char *mobj_file);
  /** Testing/debugging: Free parsed movie objects */
-@@ -1196,7 +1196,7 @@ BD_PUBLIC int bd_read_file(BLURAY *bd, c
-  * @param byte position of the clip (absolute)
-  * @param duration duration of the clip (in 90khz)
+@@ -1223,6 +1228,16 @@ struct bd_dir_s *bd_open_dir(BLURAY *bd, const char *dir);
   */
--int bd_get_clip_infos(BLURAY *bd, unsigned clip, uint64_t *clip_start_time, uint64_t *stream_start_time, uint64_t *pos, uint64_t *duration);
-+BD_PUBLIC int bd_get_clip_infos(BLURAY *bd, unsigned clip, uint64_t *clip_start_time, uint64_t *stream_start_time, uint64_t *pos, uint64_t *duration);
- 
- /**
-  *
-@@ -1229,6 +1229,16 @@ BD_PUBLIC struct bd_dir_s *bd_open_dir(B
-  */
- BD_PUBLIC struct bd_file_s *bd_open_file_dec(BLURAY *bd, const char *path);
+ struct bd_file_s *bd_open_file_dec(BLURAY *bd, const char *path);
  
 +/**
 + * Get the MPLS struct of the current title
@@ -329,11 +320,11 @@ index 1e61fb62..03fb48a6 100644
 + *
 + * Lifetime of the MPLS pointer is limited to the lifetime of the BD title
 + */
-+BD_PUBLIC struct mpls_pl *bd_get_title_mpls(BLURAY * bd);
++struct mpls_pl *bd_get_title_mpls(BLURAY * bd);
 +
+ 
  #ifdef __cplusplus
  }
- #endif
 -- 
 2.34.1
 
