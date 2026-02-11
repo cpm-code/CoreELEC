@@ -2,7 +2,7 @@
 Description=%p container
 Requires=service.system.docker.service
 After=service.system.docker.service
-Before=kodi.service
+Befora=kodi.service
 
 [Service]
 Restart=always

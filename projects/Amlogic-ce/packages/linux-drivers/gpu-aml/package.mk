@@ -2,53 +2,41 @@
 # Copyright (C) 2018-present Team CoreELEC (https://coreelec.org)
 
 PKG_NAME="gpu-aml"
-PKG_VERSION="f11ecbdec0866ffd99efbcf7104ebdf84e5173f9"
-PKG_SHA256=""
+PKG_VERSION="be29f1f274e3798d3ab2d7c489e47f8de20e8cf3"
+PKG_SHA256="06ad5ca2ae39b032477e702169f2ad8b964b36a49d97c3055094943b12a7fa0c"
 PKG_LICENSE="GPL"
 PKG_SITE="https://coreelec.org"
-PKG_URL="https://github.com/CoreELEC/gpu-aml/archive/${PKG_VERSION}.tar.gz"
+PKG_URL="https://github.com/khadas/android_hardware_arm_gpu/archive/$PKG_VERSION.tar.gz"
 PKG_DEPENDS_TARGET="toolchain linux"
-PKG_NEED_UNPACK="${LINUX_DEPENDS}"
+PKG_NEED_UNPACK="$LINUX_DEPENDS"
 PKG_LONGDESC="gpu-aml: Linux drivers for Mali GPUs found in Amlogic Meson SoCs"
 PKG_IS_KERNEL_PKG="yes"
 PKG_TOOLCHAIN="manual"
 
+pre_configure_target() {
+  sed -e "s|shell date|shell date -R|g" -i $PKG_BUILD/utgard/*/Kbuild
+  sed -e "s|USING_GPU_UTILIZATION=1|USING_GPU_UTILIZATION=0|g" -i $PKG_BUILD/utgard/platform/Kbuild.amlogic
+}
+
 pre_make_target() {
-  GPU_DRIVERS_ARCHITECTURE_REVISION="bifrost/r44p0:n valhall/r44p0:n:jm valhall/r44p0:y:csf"
+  ln -s $PKG_BUILD/utgard/platform $PKG_BUILD/utgard/r7p0/platform
 }
 
 make_target() {
-  for driver_arch_rev in ${GPU_DRIVERS_ARCHITECTURE_REVISION}; do
-    driver_version=$(echo "${driver_arch_rev}" | awk -F ":" '{ print $1 }')
-    CONFIG_MALI_CSF_SUPPORT="CONFIG_MALI_CSF_SUPPORT=$(echo "${driver_arch_rev}" | awk -F ":" '{ print $2 }')"
-    front_end=$(echo "${driver_arch_rev}" | awk -F ":" '{ print $3 }')
-    architecture=$(echo "${driver_version}" | awk -F "/" '{ print $1 }')
-    echo
-    echo "building ${driver_version}"
+  kernel_make -C $(kernel_path) M=$PKG_BUILD/bifrost/r12p0/kernel/drivers/gpu/arm \
+    CONFIG_MALI_MIDGARD=m CONFIG_MALI_PLATFORM_NAME="devicetree"
 
-    kernel_make -C ${PKG_BUILD}/${driver_version}/kernel/drivers/gpu/arm \
-      KERNEL_SRC=$(kernel_path) \
-      clean
+  kernel_make -C $(kernel_path) M=$PKG_BUILD/utgard/r7p0 \
+    EXTRA_CFLAGS="-DCONFIG_MALI450=y" \
+    CONFIG_MALI400=m CONFIG_MALI450=y
+}
 
-    if [ -n "${front_end}" ]; then
-      echo "replace compatible for correct GPU front end"
-      sed -i "s|.compatible = \"arm,mali-${architecture}.*\"|.compatible = \"arm,mali-${architecture}-${front_end}\"|" \
-        ${driver_version}/kernel/drivers/gpu/arm/midgard/mali_kbase_core_linux.c
-    fi
-
-    kernel_make -C ${PKG_BUILD}/${driver_version}/kernel/drivers/gpu/arm \
-      KERNEL_SRC=$(kernel_path) \
-      ${CONFIG_MALI_CSF_SUPPORT} \
-      CONFIG_MALI_DEVFREQ=n \
-      KCFLAGS=" -DCONFIG_MALI_LOW_MEM=0"
-
-    kernel_make -C ${PKG_BUILD}/${driver_version}/kernel/drivers/gpu/arm \
-      KERNEL_SRC=$(kernel_path) \
-      INSTALL_MOD_PATH=${INSTALL}/$(get_kernel_overlay_dir) INSTALL_MOD_STRIP=1 DEPMOD=: \
-      modules_install
-
-    [ -n "${front_end}" ] && module_name="mali_kbase_${architecture}_${front_end}.ko" || module_name="mali_kbase_${architecture}.ko"
-    mv ${INSTALL}/$(get_kernel_overlay_dir)/lib/modules/$(get_module_dir)/extra/midgard/mali_kbase.ko \
-       ${INSTALL}/$(get_kernel_overlay_dir)/lib/modules/$(get_module_dir)/extra/midgard/${module_name}
-  done
+makeinstall_target() {
+  kernel_make -C $(kernel_path) M=$PKG_BUILD/bifrost/r12p0/kernel/drivers/gpu/arm \
+    INSTALL_MOD_PATH=$INSTALL/$(get_kernel_overlay_dir) INSTALL_MOD_STRIP=1 DEPMOD=: \
+  modules_install
+  
+  kernel_make -C $(kernel_path) M=$PKG_BUILD/utgard/r7p0 \
+    INSTALL_MOD_PATH=$INSTALL/$(get_kernel_overlay_dir) INSTALL_MOD_STRIP=1 DEPMOD=: \
+  modules_install
 }

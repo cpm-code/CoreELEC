@@ -1,0 +1,69 @@
+diff -ruN --no-dereference a/src/basic/namespace-util.c b/src/basic/namespace-util.c
+--- a/src/basic/namespace-util.c	2026-02-11 07:57:41.382917780 +0800
++++ b/src/basic/namespace-util.c	2026-02-11 08:00:48.246230835 +0800
+@@ -3,6 +3,14 @@
+ #include <fcntl.h>
+ #include <linux/magic.h>
+ #include <linux/nsfs.h>
++
++/* Fallback definitions for older kernel headers (< 4.11) */
++#ifndef NS_GET_NSTYPE
++#define NS_GET_NSTYPE		_IO(0xb7, 0x3)
++#endif
++#ifndef NS_GET_OWNER_UID
++#define NS_GET_OWNER_UID	_IO(0xb7, 0x4)
++#endif
+ #include <sched.h>
+ #include <sys/ioctl.h>
+ #include <sys/mount.h>
+diff -ruN --no-dereference a/src/basic/socket-util.c b/src/basic/socket-util.c
+--- a/src/basic/socket-util.c	2026-02-11 07:57:41.395917806 +0800
++++ b/src/basic/socket-util.c	2026-02-11 08:00:48.249230840 +0800
+@@ -2,6 +2,14 @@
+ 
+ #include <fcntl.h>
+ #include <linux/if.h>
++
++/* Fallback definitions for older kernel headers */
++#ifndef SO_PEERGROUPS
++#define SO_PEERGROUPS 59
++#endif
++#ifndef SO_BINDTOIFINDEX
++#define SO_BINDTOIFINDEX 62
++#endif
+ #include <linux/if_arp.h>
+ #include <mqueue.h>
+ #include <net/if.h>
+diff -ruN --no-dereference a/src/basic/terminal-util.c b/src/basic/terminal-util.c
+--- a/src/basic/terminal-util.c	2026-02-11 07:57:41.406917827 +0800
++++ b/src/basic/terminal-util.c	2026-02-11 08:00:48.250230841 +0800
+@@ -1,6 +1,11 @@
+ /* SPDX-License-Identifier: LGPL-2.1-or-later */
+ 
+ #include <fcntl.h>
++
++/* Fallback for kernel < 4.13 */
++#ifndef TIOCGPTPEER
++#define TIOCGPTPEER	_IO('T', 0x41)
++#endif
+ #include <linux/kd.h>
+ #include <linux/magic.h>
+ #include <linux/tiocl.h>
+diff -ruN --no-dereference a/src/nsresourced/nsresourcework.c b/src/nsresourced/nsresourcework.c
+--- a/src/nsresourced/nsresourcework.c	2026-02-11 07:57:42.386919764 +0800
++++ b/src/nsresourced/nsresourcework.c	2026-02-11 08:00:48.248230838 +0800
+@@ -4,6 +4,14 @@
+ #include <linux/if_tun.h>
+ #include <linux/magic.h>
+ #include <linux/nsfs.h>
++
++/* Fallback definitions for older kernel headers (< 4.11) */
++#ifndef NS_GET_NSTYPE
++#define NS_GET_NSTYPE		_IO(0xb7, 0x3)
++#endif
++#ifndef NS_GET_OWNER_UID
++#define NS_GET_OWNER_UID	_IO(0xb7, 0x4)
++#endif
+ #include <linux/veth.h>
+ #include <net/if.h>
+ #include <poll.h>

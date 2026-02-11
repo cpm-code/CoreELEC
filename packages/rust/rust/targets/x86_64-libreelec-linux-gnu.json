@@ -8,6 +8,7 @@
   "executables": true,
   "has-rpath": true,
   "has-thread-local": true,
+  "is-builtin": false,
   "llvm-target": "x86_64-unknown-linux-gnu",
   "max-atomic-width": 64,
   "os": "linux",
@@ -32,5 +33,6 @@
   "target-family": [
     "unix"
   ],
-  "target-pointer-width": 64
+  "target-pointer-width": "64"
 }
+

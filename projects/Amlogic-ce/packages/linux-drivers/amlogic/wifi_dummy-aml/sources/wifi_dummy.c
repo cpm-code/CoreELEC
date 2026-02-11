@@ -12,8 +12,6 @@ MODULE_DESCRIPTION("Amlogic WiFi power on and SDIO/PCIe rescan module");
 extern void extern_wifi_set_enable(int);
 extern void sdio_reinit(void);
 
-#undef CONFIG_PCI
-
 #ifdef CONFIG_PCI
 extern void set_usb_wifi_power(int);
 extern void pci_remove(void);

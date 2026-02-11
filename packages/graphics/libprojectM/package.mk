@@ -21,7 +21,8 @@ PKG_CONFIGURE_OPTS_TARGET="--disable-shared \
                            --disable-sdl \
                            --disable-llvm \
                            --disable-emscripten \
-                           --enable-threading"
+                           --enable-threading \
+                           --enable-preset-subdirs"
 
 if [ "${OPENGL_SUPPORT}" = "yes" ]; then
   PKG_DEPENDS_TARGET+=" ${OPENGL}"
@@ -40,10 +41,7 @@ pre_configure_target() {
   cd ${PKG_BUILD}
   ./autogen.sh
 
-  if [ "${DISPLAYSERVER}" = "no" -a "${OPENGL_SUPPORT}" = "yes" ]; then
-    export CFLAGS+=" -DSOIL_EGL"
-    export GL_LIBS="-lOpenGL"
-  elif [ "${OPENGLES_SUPPORT}" = "yes" ]; then
+  if [ "${OPENGLES_SUPPORT}" = "yes" ]; then
     export CFLAGS+=" -DSOIL_GLES2"
   fi
 }

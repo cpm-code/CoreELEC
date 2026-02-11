@@ -55,7 +55,7 @@ PKG_CONFIGURE_OPTS_TARGET="${UTILLINUX_CONFIG_DEFAULT} \
                            --enable-fstrim \
                            --enable-blkid \
                            --enable-lscpu \
-                           --enable-lsfd \
+                           --disable-lsfd \
                            --enable-lsblk \
                            --enable-mount \
                            --enable-nologin"

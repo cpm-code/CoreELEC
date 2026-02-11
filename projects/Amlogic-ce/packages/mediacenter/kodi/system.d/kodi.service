@@ -1,8 +1,8 @@
 [Unit]
 Description=Kodi Media Center
-After=network-online.target graphical.target
+After=network-online.target graphical.target cpu-affinity-tweaks.service
 Requires=graphical.target
-Wants=network-online.target
+Wants=network-online.target cpu-affinity-tweaks.service
 
 [Service]
 EnvironmentFile=/usr/lib/kodi/kodi.conf
@@ -18,6 +18,7 @@ RestartSec=2
 StartLimitInterval=0
 LimitNOFILE=16384
 TimeoutStartSec=300
+Nice=-5
 
 [Install]
 WantedBy=kodi.target

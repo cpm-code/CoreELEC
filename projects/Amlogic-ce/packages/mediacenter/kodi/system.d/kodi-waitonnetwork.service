@@ -11,7 +11,7 @@ ConditionPathExists=/storage/.kodi/userdata/addon_data/service.coreelec.settings
 [Service]
 Type=oneshot
 EnvironmentFile=/storage/.cache/coreelec/network_wait
-ExecStart=/usr/bin/wait-time-sync --timeout ${WAIT_NETWORK_TIME}
+ExecStart=/usr/sbin/connmand-wait-online --timeout=${WAIT_NETWORK_TIME}
 StandardOutput=tty
 RemainAfterExit=yes
 SuccessExitStatus=1

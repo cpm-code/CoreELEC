@@ -49,6 +49,8 @@ LIVE="no"
 
 BREAK_TRIPPED="no"
 
+BIGFONT="1080"
+
 TEE_PID=""
 
 FORCE_SPLASH="no"
@@ -130,6 +132,69 @@ mount_common() {
   error "mount_common" "Could not mount $1"
 }
 
+get_iscsistart_options() {
+  # Convert kernel commandline ISCSI= options to iscsistart options
+  IFS_SAVE="$IFS"
+  IFS=,
+
+  for arg in $1; do
+    val="${arg#*=}"
+    case "$arg" in
+      iscsi_initiator=*)
+        option="-i"
+        ;;
+      iscsi_target_name=*)
+        option="-t"
+        ;;
+      iscsi_target_ip=*)
+        option="-a"
+        ;;
+      iscsi_target_port=*)
+        option="-p"
+        ;;
+      iscsi_target_group=*)
+        option="-g"
+        ;;
+      iscsi_username=*)
+        option="-u"
+        ;;
+      iscsi_password=*)
+        option="-w"
+        ;;
+      iscsi_in_username=*)
+        option="-U"
+        ;;
+      iscsi_in_password=*)
+        option="-W"
+        ;;
+    esac
+    echo "$option $val"
+  done
+
+  IFS="$IFS_SAVE"
+}
+
+mount_iscsi() {
+  # Mount iSCSI target
+  ISCSI_DEV="${1##*,}"
+  ISCSI_OPTIONS="${1%,*}"
+
+  if [ ! -f "/usr/sbin/iscsistart" ]; then
+    error "iscsistart" "iSCSI support not available"
+  fi
+
+  if [ "$ISCSI_OPTIONS" = "auto" ]; then
+    progress "Network configuration based on iBFT"
+    /usr/sbin/iscsistart -N >&$SILENT_OUT 2>&1 || error "iscsistart" "Unable to configure network"
+    progress "iSCSI auto connect based on iBFT"
+    /usr/sbin/iscsistart -b >&$SILENT_OUT 2>&1 || error "iscsistart" "Unable to auto connect"
+  else
+    /usr/sbin/iscsistart $(get_iscsistart_options "$ISCSI_OPTIONS") >&$SILENT_OUT 2>&1 || error "iscsistart" "Unable to connect to ISCSI target"
+  fi
+
+  mount_common "$ISCSI_DEV" "$2" "$3" "$4"
+}
+
 mount_nbd() {
 # Mount NBD device
   NBD_SERVER="${1%%:*}"
@@ -187,6 +252,9 @@ mount_part() {
       MOUNT_CMD="mount_common"
       MOUNT_TARGET="$1"
       ;;
+    ISCSI=*)
+      MOUNT_CMD="mount_iscsi"
+      ;;
     NBD=*)
       MOUNT_CMD="mount_nbd"
       ;;
@@ -225,7 +293,7 @@ mount_sysroot() {
 get_project_arch() {
   if [ -f ${1}/etc/os-release ]; then
     . ${1}/etc/os-release
-    echo "${DISTRO_ARCH}"
+    echo "${LIBREELEC_ARCH}"
   fi
 }
 
@@ -298,7 +366,7 @@ display_versions() {
 }
 
 update_file() {
-  if [ -f "$UPDATE_DIR/$2" ] && [ -f "$3" ]; then
+  if [ -f "$UPDATE_DIR/$2" -a -f "$3" ]; then
     mount -o remount,rw /flash
 
     rm -f "$3"
@@ -321,7 +389,7 @@ update_file() {
 update_partition() {
   local result
 
-  if [ -f "$UPDATE_DIR/$2" ] && [ -b "$3" ]; then
+  if [ -f "$UPDATE_DIR/$2" -a -b "$3" ]; then
     StartProgress spinner "Updating $1... "
       result="$(dd if="$UPDATE_DIR/$2" of="$3" 2>&1)"
       StopProgress "done"
@@ -353,6 +421,18 @@ load_modules() {
     progress "Loading kernel module $module"
     insmod "/usr/lib/modules/$module.ko" || progress "... Failed to load kernel module $module, skipping"
   done
+}
+
+set_consolefont() {
+  local vres
+
+  progress "Set console font"
+  if [ -e /dev/fb0 ]; then
+    vres="$(fbset 2>/dev/null | awk '/geometry/ { print $3 }')"
+    if [ $vres -gt "$BIGFONT" ]; then
+      setfont -C /dev/tty0 ter-v32b.psf
+    fi
+  fi
 }
 
 load_splash() {
@@ -494,26 +574,7 @@ local flash_label
 }
 
 check_disks() {
-  if [ "$RUN_FSCK" = "yes" ] && [ -n "$RUN_FSCK_DISKS" ]; then
-    local run_fsck_disks_tmp="${RUN_FSCK_DISKS}"
-    RUN_FSCK_DISKS=""
-
-    # remove disk duplicates like /dev/data /dev/data
-    for fsck_disk in ${run_fsck_disks_tmp}; do
-      case " ${RUN_FSCK_DISKS} " in
-        *" ${fsck_disk} "*)
-          continue ;;
-        *)
-          #RUN_FSCK_DISKS="${RUN_FSCK_DISKS} ${fsck_disk}" ;;
-          if [ -z "${RUN_FSCK_DISKS}" ]; then
-            RUN_FSCK_DISKS="${fsck_disk}"
-          else
-            RUN_FSCK_DISKS="${RUN_FSCK_DISKS} ${fsck_disk}"
-          fi
-          ;;
-      esac
-    done
-
+  if [ "$RUN_FSCK" = "yes" -a -n "$RUN_FSCK_DISKS" ]; then
     progress "Checking disk(s): $RUN_FSCK_DISKS"
     for i in 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0; do
       /usr/sbin/fsck -T -M -p -a $RUN_FSCK_DISKS >/dev/fsck.latest 2>&1
@@ -613,7 +674,7 @@ mount_storage() {
 
   if [ -n "$disk" ]; then
     if [ -n "$OVERLAY" ]; then
-      OVERLAY_DIR=$(tr -d : < /sys/class/net/eth0/address)
+      OVERLAY_DIR=$(cat /sys/class/net/eth0/address | tr -d :)
 
       mount_part "$disk" "/storage" "rw,noatime"
       mkdir -p /storage/$OVERLAY_DIR
@@ -644,7 +705,7 @@ mount_storage() {
 update_bootmenu() {
   local crnt_default
 
-  if [ -n "$SYSLINUX_DEFAULT" ] && [ -f /flash/syslinux.cfg ]; then
+  if [ -n "$SYSLINUX_DEFAULT" -a -f /flash/syslinux.cfg ]; then
     if grep -q "^LABEL $SYSLINUX_DEFAULT\$" /flash/syslinux.cfg; then
       crnt_default="$(awk '/^DEFAULT/ {print $2}' /flash/syslinux.cfg)"
       if [ ! "$crnt_default" = "$SYSLINUX_DEFAULT" ]; then
@@ -659,7 +720,7 @@ update_bootmenu() {
     fi
   fi
 
-  if [ -n "$GRUB_DEFAULT" ] && [ -f /flash/EFI/BOOT/grub.cfg ]; then
+  if [ -n "$GRUB_DEFAULT" -a -f /flash/EFI/BOOT/grub.cfg ]; then
     if grep -q "^menuentry \"$GRUB_DEFAULT\"" /flash/EFI/BOOT/grub.cfg; then
       crnt_default="$(awk '/^set default/ {print substr($2,9,19)}' /flash/EFI/BOOT/grub.cfg)"
       if [ ! "$crnt_default" = "\"$GRUB_DEFAULT\"" ]; then
@@ -705,7 +766,7 @@ do_cleanup() {
       umount $UPDATE_ROOT/.tmp/mnt
     fi
 
-    [ -n "$LOOP" ] && losetup -d $LOOP &>/dev/null
+    [ -n $LOOP ] && losetup -d $LOOP &>/dev/null
   fi
 
   [ -f "$UPDATE_TAR" ] && rm -f "$UPDATE_TAR" &>/dev/null
@@ -801,7 +862,7 @@ check_update() {
   if [ -f "$UPDATE_TAR" ]; then
     TARRESULT="0"
 
-    echo "Found new .tar archive file"
+    echo "Found new .tar archive"
     UPDATE_FILENAME="$UPDATE_TAR"
     StartProgress spinner "Extracting contents of archive... "
       tar -xf "$UPDATE_TAR" -C $UPDATE_DIR/.tmp 1>/dev/null 2>/tmp/tarresult.txt || TARRESULT="1"
@@ -809,7 +870,7 @@ check_update() {
     if [ "${TARRESULT}" -eq "0" ]; then
       mv $UPDATE_DIR/.tmp/*/target/* $UPDATE_DIR &>/dev/null
       sync
-      StopProgress "OK"
+      StopProgress "done"
     else
       StopProgress "FAILED"
 
@@ -897,7 +958,7 @@ check_update() {
     return 0
   fi
 
-  if [ ! -f "$UPDATE_DIR/$UPDATE_KERNEL" ] || [ ! -f "$UPDATE_DIR/$UPDATE_SYSTEM" ]; then
+  if [ ! -f "$UPDATE_DIR/$UPDATE_KERNEL" -o ! -f "$UPDATE_DIR/$UPDATE_SYSTEM" ]; then
     echo "Missing (source) ${UPDATE_KERNEL} or ${UPDATE_SYSTEM}!"
     do_cleanup
     StartProgress countdown "Normal startup in 30s... " 30 "NOW"
@@ -906,9 +967,9 @@ check_update() {
 
   # check md5 sums if .nocheck doesn't exist
   if [ ! -f "$UPDATE_ROOT/.nocheck" ]; then
-    if [ -f "$UPDATE_DIR/${UPDATE_KERNEL}.md5" ] && [ -f "$UPDATE_DIR/${UPDATE_SYSTEM}.md5" ]; then
+    if [ -f "$UPDATE_DIR/${UPDATE_KERNEL}.md5" -a -f "$UPDATE_DIR/${UPDATE_SYSTEM}.md5" ]; then
       # *.md5 size-check
-      if [ ! -s "$UPDATE_DIR/${UPDATE_KERNEL}.md5" ] || [ ! -s "$UPDATE_DIR/${UPDATE_SYSTEM}.md5" ]; then
+      if [ ! -s "$UPDATE_DIR/${UPDATE_KERNEL}.md5" -o ! -s "$UPDATE_DIR/${UPDATE_SYSTEM}.md5" ]; then
         echo "Zero-sized .md5 file!"
         MD5_FAILED="1"
       else
@@ -997,16 +1058,12 @@ check_update() {
   # all ok, update
   display_versions
   if [ -b "/$IMAGE_KERNEL" ]; then
-    update_partition "Kernel    " "${UPDATE_KERNEL}"     "/${IMAGE_KERNEL}"
-    update_partition "Kernel md5" "${UPDATE_KERNEL}.md5" "/${IMAGE_KERNEL}.md5"
+    update_partition "Kernel" "$UPDATE_KERNEL" "/$IMAGE_KERNEL"
   else
-    update_file "Kernel    " "${UPDATE_KERNEL}"     "/flash/${IMAGE_KERNEL}"
-    update_file "Kernel md5" "${UPDATE_KERNEL}.md5" "/flash/${IMAGE_KERNEL}.md5"
+    update_file "Kernel" "$UPDATE_KERNEL" "/flash/$IMAGE_KERNEL"
   fi
-
   umount /sysroot
-  update_file "System    " "${UPDATE_SYSTEM}"     "/flash/${IMAGE_SYSTEM}"
-  update_file "System md5" "${UPDATE_KERNEL}.md5" "/flash/${IMAGE_SYSTEM}.md5"
+  update_file "System" "$UPDATE_SYSTEM" "/flash/$IMAGE_SYSTEM"
   update_bootloader
   do_cleanup
 
@@ -1020,48 +1077,13 @@ check_update() {
   do_reboot
 }
 
-do_aml_autoscript() {
-  if [ -z "${boot}" ] && [ -z "${disk}" ]; then
-    echo "'reboot update' or 'run update' was run"
-
-    # set missing variables not set in this case
-    boot="LABEL=COREELEC"
-
-    mount_flash
-
-    # wait for eMMC
-    for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
-      [ -b /dev/env ] && break
-
-      usleep 1000000
-    done
-
-    if [ -f /flash/aml_autoscript ] && [ -b /dev/env ]; then
-      echo "doing aml_autoscript..."
-
-      mkdir -p /var/lock
-      dd if=/flash/aml_autoscript bs=72 skip=1 status=none | \
-        while read line; do
-          cmd=$(echo ${line} | sed -n "s|^setenv \(.*\)|fw_setenv \1|gp")
-          [ -n "${cmd}" ] && eval ${cmd}
-        done
-
-      echo "done..."
-    else
-      echo "something went wrong"
-    fi
-
-    do_reboot
-  fi
-}
-
 prepare_sysroot() {
   progress "Preparing system"
 
   mount --move /flash /sysroot/flash
   mount --move /storage /sysroot/storage
 
-  if [ ! -d "/sysroot/usr/lib/kernel-overlays/base/lib/modules/$(uname -r)/" ] && [ -f "/sysroot/usr/lib/systemd/systemd" ]; then
+  if [ ! -d "/sysroot/usr/lib/kernel-overlays/base/lib/modules/$(uname -r)/" -a -f "/sysroot/usr/lib/systemd/systemd" ]; then
     echo ""
     echo "NEVER TOUCH boot= in syslinux.conf / cmdline.txt!"
     echo "If you don't know what you are doing,"
@@ -1186,7 +1208,7 @@ for arg in $(cat /proc/cmdline); do
     boot=*)
       boot="${arg#*=}"
       case $boot in
-        NBD=*|NFS=*)
+        ISCSI=*|NBD=*|NFS=*)
           UPDATE_DISABLED=yes
           FLASH_NETBOOT=yes
           ;;
@@ -1201,7 +1223,7 @@ for arg in $(cat /proc/cmdline); do
     disk=*)
       disk="${arg#*=}"
       case $disk in
-        NBD=*|NFS=*)
+        ISCSI=*|NBD=*|NFS=*)
           STORAGE_NETBOOT=yes
           ;;
         /dev/*|LABEL=*|UUID=*)
@@ -1268,6 +1290,9 @@ for arg in $(cat /proc/cmdline); do
     break=*)
       BREAK="${arg#*=}"
       ;;
+    bigfont=*)
+      BIGFONT="${arg#*=}"
+      ;;
     ip=*)
       KERNEL_IPCONFIG="yes"
       ;;
@@ -1288,7 +1313,7 @@ SILENT_OUT=3
 
 # If the network is up (due to the use of the "ip" kernel parameter) and a DNS
 # server is known, allow the libc resolver to use it
-grep '^\(nameserver\|domain\) ' /proc/net/pnp 2>/dev/null | grep -v '^nameserver 0\.0\.0\.0$' > /etc/resolv.conf
+grep '^\(nameserver\|domain\) ' /proc/net/pnp | grep -v '^nameserver 0\.0\.0\.0$' > /etc/resolv.conf
 
 if [ "${boot%%=*}" = "FILE" ]; then
   error "check arguments" "boot argument can't be FILE type..."
@@ -1296,12 +1321,10 @@ fi
 
 debug_msg "Unique identifier for this client: ${MACHINE_UID:-NOT AVAILABLE}"
 
-# check if 'reboot update' or 'run update' was run
-do_aml_autoscript
-
 # main boot sequence
 for BOOT_STEP in \
     load_modules \
+    set_consolefont \
     check_disks \
     fix_bootlabel \
     mount_flash \
@@ -1321,8 +1344,8 @@ done
 BOOT_STEP=final
 
 # log if booting from usb / removable storage
-STORAGE=$(grep " /sysroot/storage " /proc/mounts | awk '{print $1}' | awk -F '/' '{print $3}')
-FLASH=$(grep " /sysroot/flash " /proc/mounts | awk '{print $1}' | awk -F '/' '{print $3}')
+STORAGE=$(cat /proc/mounts | grep " /sysroot/storage " | awk '{print $1}' | awk -F '/' '{print $3}')
+FLASH=$(cat /proc/mounts | grep " /sysroot/flash " | awk '{print $1}' | awk -F '/' '{print $3}')
 for i in $STORAGE $FLASH ; do
   if [ -n "$i" ]; then
     removable="/sys/class/block/*/$i/../removable"

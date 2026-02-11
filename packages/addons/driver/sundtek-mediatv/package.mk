@@ -35,7 +35,7 @@ make_target() {
       ;;
   esac
 
-  curl --fail -o installer.tar.gz ${INSTALLER_URL}
+  wget -O installer.tar.gz ${INSTALLER_URL}
 
   tar -xzf installer.tar.gz
 
@@ -45,7 +45,7 @@ make_target() {
   rm -f  opt/bin/lirc.sh
   rm -fr opt/lib/pm/
 
-  curl --fail -o version.used http://sundtek.de/media/latest.phtml
+  wget -O version.used http://sundtek.de/media/latest.phtml
 }
 
 addon() {

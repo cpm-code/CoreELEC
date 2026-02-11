@@ -1,0 +1,10 @@
+--- a/core/rtw_br_ext.c	2026-02-11 15:11:43.073658713 +0800
++++ b/core/rtw_br_ext.c	2026-02-11 15:11:43.074658727 +0800
+@@ -51,6 +51,7 @@
+ #include <linux/icmpv6.h>
+ #include <net/ndisc.h>
+ #include <net/checksum.h>
++#include <net/ip6_checksum.h>
+ #endif
+ #endif
+ 

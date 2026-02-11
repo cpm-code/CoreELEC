@@ -4,12 +4,14 @@
 # Copyright (C) 2022-present Team CoreELEC (https://coreelec.tv)
 
 PKG_NAME="kodi"
-PKG_VERSION="384d2d8976b92fa1a5fa3aefcfc5c61ced52e523"
+PKG_VERSION="fe86749cb74f1e3b641b7001bcb01b5a2180b254"
 PKG_SHA256=""
 PKG_LICENSE="GPL"
 PKG_SITE="http://www.kodi.tv"
-PKG_URL="https://github.com/CoreELEC/xbmc/archive/${PKG_VERSION}.tar.gz"
-PKG_DEPENDS_TARGET="toolchain JsonSchemaBuilder:host TexturePacker:host Python3 zlib systemd lzo pcre2 swig:host libass curl exiv2 fontconfig fribidi tinyxml tinyxml2 libjpeg-turbo freetype libcdio taglib libxml2 libxslt nlohmann-json sqlite ffmpeg crossguid libfmt lirc libfstrcmp flatbuffers:host flatbuffers libudfread spdlog obu_util libdovi"
+PKG_URL="https://api.github.com/repos/cpm-code/xbmc/tarball/${PKG_VERSION}"
+PKG_USETOKEN="yes"
+PKG_SOURCE_NAME="kodi-${PKG_VERSION}.tar.gz"
+PKG_DEPENDS_TARGET="toolchain JsonSchemaBuilder:host TexturePacker:host Python3 zlib systemd lzo pcre pcre2 swig:host libass curl exiv2 fontconfig fribidi tinyxml tinyxml2 libjpeg-turbo freetype libcdio taglib libxml2 libxslt rapidjson nlohmann-json sqlite ffmpeg crossguid libfmt lirc libfstrcmp flatbuffers:host flatbuffers libudfread spdlog obu_util libdovi"
 PKG_DEPENDS_UNPACK="commons-lang3 commons-text groovy"
 PKG_DEPENDS_HOST="toolchain"
 PKG_LONGDESC="A free and open source cross-platform media player."
@@ -20,6 +22,9 @@ post_unpack() {
     rm -rf $(get_build_dir ${PKG_NAME})/media/splash.*
     cp -PR ${DISTRO_DIR}/${DISTRO}/splash/${DEVICE}/splash-1080.png $(get_build_dir ${PKG_NAME})/media/splash.png
   fi
+
+  sed -e "s|@ADDON_REPO_ID@|${ADDON_REPO_ID}|g" -i $(get_build_dir ${PKG_NAME})/version.txt
+  sed -e "s|@ADDON_SERVER_URL@|${ADDON_SERVER_URL}|g" -i $(get_build_dir ${PKG_NAME})/version.txt
 
   # don't build internal TexturePacker
   sed -i 's|set(INTERNAL_TEXTUREPACKER_INSTALLABLE TRUE|set(INTERNAL_TEXTUREPACKER_INSTALLABLE FALSE|' \
@@ -74,6 +79,13 @@ configure_package() {
 
   if [ "${OPENGLES_SUPPORT}" = yes ]; then
     PKG_DEPENDS_TARGET+=" ${OPENGLES}"
+
+    # Amlogic's proprietary Mali GLES stack (opengl-meson) does not ship GBM
+    # headers/libs, but Kodi's Amlogic windowing code uses GBM for DRM.
+    # Pull in Mesa to provide gbm.h + libgbm.
+    if [ "${OPENGLES}" = "opengl-meson" ]; then
+      PKG_DEPENDS_TARGET+=" mesa"
+    fi
   fi
 
   if [ "${KODI_ALSA_SUPPORT}" = yes ]; then
@@ -231,7 +243,6 @@ configure_package() {
       fi
     elif [ "${KODIPLAYER_DRIVER}" = libamcodec ]; then
       KODI_PLATFORM="-DCORE_PLATFORM_NAME=aml -DAPP_RENDER_SYSTEM=gles"
-      PKG_DEPENDS_TARGET+=" wayland"
     fi
   fi
 
@@ -240,16 +251,16 @@ configure_package() {
                          -DWITH_JSONSCHEMABUILDER=${TOOLCHAIN}/bin/JsonSchemaBuilder \
                          -DSWIG_EXECUTABLE=${TOOLCHAIN}/bin/swig \
                          -DPYTHON_EXECUTABLE=${TOOLCHAIN}/bin/${PKG_PYTHON_VERSION} \
+                         -DPYTHON_INCLUDE_DIRS=${SYSROOT_PREFIX}/usr/include/${PKG_PYTHON_VERSION} \
                          -DGIT_VERSION=${PKG_VERSION} \
                          -DFFMPEG_PATH=${SYSROOT_PREFIX}/usr \
                          -DENABLE_INTERNAL_CROSSGUID=OFF \
                          -DENABLE_INTERNAL_EXIV2=OFF \
-                         -DENABLE_INTERNAL_FFMPEG=OFF \
-                         -DDISABLE_FFMPEG_SOURCE_PLUGINS=ON \
+                         -DENABLE_INTERNAL_FFMPEG=ON \
                          -DENABLE_INTERNAL_FLATBUFFERS=OFF \
-                         -DENABLE_INTERNAL_MARIADBCLIENT=OFF \
-                         -DENABLE_INTERNAL_NLOHMANNJSON=OFF \
+                         -DENABLE_INTERNAL_RapidJSON=OFF \
                          -DENABLE_INTERNAL_SPDLOG=OFF \
+                         -DENABLE_INTERNAL_UDFREAD=OFF \
                          -DENABLE_UDEV=ON \
                          -DENABLE_DBUS=ON \
                          -DENABLE_XSLT=ON \
@@ -357,6 +368,36 @@ post_makeinstall_target() {
      ${INSTALL}/usr/share/kodi/addons/service.xbmc.versioncheck \
      ${INSTALL}/.noinstall
 
+  # Ensure required FFmpeg runtime libraries are included in SYSTEM.
+  # Note: during builds SYSROOT_PREFIX is temporarily set to a per-package
+  # sysroot; the global sysroot is available as PKG_ORIG_SYSROOT_PREFIX.
+  FFMPEG_SYSROOT_PREFIX="${PKG_ORIG_SYSROOT_PREFIX:-${SYSROOT_PREFIX}}"
+  mkdir -p ${INSTALL}/usr/lib
+
+  # Kodi is dynamically linked to FFmpeg libs; ensure required sonames exist in SYSTEM.
+  # We always copy the real (versioned) .so and create the soname symlink, so the
+  # package doesn't end up shipping an unversioned regular file (which can prevent
+  # updates from taking effect if it isn't overwritten).
+  for so in libavcodec.so.62 libavfilter.so.11 libavformat.so.62 libavutil.so.60 libswscale.so.9 libswresample.so.6 libpostproc.so.59; do
+    src="${FFMPEG_SYSROOT_PREFIX}/usr/lib/${so}"
+    [ -e "${src}" ] || continue
+
+    real="$(readlink -f "${src}" 2>/dev/null || true)"
+    [ -n "${real}" -a -e "${real}" ] || real="${src}"
+
+    cp -p "${real}" ${INSTALL}/usr/lib/
+    ln -sf "$(basename "${real}")" "${INSTALL}/usr/lib/${so}"
+  done
+
+  # Kodi is linked against PCRE1 (libpcre.so.1), not PCRE2.
+  src_pcre="${FFMPEG_SYSROOT_PREFIX}/usr/lib/libpcre.so.1"
+  if [ -e "${src_pcre}" ]; then
+    real_pcre="$(readlink -f "${src_pcre}" 2>/dev/null || true)"
+    [ -n "${real_pcre}" -a -e "${real_pcre}" ] || real_pcre="${src_pcre}"
+    cp -p "${real_pcre}" ${INSTALL}/usr/lib/
+    ln -sf "$(basename "${real_pcre}")" "${INSTALL}/usr/lib/libpcre.so.1"
+  fi
+
   rm -rf ${INSTALL}/usr/bin/kodi
   rm -rf ${INSTALL}/usr/bin/kodi-standalone
   rm -rf ${INSTALL}/usr/bin/xbmc
@@ -413,9 +454,11 @@ post_makeinstall_target() {
   ln -sf /usr/bin/pastekodi ${INSTALL}/usr/bin/pastecrash
 
   mkdir -p ${INSTALL}/usr/share/kodi/addons
-  cp -R ${PKG_DIR}/config/repository.coreelec ${INSTALL}/usr/share/kodi/addons
-  sed -e "s|@ADDON_URL@|${ADDON_URL}|g" -i ${INSTALL}/usr/share/kodi/addons/repository.coreelec/addon.xml
-  sed -e "s|@ADDON_VERSION@|${ADDON_VERSION}|g" -i ${INSTALL}/usr/share/kodi/addons/repository.coreelec/addon.xml
+  cp -R ${PKG_DIR}/config/repository.coreelec ${INSTALL}/usr/share/kodi/addons/${ADDON_REPO_ID}
+  sed -e "s|@ADDON_URL@|${ADDON_URL}|g" -i ${INSTALL}/usr/share/kodi/addons/${ADDON_REPO_ID}/addon.xml
+  sed -e "s|@ADDON_REPO_ID@|${ADDON_REPO_ID}|g" -i ${INSTALL}/usr/share/kodi/addons/${ADDON_REPO_ID}/addon.xml
+  sed -e "s|@ADDON_REPO_NAME@|${ADDON_REPO_NAME}|g" -i ${INSTALL}/usr/share/kodi/addons/${ADDON_REPO_ID}/addon.xml
+  sed -e "s|@ADDON_VERSION@|${ADDON_VERSION}|g" -i ${INSTALL}/usr/share/kodi/addons/${ADDON_REPO_ID}/addon.xml
 
   mkdir -p ${INSTALL}/usr/share/kodi/config
 
@@ -448,7 +491,7 @@ post_makeinstall_target() {
   # update addon manifest
   ADDON_MANIFEST=${INSTALL}/usr/share/kodi/system/addon-manifest.xml
   xmlstarlet ed -L -d "/addons/addon[text()='service.xbmc.versioncheck']" ${ADDON_MANIFEST}
-  xmlstarlet ed -L --subnode "/addons" -t elem -n "addon" -v "repository.coreelec" ${ADDON_MANIFEST}
+  xmlstarlet ed -L --subnode "/addons" -t elem -n "addon" -v "${ADDON_REPO_ID}" ${ADDON_MANIFEST}
   if [ -n "${DISTRO_PKG_SETTINGS}" ]; then
     xmlstarlet ed -L --subnode "/addons" -t elem -n "addon" -v "${DISTRO_PKG_SETTINGS_ID}" ${ADDON_MANIFEST}
   fi

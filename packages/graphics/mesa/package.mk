@@ -32,12 +32,18 @@ PKG_MESON_OPTS_TARGET="-Dgallium-drivers=${GALLIUM_DRIVERS// /,} \
                        -Dshader-cache=enabled \
                        -Dopengl=true \
                        -Dgbm=enabled \
-                       -Degl=enabled \
                        -Dvalgrind=disabled \
                        -Dlibunwind=disabled \
                        -Dlmsensors=disabled \
                        -Dbuild-tests=false \
                        -Dmicrosoft-clc=disabled"
+
+# EGL requires DRI drivers; only enable when GRAPHIC_DRIVERS is non-empty
+if [ -n "${GALLIUM_DRIVERS}" ]; then
+  PKG_MESON_OPTS_TARGET+=" -Degl=enabled"
+else
+  PKG_MESON_OPTS_TARGET+=" -Degl=disabled"
+fi
 
 if [ "${DISPLAYSERVER}" = "x11" ]; then
   PKG_DEPENDS_TARGET+=" xorgproto libXext libXdamage libXfixes libXxf86vm libxcb libX11 libxshmfence libXrandr"
