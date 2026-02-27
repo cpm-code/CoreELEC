@@ -3,8 +3,8 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="libxml2"
-PKG_VERSION="2.14.6"
-PKG_SHA256="104b93d53bde845bf9b0da7bd04a34bf4f83b54a5689a599ca8ea2386e9dd718"
+PKG_VERSION="2.13.4"
+PKG_SHA256="ba783b43e8b3475cbd2b1ef40474da6a4465105ee9818d76cd3ac7863550afce"
 PKG_LICENSE="MIT"
 PKG_SITE="http://xmlsoft.org"
 PKG_URL="https://gitlab.gnome.org/GNOME/${PKG_NAME}/-/archive/v${PKG_VERSION}/${PKG_NAME}-v${PKG_VERSION}.tar.bz2"
@@ -14,12 +14,8 @@ PKG_LONGDESC="The libxml package contains an XML library, which allows you to ma
 PKG_TOOLCHAIN="cmake"
 
 PKG_CMAKE_OPTS_ALL="-DBUILD_SHARED_LIBS=ON \
-                    -DLIBXML2_WITH_ICONV=OFF \
-                    -DLIBXML2_WITH_ICU=OFF \
                     -DLIBXML2_WITH_LZMA=OFF \
-                    -DLIBXML2_WITH_TESTS=OFF \
-                    -DLIBXML2_WITH_THREADS=ON \
-                    -DLIBXML2_WITH_ZLIB=OFF"
+                    -DLIBXML2_WITH_TESTS=OFF"
 
 PKG_CMAKE_OPTS_HOST="${PKG_CMAKE_OPTS_ALL} \
                      -DLIBXML2_WITH_PYTHON=ON"

@@ -18,9 +18,11 @@ Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
  configure.ac    | 6 ++++++
  2 files changed, 14 insertions(+), 1 deletion(-)
 
+diff --git a/Makefile.pre.in b/Makefile.pre.in
+index 3f314d1354..5fad7f82fb 100644
 --- a/Makefile.pre.in
 +++ b/Makefile.pre.in
-@@ -2511,7 +2511,9 @@ bininstall: commoninstall altbininstall
+@@ -2048,7 +2048,9 @@ bininstall: commoninstall altbininstall
  	-rm -f $(DESTDIR)$(LIBPC)/python3-embed.pc
  	(cd $(DESTDIR)$(LIBPC); $(LN) -s python-$(VERSION)-embed.pc python3-embed.pc)
  	-rm -f $(DESTDIR)$(BINDIR)/idle3
@@ -30,7 +32,7 @@ Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
  	-rm -f $(DESTDIR)$(BINDIR)/pydoc3
  ifeq (@PYDOC@,yes)
  	(cd $(DESTDIR)$(BINDIR); $(LN) -s pydoc$(VERSION) pydoc3)
-@@ -2560,7 +2562,6 @@ LIBSUBDIRS=	asyncio \
+@@ -2100,7 +2102,6 @@ LIBSUBDIRS=	asyncio \
  		ensurepip ensurepip/_bundled \
  		html \
  		http \
@@ -38,8 +40,8 @@ Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
  		importlib importlib/resources importlib/metadata \
  		json \
  		logging \
-@@ -2736,6 +2737,10 @@ ifeq (@PYDOC@,yes)
- LIBSUBDIRS += pydoc_data
+@@ -2267,6 +2268,10 @@ TESTSUBDIRS += test/test_lib2to3			\
+ 		test/test_lib2to3/data/fixers/myfixes
  endif
  
 +ifeq (@IDLE@,yes)
@@ -49,21 +51,23 @@ Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
  TEST_MODULES=@TEST_MODULES@
  
  .PHONY: libinstall
-@@ -2963,7 +2968,9 @@ libainstall: all scripts
- 	$(INSTALL_SCRIPT) $(srcdir)/install-sh $(DESTDIR)$(LIBPL)/install-sh
- 	$(INSTALL_SCRIPT) python-config.py $(DESTDIR)$(LIBPL)/python-config.py
- 	$(INSTALL_SCRIPT) python-config $(DESTDIR)$(BINDIR)/python$(LDVERSION)-config
+@@ -2484,7 +2489,9 @@ libainstall: all scripts
+ ifeq (@LIB2TO3@,yes)
+ 	$(INSTALL_SCRIPT) $(SCRIPT_2TO3) $(DESTDIR)$(BINDIR)/2to3-$(VERSION)
+ endif
 +ifeq (@IDLE@,yes)
  	$(INSTALL_SCRIPT) $(SCRIPT_IDLE) $(DESTDIR)$(BINDIR)/idle$(VERSION)
 +endif
  ifeq (@PYDOC@,yes)
  	$(INSTALL_SCRIPT) $(SCRIPT_PYDOC) $(DESTDIR)$(BINDIR)/pydoc$(VERSION)
  endif
+diff --git a/configure.ac b/configure.ac
+index f0354c580d..43086962e9 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -8188,6 +8188,12 @@ PY_STDLIB_MOD([xxlimited_35], [test "$TE
- # substitute multiline block, must come after last PY_STDLIB_MOD()
- AC_SUBST([MODULE_BLOCK])
+@@ -7567,6 +7567,12 @@ AC_ARG_ENABLE(lib2to3,
+ 	AS_HELP_STRING([--disable-lib2to3], [disable lib2to3]),
+ 	[ LIB2TO3="${enableval}" ], [ LIB2TO3=yes ])
  
 +AC_SUBST(IDLE)
 +
@@ -74,3 +78,6 @@ Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
  # generate output files
  AC_CONFIG_FILES(m4_normalize([
    Makefile.pre
+-- 
+2.34.1
+

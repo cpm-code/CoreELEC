@@ -5,8 +5,8 @@
 PKG_NAME="linux"
 PKG_LICENSE="GPL"
 PKG_SITE="http://www.kernel.org"
-PKG_DEPENDS_HOST="ccache:host"
-PKG_DEPENDS_TARGET="linux:host kmod:host keyutils openssl:host ${KERNEL_EXTRA_DEPENDS_TARGET}"
+PKG_DEPENDS_HOST="ccache:host rsync:host"
+PKG_DEPENDS_TARGET="linux:host kmod:host xz:host keyutils openssl:host ${KERNEL_EXTRA_DEPENDS_TARGET}"
 PKG_NEED_UNPACK="${LINUX_DEPENDS} $(get_pkg_directory initramfs) $(get_pkg_variable initramfs PKG_NEED_UNPACK)"
 PKG_LONGDESC="This package contains a precompiled kernel image and the modules."
 PKG_IS_KERNEL_PKG="yes"
@@ -16,36 +16,24 @@ PKG_PATCH_DIRS="${LINUX}"
 
 case "${LINUX}" in
   amlogic)
-    PKG_VERSION="7d0a66e4bb9081d75c82ec4957c50034cb0ea449" # 6.18.0
-    PKG_SHA256="2617efd103533b57613d16f144ceea575b1a6b890ce5e16201b1d254e2b7b33c"
+    PKG_VERSION="380df7b7938d3c3ba1d0d0b472a810fd38061329" # 6.9.5
+    PKG_SHA256="740368c264d071200577ef745c1e06362564daefd941c7c562905853c6f16598"
     PKG_URL="https://github.com/torvalds/linux/archive/${PKG_VERSION}.tar.gz"
     PKG_SOURCE_NAME="linux-${LINUX}-${PKG_VERSION}.tar.gz"
-    PKG_PATCH_DIRS="default"
+    PKG_PATCH_DIRS="default rtlwifi/6.10 rtlwifi/6.11"
     ;;
   raspberrypi)
-    PKG_VERSION="d477259acbe9fe42de4aa605c0c3952a2b970b37" # 6.18.7
-    PKG_SHA256="d12318c2afbb7299a294a811d6571cdcf114b1878ac1b86d1f7d98292bb65742"
+    PKG_VERSION="c1321370c9af9681e0604c4d3363cf362fb48598" # 6.6.51
+    PKG_SHA256="ec4c8cdc158f7a05fcfe8f96b111772226a51ca636e4a08b06123e10c1c36a85"
     PKG_URL="https://github.com/raspberrypi/linux/archive/${PKG_VERSION}.tar.gz"
     PKG_SOURCE_NAME="linux-${LINUX}-${PKG_VERSION}.tar.gz"
-    PKG_PATCH_DIRS="raspberrypi"
-    ;;
-  rockchip)
-    PKG_VERSION="5dfbc5357c34bdf81c84aa78bc8e3d6d9ba10aad" # 6.18.7
-    PKG_SHA256="dcb5b08946f044cee1cb584397f981586c8b4565e01a95c668e679b1bcd2470a"
-    PKG_URL="https://github.com/chewitt/linux/archive/${PKG_VERSION}.tar.gz"
-    PKG_SOURCE_NAME="linux-${LINUX}-${PKG_VERSION}.tar.gz"
-    PKG_PATCH_DIRS="default rockchip"
+    PKG_PATCH_DIRS="raspberrypi rtlwifi/6.9 rtlwifi/6.10 rtlwifi/6.11"
     ;;
   *)
-    PKG_VERSION="6.18.8"
-    PKG_SHA256="37f0c5d5c242c1d604e87d48f08795e861a5a85f725b4ca11d0a538f12ff8cff"
+    PKG_VERSION="6.11"
+    PKG_SHA256="55d2c6c025ebc27810c748d66325dd5bc601e8d32f8581d9e77673529bdacb2e"
     PKG_URL="https://www.kernel.org/pub/linux/kernel/v${PKG_VERSION/.*/}.x/${PKG_NAME}-${PKG_VERSION}.tar.xz"
     PKG_PATCH_DIRS="default"
-    case ${DEVICE} in
-      RK3288|RK3328|RK3399)
-        PKG_PATCH_DIRS+=" rockchip-old"
-        ;;
-    esac
     ;;
 esac
 
@@ -115,7 +103,7 @@ makeinstall_host() {
 }
 
 pre_make_target() {
-  (
+  ( 
     cd ${ROOT}
     rm -rf ${BUILD}/initramfs
     rm -f ${STAMPS_INSTALL}/initramfs/install_target ${STAMPS_INSTALL}/*/install_init
@@ -146,30 +134,23 @@ pre_make_target() {
     ${PKG_BUILD}/scripts/config --disable CONFIG_CIFS
   fi
 
+  # enable/disable iscsi support
+  [ "${ISCSI_SUPPORT}" = yes ] && OPTION="--enable" || OPTION="--disable"
+  ${PKG_BUILD}/scripts/config ${OPTION} CONFIG_SCSI_ISCSI_ATTRS
+  ${PKG_BUILD}/scripts/config ${OPTION} CONFIG_ISCSI_TCP
+  ${PKG_BUILD}/scripts/config ${OPTION} CONFIG_ISCSI_BOOT_SYSFS
+  ${PKG_BUILD}/scripts/config ${OPTION} CONFIG_ISCSI_IBFT_FIND
+  ${PKG_BUILD}/scripts/config ${OPTION} CONFIG_ISCSI_IBFT
+
+  # disable lima/panfrost if libmali is configured
+  if [ "${OPENGLES}" = "libmali" ]; then
+    ${PKG_BUILD}/scripts/config --disable CONFIG_DRM_LIMA
+    ${PKG_BUILD}/scripts/config --disable CONFIG_DRM_PANFROST
+  fi
+
   # disable wireguard support if not enabled
   if [ ! "${WIREGUARD_SUPPORT}" = yes ]; then
     ${PKG_BUILD}/scripts/config --disable CONFIG_WIREGUARD
-  fi
-
-  # disable vfd support if not enabled
-  if [ ! "${VFD_SUPPORT}" = yes ]; then
-    ${PKG_BUILD}/scripts/config --disable CONFIG_PANEL_CHANGE_MESSAGE
-  else
-    # enable the module and set distro boot message
-    ${PKG_BUILD}/scripts/config --enable CONFIG_AUXDISPLAY
-    ${PKG_BUILD}/scripts/config --enable CONFIG_LINEDISPLAY
-    ${PKG_BUILD}/scripts/config --enable CONFIG_TM16XX
-    ${PKG_BUILD}/scripts/config --enable CONFIG_TM16XX_KEYPAD
-    ${PKG_BUILD}/scripts/config --enable CONFIG_TM16XX_I2C
-    ${PKG_BUILD}/scripts/config --enable CONFIG_TM16XX_SPI
-    ${PKG_BUILD}/scripts/config --enable CONFIG_PANEL_CHANGE_MESSAGE
-    ${PKG_BUILD}/scripts/config --set-str CONFIG_PANEL_BOOT_MESSAGE "${VFD_MESSAGE}"
-    ${PKG_BUILD}/scripts/config --enable CONFIG_INPUT_MATRIXKMAP
-    # enable led activity triggers
-    ${PKG_BUILD}/scripts/config --enable CONFIG_LEDS_TRIGGER_TIMER # Colon
-    ${PKG_BUILD}/scripts/config --enable CONFIG_LEDS_TRIGGER_NETDEV # LAN/WLAN
-    ${PKG_BUILD}/scripts/config --enable CONFIG_USB_LEDS_TRIGGER_USBPORT # USB
-    ${PKG_BUILD}/scripts/config --enable CONFIG_MMC # SD
   fi
 
   if [ "${TARGET_ARCH}" = "x86_64" ]; then
@@ -237,7 +218,7 @@ make_target() {
   DTC_FLAGS=-@ kernel_make ${KERNEL_TARGET} ${KERNEL_MAKE_EXTRACMD} modules
 
   if [ "${PKG_BUILD_PERF}" = "yes" ]; then
-    (
+    ( 
       cd tools/perf
 
       # arch specific perf build args
@@ -263,14 +244,6 @@ make_target() {
       NO_LIBTRACEEVENT=1 \
       NO_LZMA=1 \
       NO_SDT=1 \
-      NO_LIBDEBUGINFOD=1 \
-      NO_JVMTI=1 \
-      NO_LIBLLVM=1 \
-      NO_LIBPFM4=1 \
-      NO_LIBBABELTRACE=1 \
-      NO_CAPSTONE=1 \
-      NO_LIBPFM4=1 \
-      BUILD_BPF_SKEL=0 \
       CROSS_COMPILE="${TARGET_PREFIX}" \
       JOBS="${CONCURRENCY_MAKE_LEVEL}" \
         make ${PERF_BUILD_ARGS}

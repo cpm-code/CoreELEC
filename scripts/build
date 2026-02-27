@@ -147,7 +147,8 @@ else
   MESON_BUILD_TYPE="plain"
 fi
 
-CMAKE_GENERATOR_NINJA="-GNinja"
+CMAKE_GENERATOR_NINJA="-GNinja \
+                       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
 
 # configure TARGET build defaults
 TARGET_CONFIGURE_OPTS="--host=${TARGET_NAME} \
@@ -158,10 +159,9 @@ TARGET_CONFIGURE_OPTS="--host=${TARGET_NAME} \
                        --sysconfdir=/etc \
                        --libdir=/usr/lib \
                        --libexecdir=/usr/lib \
-                       --localstatedir=/var"
-if flag_enabled "cfg-libs" "yes"; then
-  TARGET_CONFIGURE_OPTS+=" --disable-static --enable-shared"
-fi
+                       --localstatedir=/var \
+                       --disable-static \
+                       --enable-shared"
 
 TARGET_CMAKE_OPTS="-DCMAKE_TOOLCHAIN_FILE=${CMAKE_CONF} \
                    -DCMAKE_INSTALL_PREFIX=/usr \
@@ -187,10 +187,9 @@ HOST_CONFIGURE_OPTS="--host=${HOST_NAME} \
                      --sbindir=${TOOLCHAIN}/sbin \
                      --sysconfdir=${TOOLCHAIN}/etc \
                      --libexecdir=${TOOLCHAIN}/lib \
-                     --localstatedir=${TOOLCHAIN}/var"
-if flag_enabled "cfg-libs:host" "yes"; then
-  HOST_CONFIGURE_OPTS+=" --disable-static --enable-shared"
-fi
+                     --localstatedir=${TOOLCHAIN}/var \
+                     --disable-static \
+                     --enable-shared"
 
 HOST_CMAKE_OPTS="${CMAKE_GENERATOR} \
                  -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CONF} \
@@ -318,19 +317,19 @@ else
     # cmake builds with ninja
     "cmake:target")
       echo "Executing (target): cmake ${CMAKE_GENERATOR_NINJA} ${TARGET_CMAKE_OPTS} ${PKG_CMAKE_OPTS_TARGET} ${PKG_CMAKE_SCRIPT%/*}" | tr -s " "
-      CMAKE_EXPORT_COMPILE_COMMANDS=1 cmake ${CMAKE_GENERATOR_NINJA} ${TARGET_CMAKE_OPTS} ${PKG_CMAKE_OPTS_TARGET} ${PKG_CMAKE_SCRIPT%/*}
+      cmake ${CMAKE_GENERATOR_NINJA} ${TARGET_CMAKE_OPTS} ${PKG_CMAKE_OPTS_TARGET} ${PKG_CMAKE_SCRIPT%/*}
       ;;
     "cmake:host")
       echo "Executing (host): cmake ${CMAKE_GENERATOR_NINJA} ${HOST_CMAKE_OPTS} ${PKG_CMAKE_OPTS_HOST} ${PKG_CMAKE_SCRIPT%/*}" | tr -s " "
-      CMAKE_EXPORT_COMPILE_COMMANDS=1 cmake ${CMAKE_GENERATOR_NINJA} ${HOST_CMAKE_OPTS} ${PKG_CMAKE_OPTS_HOST} ${PKG_CMAKE_SCRIPT%/*}
+      cmake ${CMAKE_GENERATOR_NINJA} ${HOST_CMAKE_OPTS} ${PKG_CMAKE_OPTS_HOST} ${PKG_CMAKE_SCRIPT%/*}
       ;;
     "cmake:init")
       echo "Executing (init): cmake ${CMAKE_GENERATOR_NINJA} ${INIT_CMAKE_OPTS} ${PKG_CMAKE_OPTS_INIT} ${PKG_CMAKE_SCRIPT%/*}" | tr -s " "
-      CMAKE_EXPORT_COMPILE_COMMANDS=1 cmake ${CMAKE_GENERATOR_NINJA} ${INIT_CMAKE_OPTS} ${PKG_CMAKE_OPTS_INIT} ${PKG_CMAKE_SCRIPT%/*}
+      cmake ${CMAKE_GENERATOR_NINJA} ${INIT_CMAKE_OPTS} ${PKG_CMAKE_OPTS_INIT} ${PKG_CMAKE_SCRIPT%/*}
       ;;
     "cmake:bootstrap")
       echo "Executing (bootstrap): cmake ${CMAKE_GENERATOR_NINJA} ${BOOTSTRAP_CMAKE_OPTS} ${PKG_CMAKE_OPTS_BOOTSTRAP} ${PKG_CMAKE_SCRIPT%/*}" | tr -s " "
-      CMAKE_EXPORT_COMPILE_COMMANDS=1 cmake ${CMAKE_GENERATOR_NINJA} ${BOOTSTRAP_CMAKE_OPTS} ${PKG_CMAKE_OPTS_BOOTSTRAP} ${PKG_CMAKE_SCRIPT%/*}
+      cmake ${CMAKE_GENERATOR_NINJA} ${BOOTSTRAP_CMAKE_OPTS} ${PKG_CMAKE_OPTS_BOOTSTRAP} ${PKG_CMAKE_SCRIPT%/*}
       ;;
 
     # cmake builds with make

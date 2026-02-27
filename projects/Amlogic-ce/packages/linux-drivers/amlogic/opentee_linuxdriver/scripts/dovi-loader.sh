@@ -32,111 +32,103 @@ check_dovi_version() {
     fi
 }
 
-insmod_dovi() {
-  [ ! -f ${DOVI_KO_ANDROID} ] && return 1
-
-  modinfo ${DOVI_KO_ANDROID}
-
-  if check_dovi_version ${DOVI_KO_ANDROID} 5 15 137; then
-    message "loading dovi module from android partition"
-    insmod ${DOVI_KO_ANDROID}
-  else
-    cat > /tmp/dovi.message << 'EOF'
+insmod_dovi_ne() {
+  DOVI_KO=${1}
+  if [ -f ${DOVI_KO} ]; then
+    message "loading '${DOVI_KO}' module"
+    modinfo ${DOVI_KO}
+    if check_dovi_version ${DOVI_KO} 5 4 210; then
+      insmod ${DOVI_KO} && return 0
+    else
+      cat > /tmp/dovi.message << 'EOF'
 [TITLE]CoreELEC Dolby Vision Media Playback[/TITLE]
 [B][COLOR red]Android Dolby Vision kernel module is not compatible[/COLOR][/B]
 [COLOR red]No Dolby Vision media playback possible![/COLOR]
 
-Please upgrade Android firmware of your device to minimum Linux kernel version '5.15.137'.
+Please upgrade Android firmware of your device to minimum Linux kernel version '5.4.210'.
 Dolby Vision media will be displayed in HDR instead Dolby Vision until the firmware fulfill the minimum requirements.
 EOF
+    fi
   fi
 
-  return 0
+  return 1
 }
 
-load_dovi() {
+load_dovi_ne() {
   # local dovi.ko
-  for DOVI_KO_STORAGE in /storage/.config/dovi.ko \
-                         /flash/dovi.ko \
-                         /storage/dovi.ko \
-                         ; do
-    if [ -f ${DOVI_KO_STORAGE} ]; then
-      message "loading dovi module from ce partition"
-      modinfo ${DOVI_KO_STORAGE}
-      insmod ${DOVI_KO_STORAGE} && return
-    fi
-  done
+  insmod_dovi_ne /storage/.config/dovi.ko && return
+  insmod_dovi_ne /flash/dovi.ko && return
+  insmod_dovi_ne /storage/dovi.ko && return
 
   # Android 12
   if [ -b /dev/oem ]; then
     mountpoint -q /android/oem || mount -o ro /dev/oem /android/oem
-
-    DOVI_KO_ANDROID="/android/oem/overlay/dovi.ko"
-    insmod_dovi && umount_partitions && return
+    insmod_dovi_ne /android/oem/overlay/dovi.ko && return
   fi
 
   # Android 11
-  dmsetup create --concise "$(parse-android-dynparts /dev/super)"
-
-  local active_slot=""
+  # if mounted from tee-loader don't mount/unmount from dovi-loader
+  if ! ls /dev/mapper/dynpart-* &>/dev/null; then
+    dmsetup create --concise "$(parse-android-dynparts /dev/super)"
+    systemctl set-environment dmsetup_remove=yes
+  fi
 
   if [ -b /dev/mapper/dynpart-system_a ]; then
     active_slot="_a"
   elif [ -b /dev/mapper/dynpart-system_b ]; then
     active_slot="_b"
-  fi
-
-  # Xiaomi Android 14
-  if [ -b /dev/oem${active_slot} ]; then
-    mount -o ro /dev/oem${active_slot} /android/oem
-  
-    DOVI_KO_ANDROID="/android/oem/overlay/dovi.ko"
-    insmod_dovi && umount_partitions && return
+  else
+    active_slot=""
   fi
 
   if [ -b /dev/mapper/dynpart-odm${active_slot} ]; then
-    mount -o ro /dev/mapper/dynpart-odm${active_slot} /android/odm
-
-    DOVI_KO_ANDROID="/android/odm/lib/modules/dovi.ko"
-    insmod_dovi && umount_partitions && return
+    mountpoint -q /android/odm || mount -o ro /dev/mapper/dynpart-odm${active_slot} /android/odm
+    insmod_dovi_ne /android/odm/lib/modules/dovi.ko && return
   fi
 
-  # older Android
-  if [ -b /dev/vendor ]; then
-    mount -o ro /dev/vendor /android/vendor
-
-    for DOVI_KO_ANDROID in /android/vendor/lib/modules/dovi.ko \
-                           /android/vendor/lib/modules/dovi_vs10.ko \
-                           ; do
-      insmod_dovi && umount_partitions && return
-    done
-  fi
-
-  message "dovi not supported"
-  cleanup_dovi
+  cleanup_dovi_ne
 }
 
-umount_partitions() {
-  mountpoint -q /android/oem && umount /android/oem
-  mountpoint -q /android/odm && umount /android/odm
-  mountpoint -q /android/vendor && umount /android/vendor
-  ls /dev/mapper/dynpart-* &>/dev/null && dmsetup remove /dev/mapper/dynpart-*
-  return 0  # success
-}
-
-cleanup_dovi() {
+cleanup_dovi_ne() {
   rmmod dovi 2>/dev/null
-  umount_partitions
+  mountpoint -q /android/odm && umount /android/odm
+  mountpoint -q /android/oem && umount /android/oem
+  # unmount only if mounted from this script
+  [ "${dmsetup_remove}" = "yes" ] && \
+    ls /dev/mapper/dynpart-* &>/dev/null && dmsetup remove /dev/mapper/dynpart-*
 }
 
-message "run dovi ${1}"
+load_dovi_ng() {
+  mountpoint -q /android/vendor || mount -o ro /dev/vendor /android/vendor
+  for DOVI_KO in /storage/.config/dovi.ko \
+                 /flash/dovi.ko \
+                 /storage/dovi.ko \
+                 /android/vendor/lib/modules/dovi.ko \
+                 /android/vendor/lib/modules/dovi_vs10.ko \
+                ; do
+    if [ -f ${DOVI_KO} ]; then
+      message "loading '${DOVI_KO}' module"
+      modinfo ${DOVI_KO}
+      insmod  ${DOVI_KO} && return
+    fi
+  done
+
+  cleanup_dovi_ng
+}
+
+cleanup_dovi_ng() {
+  rmmod dovi 2>/dev/null
+  mountpoint -q /android/vendor && umount /android/vendor
+}
+
+message "run dovi '${1}' for ${DISTRO_DEVICE:8:2}"
 
 case "${1}" in
   start)
-    load_dovi
+    load_dovi_${DISTRO_DEVICE:8:2}
     ;;
   stop)
-    cleanup
+    cleanup_dovi_${DISTRO_DEVICE:8:2}
     ;;
 esac
 

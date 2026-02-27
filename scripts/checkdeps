@@ -58,7 +58,6 @@ dep_map=(
   [bash]=bash
   [bc]=bc
   [bzip2]=bzip2
-  [curl]=curl
   [diff]=diffutils
   [gawk]=gawk
   [gcc]=gcc
@@ -71,10 +70,10 @@ dep_map=(
   [patch]=patch
   [perl]=perl
   [rdfind]=rdfind
-  [rsync]=rsync
   [sed]=sed
   [tar]=tar
   [unzip]=unzip
+  [wget]=wget
   [xz]=xz-utils
   [zip]=zip
   [zstd]=zstd
@@ -97,7 +96,7 @@ perl_map=(
 ### PROJECT SPECIFIC REQUIREMENTS ###
 # Extend build scripts to look for distro/project/device checkdep scripts before adding further checks here
 # Native aarch64 on debian host needs to support rkbin (Rockchip) and aml_encrypt_* (Amlogic)
-if [ "$(uname -m)" = "aarch64" ] && { [ "${PROJECT}" = "Rockchip" ] || [ "${PROJECT}" = "Amlogic" ]; }; then
+if [ "$(uname -m)" = "aarch64" ] && [ "${PROJECT}" = "Rockchip" -o "${PROJECT}" = "Amlogic" ]; then
   dep_map[qemu-x86_64]=qemu-user-binfmt
   file_map[/usr/x86_64-linux-gnu/lib/ld-linux-x86-64.so.2]="libc6-amd64-cross"
   file_map[/usr/x86_64-linux-gnu/lib/libc.so.6]="libc6-amd64-cross"
@@ -293,7 +292,7 @@ if [ "${#need_map[@]}" -gt 0 ]; then
   fi
 fi
 
-# check if installed packages satisfied deps
+# check if installed packages satisifed deps
 get_deps
 
 if [ "${#need_map[@]}" -gt 0 ]; then

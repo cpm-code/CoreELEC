@@ -13,10 +13,15 @@ PKG_NEED_UNPACK="$LINUX_DEPENDS"
 PKG_LONGDESC="openvfd-driver: an open source Linux driver for VFD displays"
 PKG_TOOLCHAIN="manual"
 
-make_target() {
-  kernel_make -C "$(kernel_path)" M="$PKG_BUILD/driver"
+pre_make_target() {
+  unset LDFLAGS
+}
 
-  CFLAGS+=" -Wno-implicit-function-declaration"
+make_target() {
+  make ARCH=$TARGET_KERNEL_ARCH \
+       CROSS_COMPILE=$TARGET_KERNEL_PREFIX \
+       -C "$(kernel_path)" M="$PKG_BUILD/driver"
+
   make OpenVFDService
 }
 

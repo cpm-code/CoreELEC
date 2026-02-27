@@ -12,7 +12,7 @@ PKG_LONGDESC="Tools for interacting with the linux GPIO character device."
 PKG_TOOLCHAIN="autotools"
 PKG_BUILD_FLAGS="+pic -sysroot"
 
-PKG_CONFIGURE_OPTS_TARGET="--enable-tools --disable-shared --enable-introspection=no"
+PKG_CONFIGURE_OPTS_TARGET="--enable-tools --disable-shared"
 
 post_make_target() {
   (

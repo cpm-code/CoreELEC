@@ -3,17 +3,19 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="systemd"
-PKG_VERSION="259.1"
-PKG_SHA256="7af4f36db512ad2f0f749a0f9886370edeb2bb5128014fc47cdf73702c7e1911"
+PKG_VERSION="256.6"
+PKG_SHA256="c085f162dec001407dd32f00abbf20b7e6ed7043dcfaf8ed954787d86707f409"
 PKG_LICENSE="LGPL2.1+"
 PKG_SITE="http://www.freedesktop.org/wiki/Software/systemd"
 PKG_URL="https://github.com/systemd/systemd/archive/v${PKG_VERSION}.tar.gz"
 PKG_DEPENDS_TARGET="meson:host ninja:host gcc:host libcap kmod util-linux entropy libidn2 wait-time-sync Jinja2:host"
 PKG_LONGDESC="A system and session manager for Linux, compatible with SysV and LSB init scripts."
-PKG_BUILD_FLAGS="+lto"
 
 PKG_MESON_OPTS_TARGET="--libdir=/usr/lib \
+                       -Drootprefix=/usr \
+                       -Dsplit-usr=false \
                        -Dsplit-bin=true \
+                       -Ddefault-hierarchy=hybrid \
                        -Dtty-gid=5 \
                        -Dtests=false \
                        -Dseccomp=disabled \
@@ -62,9 +64,9 @@ PKG_MESON_OPTS_TARGET="--libdir=/usr/lib \
                        -Dhostnamed=true \
                        -Dlocaled=false \
                        -Dmachined=false \
+                       -Dnsresourced=false \
                        -Dportabled=false \
-                       -Duserdb=true \
-                       -Dnologin-path=/usr/sbin/nologin \
+                       -Duserdb=false \
                        -Dhomed=disabled \
                        -Dnetworkd=false \
                        -Dtimedated=false \
@@ -87,13 +89,12 @@ PKG_MESON_OPTS_TARGET="--libdir=/usr/lib \
                        -Dnss-myhostname=false \
                        -Dnss-mymachines=disabled \
                        -Dnss-resolve=disabled \
-                       -Dnss-systemd=true \
+                       -Dnss-systemd=false \
                        -Dman=disabled \
                        -Dhtml=disabled \
                        -Dlink-udev-shared=true \
                        -Dlink-systemctl-shared=true \
                        -Dlink-networkd-shared=false \
-                       -Djournal-storage-default=auto \
                        -Dbashcompletiondir=no \
                        -Dzshcompletiondir=no \
                        -Dkmod-path=/usr/bin/kmod \
@@ -127,22 +128,20 @@ post_makeinstall_target() {
   safe_remove ${INSTALL}/usr/lib/tmpfiles.d/home.conf
   safe_remove ${INSTALL}/usr/share/factory
 
-  # remove Network adapter renaming rule, this is confusing
+  # remove Network adaper renaming rule, this is confusing
   safe_remove ${INSTALL}/usr/lib/udev/rules.d/80-net-setup-link.rules
 
   safe_remove ${INSTALL}/usr/lib/udev/rules.d/71-seat.rules
   safe_remove ${INSTALL}/usr/lib/udev/rules.d/73-seat-late.rules
 
-  if [ "${LOCAL_LOGIN}" = "no" ]; then
-    # remove getty units, we dont want a console
-    safe_remove ${INSTALL}/usr/lib/systemd/system/autovt@.service
-    safe_remove ${INSTALL}/usr/lib/systemd/system/console-getty.service
-    safe_remove ${INSTALL}/usr/lib/systemd/system/container-getty@.service
-    safe_remove ${INSTALL}/usr/lib/systemd/system/getty.target
-    safe_remove ${INSTALL}/usr/lib/systemd/system/getty@.service
-    safe_remove ${INSTALL}/usr/lib/systemd/system/serial-getty@.service
-    safe_remove ${INSTALL}/usr/lib/systemd/system/*.target.wants/getty.target
-  fi
+  # remove getty units, we dont want a console
+  safe_remove ${INSTALL}/usr/lib/systemd/system/autovt@.service
+  safe_remove ${INSTALL}/usr/lib/systemd/system/console-getty.service
+  safe_remove ${INSTALL}/usr/lib/systemd/system/container-getty@.service
+  safe_remove ${INSTALL}/usr/lib/systemd/system/getty.target
+  safe_remove ${INSTALL}/usr/lib/systemd/system/getty@.service
+  safe_remove ${INSTALL}/usr/lib/systemd/system/serial-getty@.service
+  safe_remove ${INSTALL}/usr/lib/systemd/system/*.target.wants/getty.target
 
   # remove other notused or nonsense stuff (our /etc is ro)
   safe_remove ${INSTALL}/usr/lib/systemd/systemd-update-done
@@ -156,11 +155,6 @@ post_makeinstall_target() {
 
   # adjust systemd-hwdb-update (we have read-only /etc).
   sed '/^ConditionNeedsUpdate=.*$/d' -i ${INSTALL}/usr/lib/systemd/system/systemd-hwdb-update.service
-
-  # remove systemd-creds
-  safe_remove ${INSTALL}/usr/bin/systemd-creds
-  safe_remove ${INSTALL}/usr/lib/tmpfiles.d/credstore.conf
-  safe_remove ${INSTALL}/usr/lib/tmpfiles.d/provision.conf
 
   # remove nspawn
   safe_remove ${INSTALL}/usr/bin/systemd-nspawn
@@ -202,9 +196,6 @@ post_makeinstall_target() {
   safe_remove ${INSTALL}/usr/lib/systemd/system/systemd-time-wait-sync.service
   safe_remove ${INSTALL}/usr/lib/systemd/systemd-time-wait-sync
 
-  # remove the userdbctl load-credentials script - no service (addon) require the creation of static users
-  safe_remove ${INSTALL}/usr/lib/systemd/system/systemd-userdb-load-credentials.service
-
   # tune journald.conf
   sed -e "s,^.*Compress=.*$,Compress=no,g" -i ${INSTALL}/etc/systemd/journald.conf
   sed -e "s,^.*MaxFileSec=.*$,MaxFileSec=0,g" -i ${INSTALL}/etc/systemd/journald.conf
@@ -215,10 +206,6 @@ post_makeinstall_target() {
   sed -e "s,^.*SystemMaxUse=.*$,SystemMaxUse=10M,g" -i ${INSTALL}/etc/systemd/journald.conf
 
   # tune logind.conf
-  if [ "${LOCAL_LOGIN}" = "yes" ]; then
-    sed -e "s,^.*NAutoVTs=.*$,NAutoVTs=2,g" -i ${INSTALL}/etc/systemd/logind.conf
-    sed -e "s,^.*ReserveVT=.*$,ReserveVT=6,g" -i ${INSTALL}/etc/systemd/logind.conf
-  fi
   sed -e "s,^.*HandleLidSwitch=.*$,HandleLidSwitch=ignore,g" -i ${INSTALL}/etc/systemd/logind.conf
   if [ "${DISPLAYSERVER}" = "no" ]; then
     sed -e "s,^.*HandlePowerKey=.*$,HandlePowerKey=poweroff,g" -i ${INSTALL}/etc/systemd/logind.conf
@@ -277,8 +264,6 @@ post_makeinstall_target() {
   safe_remove ${INSTALL}/etc/udev/rules.d
   ln -sf /storage/.config/udev.rules.d ${INSTALL}/etc/udev/rules.d
 
-  ln -sf /storage/.cache/userdb ${INSTALL}/etc/userdb
-
   # journald
   ln -sf /storage/.cache/journald.conf.d ${INSTALL}/usr/lib/systemd/journald.conf.d
 }
@@ -312,7 +297,6 @@ post_install() {
   add_group input 104
   add_group render 105
   add_group sgx 106
-  add_group clock 107
 
   enable_service machine-id.service
   enable_service debugconfig.service
@@ -323,9 +307,5 @@ post_install() {
   enable_service network-base.service
   enable_service systemd-timesyncd.service
   enable_service systemd-timesyncd-setup.service
-  enable_service systemd-userdbd.socket
   enable_service debug-shell.service
-  if [ "${LOCAL_LOGIN}" = "yes" ]; then
-    enable_service getty@tty0.service
-  fi
 }

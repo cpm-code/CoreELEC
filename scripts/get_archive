@@ -2,20 +2,9 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 _get_file_already_downloaded() {
-  { [ ! -f "${PACKAGE}" ] || [ ! -f "${STAMP_URL}" ] || [ ! -f "${STAMP_SHA}" ]; } && return 1
-  { [ -n "${PKG_SHA256}" ] && [ "$(cat ${STAMP_SHA} 2>/dev/null)" != "${PKG_SHA256}" ]; } && return 1
+  [ ! -f "${PACKAGE}" -o ! -f "${STAMP_URL}" -o ! -f "${STAMP_SHA}" ] && return 1
+  [ -n "${PKG_SHA256}" -a "$(cat ${STAMP_SHA} 2>/dev/null)" != "${PKG_SHA256}" ] && return 1
   return 0
-}
-
-_fcurl() {
-  if [[ "${PKG_USETOKEN}" == "yes" ]]; then
-    if [[ ${url} == https://github.com/CoreELEC/* ]] && [[ -n "${COREELEC_GHTOKEN}" ]]; then
-      curl -H "Authorization: token ${COREELEC_GHTOKEN}" $@
-      return
-    fi
-  fi
-
-  curl $@
 }
 
 # Latest file already present, exit now...
@@ -36,23 +25,58 @@ for mirror in ${DISTRO_MIRROR}; do
   PACKAGE_MIRROR="${PACKAGE_MIRROR} ${mirror}/${PKG_NAME}/${PKG_SOURCE_NAME}"
 done
 
-[ "${VERBOSE}" != "yes" ] && GET_OPT="--silent --show-error"
-GET_CMD="_fcurl ${GET_OPT} --fail --connect-timeout 30 --retry 3 --continue-at - --location --max-redirs 5 --output ${PACKAGE}"
+[ "${VERBOSE}" != "yes" ] && WGET_OPT=-q
+WGET_CMD="wget --output-file=- --timeout=30 --tries=3 --no-check-certificate -c ${WGET_OPT} --progress=bar:force --show-progress -O ${PACKAGE}"
+
+[ "${VERBOSE}" = "yes" ] && CURL_PROGRESS="--progress-bar" || CURL_PROGRESS="--silent --show-error"
+CURL_CMD="curl --fail --location --location-trusted --connect-timeout 30 --retry 3 --retry-delay 1 ${CURL_PROGRESS} -o ${PACKAGE}"
 
 # unset LD_LIBRARY_PATH to stop wget from using toolchain/lib and loading libssl.so/libcrypto.so instead of host libraries
 unset LD_LIBRARY_PATH
 
 rm -f "${STAMP_URL}" "${STAMP_SHA}"
 
-NBGET=10
+NBWGET=10
 NBCHKS=2
-while [ ${NBGET} -gt 0 ] && [ ${NBCHKS} -gt 0 ]; do
+while [ ${NBWGET} -gt 0 -a ${NBCHKS} -gt 0 ]; do
   for url in "${PKG_URL}" ${PACKAGE_MIRROR}; do
+    WGET_HEADERS=()
+    CURL_HEADERS=()
+
+    if [[ "$PKG_USETOKEN" == "yes" ]] && [[ -z "${GHTOKEN}" ]]; then
+      if [[ $url == https://github.com/* || $url == https://api.github.com/* || $url == https://codeload.github.com/* ]]; then
+        die "\nGHTOKEN is not set, but ${PKG_NAME} requires a GitHub token to download ${url}\nExport GHTOKEN and retry.\n"
+      fi
+    fi
+
+    if [[ "$PKG_USETOKEN" == "yes" ]] && [[ -n "${GHTOKEN}" ]]; then
+      if [[ $url == https://github.com/* || $url == https://api.github.com/* || $url == https://codeload.github.com/* ]]; then
+        _gh_auth_header="Authorization: token ${GHTOKEN}"
+        WGET_HEADERS+=(--header="${_gh_auth_header}")
+        CURL_HEADERS+=(-H "${_gh_auth_header}")
+      fi
+    fi
+
     rm -f "${PACKAGE}"
-    if ${GET_CMD} "${url}"; then
+    [[ "${url}" =~ ^[fF][tT][pP]:* ]] && WGET_FTP=--passive-ftp || WGET_FTP=
+    if [[ $url == https://github.com/* || $url == https://api.github.com/* || $url == https://codeload.github.com/* ]] && [[ "$PKG_USETOKEN" == "yes" ]] && [[ -n "${GHTOKEN}" ]] && command -v curl >/dev/null 2>&1; then
+      if ${CURL_CMD} "${CURL_HEADERS[@]}" "${url}"; then
+        CALC_SHA256=$(sha256sum "${PACKAGE}" | cut -d" " -f1)
+
+        [ -z "${PKG_SHA256}" -o "${PKG_SHA256}" = "${CALC_SHA256}" ] && break 2
+
+        if [ "${CHANGE_HASH}" = "yes" ]; then
+          sed -e "s|^PKG_SHA256=.*|PKG_SHA256=\"${CALC_SHA256}\"|" -i "${PKG_DIR}/package.mk"
+          break 2
+        else
+          build_msg "CLR_WARNING" "WARNING" "Incorrect checksum calculated on downloaded file: got ${CALC_SHA256} wanted ${PKG_SHA256}"
+          NBCHKS=$((NBCHKS - 1))
+        fi
+      fi
+    elif ${WGET_CMD} ${WGET_FTP} "${WGET_HEADERS[@]}" "${url}"; then
       CALC_SHA256=$(sha256sum "${PACKAGE}" | cut -d" " -f1)
 
-      { [ -z "${PKG_SHA256}" ] || [ "${PKG_SHA256}" = "${CALC_SHA256}" ]; } && break 2
+      [ -z "${PKG_SHA256}" -o "${PKG_SHA256}" = "${CALC_SHA256}" ] && break 2
 
       if [ "${CHANGE_HASH}" = "yes" ]; then
         sed -e "s|^PKG_SHA256=.*|PKG_SHA256=\"${CALC_SHA256}\"|" -i "${PKG_DIR}/package.mk"
@@ -61,14 +85,12 @@ while [ ${NBGET} -gt 0 ] && [ ${NBCHKS} -gt 0 ]; do
         build_msg "CLR_WARNING" "WARNING" "Incorrect checksum calculated on downloaded file: got ${CALC_SHA256} wanted ${PKG_SHA256}"
         NBCHKS=$((NBCHKS - 1))
       fi
-    else
-      echo -e "Error downloading ${url}\n"
     fi
   done
-  NBGET=$((NBGET - 1))
+  NBWGET=$((NBWGET - 1))
 done
 
-if [ ${NBGET} -eq 0 ] || [ ${NBCHKS} -eq 0 ]; then
+if [ ${NBWGET} -eq 0 -o ${NBCHKS} -eq 0 ]; then
   die "\nCannot get ${1} sources : ${PKG_URL}\nTry later!"
 else
   build_msg "CLR_INFO" "INFO" "Calculated checksum: ${CALC_SHA256}"

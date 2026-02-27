@@ -4,7 +4,6 @@
 
 # get coreelec release information
 source /etc/os-release
-source /usr/lib/coreelec/read-firmware-version
 
 VIDEO_UCODE_BIN_PATH=/lib/firmware/video/video_ucode.bin
 TEE_SUPPLICANT_PID_FILE=/var/run/tee-supplicant.pid
@@ -36,7 +35,11 @@ android_wrapper() {
 run_tee_from_coreelec() {
   message "run tee from coreelec start"
 
-  local SOC=$(awk '/SoC[ \t]*:/ {printf "%s", $3}' /proc/cpuinfo)
+  if [ "${DISTRO_DEVICE}" = "Amlogic-ng" ]; then
+     local SOC=$(grep -q "sc2" /proc/device-tree/compatible && echo "S905X4")
+  else
+     local SOC=$(awk '/SoC[ \t]*:/ {printf "%s", $3}' /proc/cpuinfo)
+  fi
 
   if [ -z "${SOC}" ]; then
     message "SoC architecture unknown"
@@ -44,26 +47,14 @@ run_tee_from_coreelec() {
   fi
 
   mkdir -p /var/lib
-  ln -sfn /usr/lib/ta/${SOC} /var/lib/optee_armtz
+  ln -sfn /usr/lib/ta/${SOC} /var/lib/teetz
 
   [ -f $(dirname ${VIDEO_UCODE_BIN_PATH})/${SOC}/video_ucode.bin ] && \
     ln -sfn ${SOC}/video_ucode.bin ${VIDEO_UCODE_BIN_PATH}
 
-  read_firmware_version ${VIDEO_UCODE_BIN_PATH} &>/dev/null
-  message "Using CoreELEC ucode file '${minor}.${batch}' for ${SOC}"
-
-  if [ -c /dev/mmcblk0rpmb ]; then
-    message "Using real rpmb for tee-supplicant"
-    tee-supplicant &
-    echo ${!} >${TEE_SUPPLICANT_PID_FILE}
-  else
-    # intercept path and use dummy file for rpmb and cid
-    message "Using dummy rpmb for tee-supplicant"
-    LD_PRELOAD=/usr/lib/coreelec/tee-dummy-rpmb.so \
-      tee-supplicant &
-    echo ${!} >${TEE_SUPPLICANT_PID_FILE}
-  fi
-
+  modprobe -q optee_armtz
+  tee-supplicant &
+  echo ${!} >${TEE_SUPPLICANT_PID_FILE}
   # wait for tee-supplicant process to start
   sleep 5
 
@@ -74,10 +65,9 @@ run_tee_from_coreelec() {
 }
 
 run_tee_from_android() {
-  local SERIAL_S5=$(printf "%d" "0x3e")
   message "run tee from android start"
 
-  dmsetup create --concise "$(parse-android-dynparts /dev/super)"
+  ! ls /dev/mapper/dynpart-* &>/dev/null && dmsetup create --concise "$(parse-android-dynparts /dev/super)"
 
   local active_slot=$(fw_printenv active_slot 2>/dev/null | awk -F '=' '/active_slot=/ {print $2}')
   message "fw active slot: '${active_slot}'"
@@ -92,56 +82,26 @@ run_tee_from_android() {
 
   message "active slot: '${active_slot}'"
 
-  # load extra EROFS module when SoC support AMFC driver
-  [ -d /sys/class/amfc ] && modprobe aml-erofs
-
-  mount -o ro /dev/mapper/dynpart-system${active_slot} /android/system
-  mount -o ro /dev/mapper/dynpart-vendor${active_slot} /android/vendor
-
-  read_firmware_version /vendor${VIDEO_UCODE_BIN_PATH} &>/dev/null
-  message "Android ucode version: '${minor}.${batch}'"
-  if [[ ${minor} -gt 4 || ( ${minor} -eq 4 && ${batch} -ge 1 ) ]]; then
-    umount_partitions
-    message "run tee from android end"
-    return 2
-  fi
-
-  if [ ${SERIAL_THIS} -lt ${SERIAL_S5} ]; then
-    local SOC=$(awk '/SoC[ \t]*:/ {printf "%s", $3}' /proc/cpuinfo)
-    ln -sfn NO_TEE/video_ucode.bin "$VIDEO_UCODE_BIN_PATH"
-    read_firmware_version ${VIDEO_UCODE_BIN_PATH} &>/dev/null
-    message "Using CoreELEC ucode file '${minor}.${batch}' for ${SOC}"
-  else
-    ln -sfn /vendor${VIDEO_UCODE_BIN_PATH} ${VIDEO_UCODE_BIN_PATH}
-    cat > /tmp/firmware.message << EOF
-Firmware version '${minor}.${batch}' found. Please update Android to enable the best possible media support.
-EOF
-  fi
+  mountpoint -q /android/system || mount -o ro /dev/mapper/dynpart-system${active_slot} /android/system
+  mountpoint -q /android/vendor || mount -o ro /dev/mapper/dynpart-vendor${active_slot} /android/vendor
 
   if [ ! -x /vendor/bin/tee-supplicant ]; then
-    umount_partitions
     message "tee-supplicant does not exist on android"
-    message "run tee from android end"
     return 1
   fi
 
+  modprobe -q optee_armtz
   android_wrapper exec /vendor/bin/tee-supplicant &
   echo ${!} >${TEE_SUPPLICANT_PID_FILE}
   # wait for tee-supplicant process to start
   sleep 5
 
+  ln -sfn /vendor${VIDEO_UCODE_BIN_PATH} ${VIDEO_UCODE_BIN_PATH}
+
   android_wrapper /vendor/bin/tee_preload_fw ${VIDEO_UCODE_BIN_PATH}
   local rv=${?}
-  umount_partitions
   message "run tee from android end"
   return ${rv}
-}
-
-umount_partitions() {
-  mountpoint -q /android/system && umount /android/system
-  mountpoint -q /android/vendor && umount /android/vendor
-  ls /dev/mapper/dynpart-* &>/dev/null && dmsetup remove /dev/mapper/dynpart-*
-  return 0  # success
 }
 
 cleanup_tee() {
@@ -154,7 +114,12 @@ cleanup_tee() {
     rm -f ${TEE_SUPPLICANT_PID_FILE}
   fi
 
-  umount_partitions
+  modprobe -r optee_armtz
+
+  mountpoint -q /android/system && umount /android/system
+  mountpoint -q /android/vendor && umount /android/vendor
+  ls /dev/mapper/dynpart-* &>/dev/null && dmsetup remove /dev/mapper/dynpart-*
+
   message "cleanup tee end"
 }
 
@@ -165,29 +130,23 @@ SERIAL_SC2=$(printf "%d" "0x32")
 if [ ${SERIAL_THIS} -lt ${SERIAL_SC2} ]; then
   echo 1 > $(realpath /sys/module/*tee/parameters/disable_flag)
   message "tee not needed (SoC is less than SC2 (0x32) architecture)"
-  ln -sfn NO_TEE/video_ucode.bin ${VIDEO_UCODE_BIN_PATH}
   exit 0
 fi
 
 case "${1}" in
   start)
-    if [ -b /dev/super ]; then
+    if [ "${DISTRO_DEVICE}" = "Amlogic-ne" -a -b /dev/super ]; then
       run_tee_from_android
-      rv=${?}
-      [ ${rv} -eq 0 ] && exit 0
+      [ ${?} -eq 0 ] && exit 0
 
-      if [ ${rv} -eq 1 ]; then
-        message "using tee from android failed, trying from coreelec"
-        cleanup_tee
-      elif [ ${rv} -eq 2 ]; then
-        message "tee from android match SCS version, trying from coreelec"
-      fi
+      message "using tee from android failed, trying from coreelec"
+      cleanup_tee
     fi
 
     run_tee_from_coreelec
     [ ${?} -eq 0 ] && exit 0
 
-    if [ ! -b /dev/super ]; then exit 0; fi
+    [ "${DISTRO_DEVICE}" = "Amlogic-ng" ] && exit 0
 
     cat > /tmp/tee.message << 'EOF'
 [TITLE]CoreELEC Media Playback[/TITLE]

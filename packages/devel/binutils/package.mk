@@ -3,12 +3,11 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="binutils"
-PKG_VERSION="2.45.1"
-PKG_SHA256="5fe101e6fe9d18fdec95962d81ed670fdee5f37e3f48f0bef87bddf862513aa5"
+PKG_VERSION="2.43.1"
+PKG_SHA256="13f74202a3c4c51118b797a39ea4200d3f6cfbe224da6d1d95bb938480132dfd"
 PKG_LICENSE="GPL"
 PKG_SITE="https://www.gnu.org/software/binutils/"
 PKG_URL="https://ftp.gnu.org/gnu/binutils/${PKG_NAME}-${PKG_VERSION}.tar.xz"
-PKG_DEPENDS_UNPACK="binutils-gold"
 PKG_DEPENDS_HOST="ccache:host bison:host flex:host linux:host"
 PKG_DEPENDS_TARGET="toolchain zlib binutils:host"
 PKG_LONGDESC="A GNU collection of binary utilities."
@@ -47,10 +46,6 @@ PKG_CONFIGURE_OPTS_TARGET="--target=${TARGET_NAME} \
                          --disable-ld \
                          --disable-lto \
                          --disable-nls"
-
-post_unpack() {
-  cp -a $(get_build_dir binutils-gold)/{elfcpp,gold} ${PKG_BUILD}
-}
 
 pre_configure_host() {
   unset CPPFLAGS

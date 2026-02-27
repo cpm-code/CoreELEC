@@ -1,0 +1,15 @@
+diff --git a/brcm_patchram_plus.c b/brcm_patchram_plus.c
+index 2a74b3e..2d2c1f3 100644
+--- a/brcm_patchram_plus.c
++++ b/brcm_patchram_plus.c
+@@ -446,7 +446,7 @@ parse_cmd_line(int argc, char **argv)
+ 	int c;
+ 	int ret = 0;
+
+-	typedef int (*PFI)();
++	typedef int (*PFI)(char *optarg);
+
+ 	PFI parse[] = { parse_patchram, parse_baudrate,
+ 		parse_bdaddr, parse_enable_lpm, parse_enable_hci,
+ 		parse_use_baudrate_for_download,
+ 		parse_scopcm, parse_i2s, parse_no2bytes, parse_tosleep};

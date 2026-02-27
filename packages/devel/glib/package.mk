@@ -3,8 +3,8 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="glib"
-PKG_VERSION="2.87.2"
-PKG_SHA256="d6eb74a4f4ffc0b56df79ae3a939463b1d92c623f6c167d51aab24e303a851f3"
+PKG_VERSION="2.82.1"
+PKG_SHA256="478634440bf52ee4ec4428d558787398c0be6b043c521beb308334b3db4489a6"
 PKG_LICENSE="LGPL"
 PKG_SITE="https://www.gtk.org/"
 PKG_URL="https://download.gnome.org/sources/glib/$(get_pkg_version_maj_min)/${PKG_NAME}-${PKG_VERSION}.tar.xz"
@@ -15,33 +15,33 @@ PKG_LONGDESC="A library which includes support routines for C such as lists, tre
 PKG_MESON_OPTS_HOST="-Ddefault_library=shared \
                      -Dinstalled_tests=false \
                      -Dlibmount=disabled \
-                     -Dintrospection=disabled \
-                     -Dsysprof=disabled \
-                     -Dtests=false"
+                     -Dtests=false \
+                     -Dintrospection=disabled"
 
 PKG_MESON_OPTS_TARGET="-Ddefault_library=shared \
                        -Dinstalled_tests=false \
                        -Dselinux=disabled \
                        -Dxattr=true \
-                       -Ddocumentation=false \
-                       -Dman-pages=disabled \
-                       -Ddtrace=disabled \
-                       -Dsystemtap=disabled \
+                       -Dgtk_doc=false \
+                       -Dman=false \
+                       -Ddtrace=false \
+                       -Dsystemtap=false \
                        -Dbsymbolic_functions=true \
-                       -Dsysprof=disabled \
+                       -Dforce_posix_threads=true \
                        -Dtests=false \
-                       -Dintrospection=enabled"
+                       -Dintrospection=disabled"
 
 pre_configure_target() {
-  # tweak the binary names so that it picks up our
-  # wrappers which do the cross-compile with qemu
-  sed -e "s|gir_scanner = .*|gir_scanner = files('${TOOLCHAIN}/bin/g-ir-scanner-wrapper')|" \
-      -e "s|enable_gir = .*|enable_gir = true|" \
-      -e "s|  error('Running binaries|  # error('Running binaries|" \
-      -i ${PKG_BUILD}/meson.build
+  if echo "${PKG_MESON_OPTS_TARGET}" | grep -q "-Dintrospection=enabled"; then
+    # tweak the binary names so that it picks up our
+    # wrappers which do the cross-compile with qemu
+    sed -e "s|gir_scanner = .*|gir_scanner = files('${TOOLCHAIN}/bin/g-ir-scanner-wrapper')|" \
+        -e "s|  error('Running binaries|  # error('Running binaries|" \
+        -i ${PKG_BUILD}/meson.build
 
-  sed -e "s|override_find_program('g-ir-compiler'|override_find_program('g-ir-compiler-wrapper'|" \
-      -i ${PKG_BUILD}/girepository/compiler/meson.build
+    sed -e "s|override_find_program('g-ir-compiler'|override_find_program('g-ir-compiler-wrapper'|" \
+        -i ${PKG_BUILD}/girepository/compiler/meson.build
+  fi
 }
 
 post_makeinstall_target() {

@@ -3,14 +3,14 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="libjpeg-turbo"
-PKG_VERSION="3.1.3"
-PKG_SHA256="075920b826834ac4ddf97661cc73491047855859affd671d52079c6867c1c6c0"
+PKG_VERSION="3.0.4"
+PKG_SHA256="0270f9496ad6d69e743f1e7b9e3e9398f5b4d606b6a47744df4b73df50f62e38"
 PKG_LICENSE="GPL"
 PKG_SITE="https://libjpeg-turbo.org/"
-PKG_URL="https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/${PKG_VERSION}/${PKG_NAME}-${PKG_VERSION}.tar.gz"
-PKG_DEPENDS_HOST="cmake:host ninja:host"
-PKG_DEPENDS_TARGET="cmake:host ninja:host gcc:host"
-PKG_LONGDESC="A JPEG image codec that uses SIMD instructions."
+PKG_URL="https://github.com/libjpeg-turbo/libjpeg-turbo/archive/${PKG_VERSION}.tar.gz"
+PKG_DEPENDS_HOST="toolchain:host"
+PKG_DEPENDS_TARGET="toolchain"
+PKG_LONGDESC="A high-speed version of libjpeg for x86 and x86-64 processors which uses SIMD."
 PKG_BUILD_FLAGS="+pic +pic:host"
 
 PKG_CMAKE_OPTS_HOST="-DENABLE_STATIC=ON \

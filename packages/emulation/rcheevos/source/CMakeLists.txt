@@ -1,6 +1,6 @@
 project(rcheevos)
 
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.0)
 
 # Disable Lua for now
 add_definitions(-DRC_DISABLE_LUA)

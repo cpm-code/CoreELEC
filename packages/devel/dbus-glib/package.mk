@@ -4,8 +4,8 @@
 # Copyright (C) 2022-present Team CoreELEC (https://coreelec.org)
 
 PKG_NAME="dbus-glib"
-PKG_VERSION="0.114"
-PKG_SHA256="c09c5c085b2a0e391b8ee7d783a1d63fe444e96717cc1814d61b5e8fc2827a7c"
+PKG_VERSION="0.112"
+PKG_SHA256="7d550dccdfcd286e33895501829ed971eeb65c614e73aadb4a08aeef719b143a"
 PKG_LICENSE="GPL"
 PKG_SITE="https://freedesktop.org/wiki/Software/dbus"
 PKG_URL="https://dbus.freedesktop.org/releases/dbus-glib/${PKG_NAME}-${PKG_VERSION}.tar.gz"

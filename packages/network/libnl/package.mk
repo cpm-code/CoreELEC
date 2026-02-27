@@ -3,14 +3,13 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="libnl"
-PKG_VERSION="3.12.0"
-PKG_SHA256="fc51ca7196f1a3f5fdf6ffd3864b50f4f9c02333be28be4eeca057e103c0dd18"
+PKG_VERSION="3.10.0"
+PKG_SHA256="49b3e2235fdb58f5910bbb3ed0de8143b71ffc220571540502eb6c2471f204f5"
 PKG_LICENSE="LGPL"
 PKG_SITE="https://github.com/thom311/libnl"
 PKG_URL="https://github.com/thom311/libnl/releases/download/libnl${PKG_VERSION//./_}/libnl-${PKG_VERSION}.tar.gz"
 PKG_DEPENDS_TARGET="toolchain"
 PKG_LONGDESC="A library for applications dealing with netlink socket."
-PKG_BUILD_FLAGS="+pic"
 
 PKG_CONFIGURE_OPTS_TARGET="--enable-static \
                            --disable-shared \

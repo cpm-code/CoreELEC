@@ -1,9 +1,10 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
+# Copyright (C) 2009-2016 Lukas Rusak (lrusak@libreelec.tv)
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="go"
-PKG_VERSION="1.25.7"
-PKG_SHA256="b70e36c8b8dc95494d242eb8a05beec62cefcf5b2d3636fad6e8f85c362a497d"
+PKG_VERSION="1.23.1"
+PKG_SHA256="3bf56ef25470175efaa8a3616737d8b65fdaacf814297de77cba3cffdea39323"
 PKG_LICENSE="BSD"
 PKG_SITE="https://golang.org"
 PKG_URL="https://github.com/golang/go/archive/${PKG_NAME}${PKG_VERSION}.tar.gz"

@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Copyright (C) 2018-present Team CoreELEC (https://coreelec.org)
+
+if grep -q "g12b" /proc/device-tree/compatible; then
+    if [ -e /usr/lib/libMali.gondul.g12b.so ]; then
+        ln -sf /usr/lib/libMali.gondul.g12b.so /var/lib/libMali.so
+    else
+        ln -sf /usr/lib/libMali.gondul.so /var/lib/libMali.so
+    fi
+elif grep -qE "g12a|sc2" /proc/device-tree/compatible; then
+    if [ -e /usr/lib/libMali.dvalin.g12a.so ]; then
+        ln -sf /usr/lib/libMali.dvalin.g12a.so /var/lib/libMali.so
+    else
+        ln -sf /usr/lib/libMali.dvalin.so /var/lib/libMali.so
+    fi
+elif grep -q "Gxl" /proc/device-tree/compatible; then
+    ln -sf /usr/lib/libMali.m450.so /var/lib/libMali.so
+fi

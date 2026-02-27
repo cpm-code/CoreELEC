@@ -3,8 +3,8 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="e2fsprogs"
-PKG_VERSION="1.47.3"
-PKG_SHA256="857e6ef800feaa2bb4578fbc810214be5d3c88b072ea53c5384733a965737329"
+PKG_VERSION="1.47.1"
+PKG_SHA256="5a33dc047fd47284bca4bb10c13cfe7896377ae3d01cb81a05d406025d99e0d1"
 PKG_LICENSE="GPL"
 PKG_SITE="http://e2fsprogs.sourceforge.net/"
 PKG_URL="https://www.kernel.org/pub/linux/kernel/people/tytso/${PKG_NAME}/v${PKG_VERSION}/${PKG_NAME}-${PKG_VERSION}.tar.xz"
@@ -12,7 +12,7 @@ PKG_DEPENDS_HOST="autotools:host"
 PKG_DEPENDS_TARGET="autotools:host gcc:host"
 PKG_DEPENDS_INIT="autotools:host gcc:host"
 PKG_LONGDESC="The filesystem utilities for the EXT2 filesystem, including e2fsck, mke2fs, dumpe2fs, fsck, and others."
-PKG_BUILD_FLAGS="-parallel -cfg-libs -cfg-libs:host -cfg-libs:init"
+PKG_BUILD_FLAGS="-parallel"
 
 PKG_CONFIGURE_OPTS_HOST="--prefix=${TOOLCHAIN}/ \
                          --bindir=${TOOLCHAIN}/bin \
@@ -84,7 +84,6 @@ post_makeinstall_target() {
   rm -rf ${INSTALL}/usr/sbin/blkid
   rm -rf ${INSTALL}/usr/sbin/dumpe2fs
   rm -rf ${INSTALL}/usr/sbin/e2freefrag
-  rm -rf ${INSTALL}/usr/sbin/e2mmpstatus
   rm -rf ${INSTALL}/usr/sbin/e2undo
   rm -rf ${INSTALL}/usr/sbin/e4defrag
   rm -rf ${INSTALL}/usr/sbin/filefrag

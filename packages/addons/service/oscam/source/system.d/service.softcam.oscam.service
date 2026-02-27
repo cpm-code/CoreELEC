@@ -4,14 +4,6 @@ After=network-online.service
 Requires=network-online.service
 
 [Service]
-ExecStartPre=-/bin/sh -c ' \
-  grep -qx "amlogic,smartcard" /proc/device-tree/smartcard/compatible &>/dev/null && \
-  grep -qx "okay" /proc/device-tree/smartcard/status &>/dev/null && \
-  /sbin/modprobe amsmc'
-ExecStartPre=-/bin/sh -c ' \
-  grep -qx "amlogic,smartcard-sc2" /proc/device-tree/smartcard/compatible &>/dev/null && \
-  grep -qx "okay" /proc/device-tree/smartcard/status &>/dev/null && \
-  /sbin/modprobe amsmc_sc2'
 ExecStart=/bin/sh -c "exec sh /storage/.kodi/addons/service.softcam.oscam/bin/oscam.start"
 TimeoutStopSec=1
 Restart=always

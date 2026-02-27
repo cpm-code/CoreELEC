@@ -162,7 +162,7 @@ while [ $# -gt 0 ]; do
       usage 1
       ;;
     -*)
-      addons_drop+=" ${1:1}"
+      addons_drop+=" $(get_addons ${1:1})"
       ;;
     *)
       addons+=" $(get_addons ${1})"

@@ -138,7 +138,7 @@ index 000000000..12b4795de
 +#include <sys/ioctl.h>
 +#include <sys/uio.h>
 +#include <limits.h>
-+#include <bluetooth/bluetooth.h>
++#include "lib/bluetooth.h"
 +#include "hciattach.h"
 +
 +/******************************************************************************

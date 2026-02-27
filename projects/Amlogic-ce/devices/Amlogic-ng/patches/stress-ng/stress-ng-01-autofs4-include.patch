@@ -1,0 +1,14 @@
+stress-dev.c: In function 'stress_dev_autofs_linux':
+stress-dev.c:3603:46: error: 'AUTOFS_TYPE_ANY' undeclared (first use in this function)
+ 3603 |                 info->ismountpoint.in.type = AUTOFS_TYPE_ANY;
+
+--- a/stress-dev.c	2024-11-15 19:54:23.020767356 +0100
++++ b/stress-dev.c	2024-11-15 19:57:29.603493996 +0100
+@@ -42,6 +42,7 @@
+ 
+ #if defined(HAVE_LINUX_AUTO_DEV_IOCTL_H)
+ #include <linux/auto_dev-ioctl.h>
++#include <linux/auto_fs4.h>
+ #endif
+ 
+ #if defined(HAVE_LINUX_BLKZONED_H)

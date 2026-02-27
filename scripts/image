@@ -11,7 +11,7 @@ unset _CACHE_PACKAGE_LOCAL_DEVICE _CACHE_PACKAGE_LOCAL _CACHE_PACKAGE_GLOBAL _DE
 . config/show_config
 
 # Validate UBOOT_SYSTEM if it is specified
-if [ "${BOOTLOADER}" = "u-boot" ] && [ -n "${DEVICE}" ]; then
+if [ "${BOOTLOADER}" = "u-boot" -a -n "${DEVICE}" ]; then
   if [ -z "${UBOOT_SYSTEM}" ]; then
     ${SCRIPTS}/uboot_helper ${PROJECT} ${DEVICE} >/dev/null
   else
@@ -38,7 +38,6 @@ function do_mkimage() {
     PROJECT="${PROJECT}" \
     DEVICE="${DEVICE}" \
     DISTRO="${DISTRO}" \
-    DISTRO_HOME_URL="${DISTRO_HOME_URL}" \
     TARGET_IMG="${TARGET_IMG}" \
     BUILD_NAME="${IMAGE_NAME}" \
     IMAGE_NAME="${1:-${IMAGE_NAME}}" \
@@ -96,13 +95,13 @@ if [ "${OFFICIAL}" = "yes" ]; then
   DISTRO_BUILD="official"
 else
   if [ ${NON_PERIODIC} ]; then
-    OS_STAGE="devel"
+    OS_STAGE="cpm"
     BUILD_NUM="_$(date +%Y%m%d%H%M%S)"
   fi
   if [ -n "${BUILDER_NAME}" ]; then
     DISTRO_BUILD="${BUILDER_NAME}"
   else
-    DISTRO_BUILD="community"
+    DISTRO_BUILD="cpm"
   fi
 fi
 
@@ -147,7 +146,7 @@ rm -rf ${INSTALL}
 rm -rf ${STAMPS_INSTALL}
 mkdir -p ${INSTALL}
 
-# Create base layout of read-only file system
+# Create base layout of LibreELEC read-only file system
 for directory in etc dev proc run sys tmp usr var flash storage; do
   mkdir -p ${INSTALL}/${directory}
 done
@@ -178,7 +177,7 @@ VERSION="${DISTRO_VERSION}"
 ID="${DISTRONAME,,}"
 VERSION_ID="${OS_VERSION}"
 PRETTY_NAME="${DISTRONAME} (${DISTRO_BUILD}): ${DISTRO_VERSION}"
-HOME_URL="${DISTRO_HOME_URL}"
+HOME_URL="https://coreelec.org"
 BUG_REPORT_URL="${ORIGIN_URL}"
 BUILD_ID="${GIT_HASH}"
 DISTRO_ARCH="${DISTRO_ARCH}"
@@ -221,7 +220,7 @@ if [ -d "${PROJECT_DIR}/${PROJECT}/filesystem" ]; then
 fi
 
 # Copy DEVICE related files to filesystem
-if [ -n "${DEVICE}" ] && [ -d "${PROJECT_DIR}/${PROJECT}/devices/${DEVICE}/filesystem" ]; then
+if [ -n "${DEVICE}" -a -d "${PROJECT_DIR}/${PROJECT}/devices/${DEVICE}/filesystem" ]; then
   cp -PR --remove-destination ${PROJECT_DIR}/${PROJECT}/devices/${DEVICE}/filesystem/* ${INSTALL}
   # Install device specific systemd services
   for service in ${PROJECT_DIR}/${PROJECT}/devices/${DEVICE}/filesystem/usr/lib/systemd/system/*.service; do
@@ -287,7 +286,7 @@ rm -rf ${FAKEROOT_SCRIPT}
 # Set permissions
 chmod 0644 ${TARGET_IMG}/${IMAGE_NAME}.system
 
-if [ "${1}" = "release" ] || [ "${1}" = "mkimage" ] || [ "${1}" = "noobs" ]; then
+if [ "${1}" = "release" -o "${1}" = "mkimage" -o "${1}" = "noobs" ]; then
 
   RELEASE_DIR="target/${IMAGE_NAME}"
 
@@ -356,10 +355,9 @@ if [ "${1}" = "release" ] || [ "${1}" = "mkimage" ] || [ "${1}" = "noobs" ]; the
     UUID_SYSTEM="$(date '+%d%m')-$(date '+%M%S')"
     UUID_STORAGE="$(uuidgen)"
 
-    if [ "${BOOTLOADER}" = "u-boot" ] && [ -z "${UBOOT_SYSTEM}" ] && [ -n "${DEVICE}" ]; then
+    DEVICE_BOARDS=
+    if [ "${BOOTLOADER}" = "u-boot" -a -z "${UBOOT_SYSTEM}" -a -n "${DEVICE}" ]; then
       DEVICE_BOARDS=$(${SCRIPTS}/uboot_helper "${PROJECT}" "${DEVICE}")
-    else
-      DEVICE_BOARDS=""
     fi
 
     if [ -n "${DEVICE_BOARDS}" ]; then
@@ -394,7 +392,7 @@ if [ "${1}" = "release" ] || [ "${1}" = "mkimage" ] || [ "${1}" = "noobs" ]; the
 
     RELEASE_DIR="${TARGET_IMG}/${IMAGE_NAME}-${1}"
 
-    # eg. Distro_RPi, Distro_RPi2 etc.
+    # eg. LibreELEC_RPi, LibreELEC_RPi2 etc.
     NOOBS_DISTRO="${DISTRONAME}_${DEVICE:-${PROJECT}}"
 
     # Create release dir
@@ -521,7 +519,7 @@ if [ "${1}" = "release" ] || [ "${1}" = "mkimage" ] || [ "${1}" = "noobs" ]; the
   fi
 fi
 
-if [ -d "${BUILD}/qa_checks" ] && [ -n "$(ls -1 ${BUILD}/qa_checks/)" ]; then
+if [ -n "$(ls -1 ${BUILD}/qa_checks/ 2>/dev/null)" ]; then
   log_qa_check "qa_issues" "QA issues present, please fix!\n$(find ${BUILD}/qa_checks/* -type f ! -name qa_issues)\n"
 fi
 

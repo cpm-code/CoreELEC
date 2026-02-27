@@ -6,12 +6,12 @@
 # Short distro description
   DESCRIPTION="CoreELEC is a fast and user-friendly Kodi Entertainment Center distribution."
 
-# Distribution Source location
-  DISTRO_MIRROR="https://sources.libreelec.tv/mirror"
-  DISTRO_SRC="https://sources.libreelec.tv/$DISTRO_VERSION"
+  BUILDER_NAME="cpm"
+  ORIGIN_URL="https://github.com/cpm-code/CoreELEC"
+  BUG_REPORT_URL="https://github.com/cpm-code/CoreELEC"
+  GHTOKEN=""
 
-# Distribution Home URL
-  DISTRO_HOME_URL="https://coreelec.org"
+### USER INTERFACE SETTINGS ###
 
 # Welcome Message for SSH Server (up to 5 Lines)
   GREETING0="##############################################"
@@ -62,21 +62,14 @@
 # Space separated list is supported,
 # e.g. ADDITIONAL_DRIVERS="DRIVER1 DRIVER2"
   ADDITIONAL_DRIVERS="gpu-aml openvfd-driver media_modules-aml wifi_dummy-aml ap6xxx-aml
-                      aic8800-sdio RTW88 RTL8189FS RTL8852BE-aml RTL8723DS-aml
-                      RTL8733BS RTL8851BU RTL8852BS-aml mt76 mt7668-wifi-bt w1-aml w2-aml
-                      aml_bt EA6X21QX uwe5631-aml"
-
-# additional Firmware to use (dvb-firmware, misc-firmware, wlan-firmware)
-# Space separated list is supported,
-# e.g. FIRMWARE="dvb-firmware misc-firmware wlan-firmware"
-  FIRMWARE="misc-firmware wlan-firmware dvb-firmware brcmfmac_sdio-firmware-aml
-            rtkbt-firmware-aml qca-firmware-aml"
+                     uwe5631-aml RTL8812AU RTL8822BU-aml RTL8822CS-aml RTL8822CU-aml
+                     RTL8851BU RTL8852BS-aml RTL8152-aml RTL8723DS-aml w1-aml"
 
 # Default size of system partition, in MB, eg. 512
   SYSTEM_SIZE=512
 
 # Default system partition offset, in sectors, eg. 2048
-  SYSTEM_PART_START=16384
+  SYSTEM_PART_START=8192
 
 # build with swap support (yes / no)
   SWAP_SUPPORT="yes"
@@ -90,11 +83,6 @@
 # debug tty path
   DEBUG_TTY="/dev/ttyS0"
 
-# local console login prompt (yes / no)
-  LOCAL_LOGIN="no"
-
-# Enable SSH on boot (yes / no)
-  SSH_ENABLED_DEFAULT="no"
 
 ### KODI SETTINGS ###
 # Mediacenter to use (kodi / no)
@@ -178,10 +166,16 @@
 
 # Distribution Specific source location
   DISTRO_MIRROR="http://sources.coreelec.org http://sources.libreelec.tv/mirror"
-  DISTRO_SRC="http://sources.libreelec.tv/$LIBREELEC_VERSION"
+  DISTRO_SRC="http://sources.libreelec.tv/$DISTRO_VERSION"
 
 # Addon Server Url
   ADDON_SERVER_URL="https://addons.coreelec.org"
+
+# ID of the default addon repository
+  ADDON_REPO_ID="repository.coreelec"
+
+# Name of the default addon repository
+  ADDON_REPO_NAME="CoreELEC Add-ons"
 
 # set the addon dirs
   ADDON_PATH="$DEVICE/$ADDON_VERSION/$TARGET_ARCH"
@@ -203,6 +197,9 @@
 
 # wireless daemon to use (wpa_supplicant/iwd)
   WIRELESS_DAEMON="wpa_supplicant"
+
+# build and install iSCSI support - iscsistart (yes / no)
+  ISCSI_SUPPORT="no"
 
 # build with NFS support (mounting nfs shares via the OS) (yes / no)
   NFS_SUPPORT="yes"
@@ -233,6 +230,9 @@
 
 # build and install exFAT fuse support (yes / no)
   EXFAT="yes"
+
+# build and install NTFS-3G fuse support (yes / no)
+  NTFS3G="yes"
 
 # build and install hfs filesystem utilities (yes / no)
   HFSTOOLS="yes"
@@ -271,4 +271,4 @@
 # Space separated list is supported,
 # e.g. ADDITIONAL_PACKAGES="PACKAGE1 PACKAGE2"
   ADDITIONAL_PACKAGES="u-boot-script dtc CoreELEC-Debug-Scripts inject_bl301 ceemmc
-                       nfs-utils dtb-xml megatools tmate parse-android-dynparts aml_recovery"
+                       nfs-utils dtb-xml megatools"

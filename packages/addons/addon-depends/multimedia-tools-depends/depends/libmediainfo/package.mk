@@ -2,8 +2,8 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="libmediainfo"
-PKG_VERSION="25.10"
-PKG_SHA256="ad13d9797b046ce39d0c65a6f81d2aef2429734c21865a6a4c592c7c01f249dd"
+PKG_VERSION="24.06"
+PKG_SHA256="0683f28a2475dc2417205ba528debccc407da4d9fa6516eb4b75b3ff7244e96e"
 PKG_LICENSE="GPL"
 PKG_SITE="https://mediaarea.net/en/MediaInfo/Download/Source"
 PKG_URL="https://mediaarea.net/download/source/libmediainfo/${PKG_VERSION}/libmediainfo_${PKG_VERSION}.tar.xz"
@@ -20,7 +20,7 @@ configure_target() {
         --host=${TARGET_NAME} \
         --build=${HOST_NAME} \
         --enable-static \
-        --enable-shared \
+        --disable-shared \
         --prefix=/usr \
         --enable-visibility
 }
@@ -36,8 +36,6 @@ makeinstall_target() {
     mkdir -p ${INSTALL}/usr/include/MediaInfo/${i}/
     cp -aP ../../../Source/MediaInfo/${i}/*.h ${INSTALL}/usr/include/MediaInfo/${i}/
   done
-
-  # only install static library, so mediainfo does not build with shared library
-  cp -P .libs/libmediainfo.a ${INSTALL}/usr/lib
+  cp -P .libs/* ${INSTALL}/usr/lib
   cp -P libmediainfo.pc ${INSTALL}/usr/lib/pkgconfig
 }

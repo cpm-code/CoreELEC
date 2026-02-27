@@ -1,0 +1,28 @@
+diff --git a/src/libbpf.c b/src/libbpf.c
+index d54a3b0..c2bbf8a 100644
+--- a/src/libbpf.c
++++ b/src/libbpf.c
+@@ -33,6 +33,5 @@
+ #include <linux/filter.h>
+ #include <linux/limits.h>
+ #include <linux/perf_event.h>
+-#include <linux/bpf_perf_event.h>
+ #include <linux/ring_buffer.h>
+ #include <sys/epoll.h>
+@@ -6847,11 +6847,7 @@
+	case BPF_PROG_TYPE_PERF_EVENT:
+-		if (__builtin_types_compatible_p(bpf_user_pt_regs_t, struct pt_regs) &&
+-		    btf_is_struct(t) && strcmp(tname, "pt_regs") == 0)
+-			return true;
+-		if (__builtin_types_compatible_p(bpf_user_pt_regs_t, struct user_pt_regs) &&
+-		    btf_is_struct(t) && strcmp(tname, "user_pt_regs") == 0)
+-			return true;
+-		if (__builtin_types_compatible_p(bpf_user_pt_regs_t, struct user_regs_struct) &&
+-		    btf_is_struct(t) && strcmp(tname, "user_regs_struct") == 0)
+-			return true;
++		if (btf_is_struct(t) &&
++		    (strcmp(tname, "pt_regs") == 0 ||
++		     strcmp(tname, "user_pt_regs") == 0 ||
++		     strcmp(tname, "user_regs_struct") == 0))
++			return true;
+		break;

@@ -13,15 +13,21 @@ PKG_DEPENDS_TARGET="toolchain tntnet:host libtool cxxtools zlib"
 PKG_LONGDESC="A web application server for C++."
 
 PKG_CONFIGURE_OPTS_HOST="--disable-unittest \
-                         --disable-server \
-                         --enable-sdk \
-                         --disable-demos"
+                         --with-server=no \
+                         --with-sdk=yes \
+                         --with-demos=no \
+                         --with-epoll=yes \
+                         --with-ssl=no \
+                         --with-stressjob=no"
 
 PKG_CONFIGURE_OPTS_TARGET="--disable-unittest \
                            --with-sysroot=${SYSROOT_PREFIX} \
-                           --disable-server \
-                           --disable-sdk \
-                           --disable-demos"
+                           --with-server=no \
+                           --with-sdk=no \
+                           --with-demos=no \
+                           --with-epoll=yes \
+                           --with-ssl=no \
+                           --with-stressjob=no"
 
 post_configure_target() {
   libtool_remove_rpath libtool

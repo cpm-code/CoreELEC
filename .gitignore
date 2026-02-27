@@ -14,7 +14,6 @@ mkpkg-temp
 
 # options
 /.libreelec
-/.coreelec
 
 # private working directory
 /.work/
@@ -28,6 +27,9 @@ mkpkg-temp
 
 # ccache
 /.ccache/
+
+# local build logs
+/build-logs/
 
 # backup files
 *.orig

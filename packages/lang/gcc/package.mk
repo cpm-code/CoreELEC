@@ -3,8 +3,8 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="gcc"
-PKG_VERSION="15.2.0"
-PKG_SHA256="438fd996826b0c82485a29da03a72d71d6e3541a83ec702df4271f6fe025d24e"
+PKG_VERSION="14.2.0"
+PKG_SHA256="a7b39bc69cbf9e25826c5a60ab26477001f7c08d85cec04bc0e29cabed6f3cc9"
 PKG_LICENSE="GPL-2.0-or-later"
 PKG_SITE="https://gcc.gnu.org/"
 PKG_URL="https://ftpmirror.gnu.org/gcc/${PKG_NAME}-${PKG_VERSION}/${PKG_NAME}-${PKG_VERSION}.tar.xz"
@@ -19,7 +19,7 @@ if [ "${MOLD_SUPPORT}" = "yes" ]; then
 fi
 
 case ${TARGET_ARCH} in
-  arm | aarch64 | riscv64)
+  arm | riscv64)
     OPTS_LIBATOMIC="--enable-libatomic"
     ;;
   *)
@@ -116,11 +116,6 @@ post_make_host() {
   if [ ! "${BUILD_WITH_DEBUG}" = "yes" ]; then
     ${TARGET_PREFIX}strip ${TARGET_NAME}/libgcc/libgcc_s.so*
     ${TARGET_PREFIX}strip ${TARGET_NAME}/libstdc++-v3/src/.libs/libstdc++.so*
-  fi
-
-  if [ "${OPTS_LIBATOMIC}" = "--enable-libatomic" ]; then
-    mkdir -p ${SYSROOT_PREFIX}/usr/lib
-    cp -P ${PKG_BUILD}/.${HOST_NAME}/${TARGET_NAME}/libatomic/.libs/libatomic.so* ${SYSROOT_PREFIX}/usr/lib
   fi
 }
 

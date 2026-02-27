@@ -3,17 +3,17 @@
 
 BL2_MIN_VERSION="xxxxxx"
 PKG_NAME="bl301_${BL2_MIN_VERSION}"
-PKG_VERSION="ad963f0d1b9b1d8f1eb001ff2ebc5bf248213f35"
-PKG_SHA256="9df9d98d38b77964a9d1308a17eb879db1815d78b8f56d8dfadeea0271b4cafb"
+PKG_VERSION="4a953954c3324afdbb1263d6a1389175692580d5"
+PKG_SHA256="bb2c5492a82b8d9db071602216abe5eeb5b9457fcb8e314a84e9c99db49e07fd"
 PKG_LICENSE="GPL"
 PKG_SITE="https://coreelec.org"
-PKG_URL="https://github.com/CoreELEC/bl301/archive/${PKG_VERSION}.tar.gz"
+PKG_URL="https://github.com/CoreELEC/bl301/archive/$PKG_VERSION.tar.gz"
 PKG_DEPENDS_TARGET="toolchain gcc-linaro-aarch64-elf:host gcc-linaro-arm-eabi:host"
 PKG_LONGDESC="Das U-Boot is a cross-platform bootloader for embedded systems."
 PKG_TOOLCHAIN="manual"
 
 pre_make_target() {
-  sed -i "s|arm-none-eabi-|arm-eabi-|g" ${PKG_BUILD}/Makefile ${PKG_BUILD}/arch/arm/cpu/armv8/*/firmware/scp_task/Makefile 2>/dev/null || true
+  sed -i "s|arm-none-eabi-|arm-eabi-|g" $PKG_BUILD/Makefile $PKG_BUILD/arch/arm/cpu/armv8/*/firmware/scp_task/Makefile 2>/dev/null || true
 }
 
 make_target() {
@@ -42,4 +42,7 @@ makeinstall_target() {
     PKG_BIN=${PKG_BUILD}/build/${PKG_BL301_SUBDEVICE}_bl301.bin
     cp -av ${PKG_BIN} ${INSTALL}/usr/share/bootloader/bl301/${BL2_MIN_VERSION}/${PKG_BL301_SUBDEVICE}_bl301.bin
   done
+
+  [ -d "${PKG_BUILD}/bl30" ] && cp -av ${PKG_BUILD}/bl30 ${INSTALL}/usr/share/bootloader/bl301/${BL2_MIN_VERSION} || :
+  [ -d "${PKG_BUILD}/bl31" ] && cp -av ${PKG_BUILD}/bl31 ${INSTALL}/usr/share/bootloader/bl301/${BL2_MIN_VERSION} || :
 }
