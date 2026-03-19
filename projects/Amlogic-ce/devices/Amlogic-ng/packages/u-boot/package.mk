@@ -14,7 +14,7 @@ PKG_CANUPDATE="${PROJECT}*"
 PKG_NEED_UNPACK="$PROJECT_DIR/$PROJECT/bootloader "
 
 for PKG_SUBDEVICE in $SUBDEVICES; do
-  if [ "${PKG_SUBDEVICE}" != "Odroid_HC4" ]; then
+  if [ "${PKG_SUBDEVICE}" != "Odroid_HC4" ] && [ "${PKG_SUBDEVICE}" != "Ugoos_AM6" ] && [ "${PKG_SUBDEVICE}" != "Ugoos_AM6B" ]; then
     PKG_DEPENDS_TARGET+=" u-boot-${PKG_SUBDEVICE}"
     PKG_NEED_UNPACK+=" $(get_pkg_directory u-boot-${PKG_SUBDEVICE})"
   fi
