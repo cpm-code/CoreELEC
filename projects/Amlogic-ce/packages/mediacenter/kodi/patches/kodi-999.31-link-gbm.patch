@@ -1,15 +1,10 @@
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -482,1 +482,6 @@
- unset(_MAIN_LIBRARIES)
-+
-+# Ensure libbluetooth is linked after libkodi.a (needed with --as-needed)
-+if(DEFINED bluetooth_FOUND AND bluetooth_FOUND)
-+  target_link_libraries(${APP_NAME_LC} bluetooth)
-+endif()
+diff --git a/xbmc/windowing/amlogic/CMakeLists.txt b/xbmc/windowing/amlogic/CMakeLists.txt
 --- a/xbmc/windowing/amlogic/CMakeLists.txt
 +++ b/xbmc/windowing/amlogic/CMakeLists.txt
-@@ -14,1 +14,7 @@
+@@ -12,4 +12,10 @@ if(ENABLE_OPENGLES)
+   list(APPEND HEADERS WinSystemAmlogicGLESContext.h)
+ endif()
+
  core_add_library(windowing_Amlogic)
 +
 +if(TARGET ${APP_NAME_LC}::GBM)
@@ -17,9 +12,14 @@
 +else()
 +  target_link_libraries(${CORE_LIBRARY} PUBLIC gbm)
 +endif()
++
+diff --git a/xbmc/windowing/gbm/CMakeLists.txt b/xbmc/windowing/gbm/CMakeLists.txt
 --- a/xbmc/windowing/gbm/CMakeLists.txt
 +++ b/xbmc/windowing/gbm/CMakeLists.txt
-@@ -26,1 +26,7 @@
+@@ -23,4 +23,10 @@ if(TARGET ${APP_NAME_LC}::OpenGLES)
+   list(APPEND HEADERS WinSystemGbmGLESContext.h)
+ endif()
+
  core_add_library(windowing_gbm)
 +
 +if(TARGET ${APP_NAME_LC}::GBM)
