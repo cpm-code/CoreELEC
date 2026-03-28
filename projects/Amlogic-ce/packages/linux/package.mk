@@ -29,6 +29,7 @@ case "$LINUX" in
 esac
 
 PKG_KERNEL_CFG_FILE=$(kernel_config_path) || die
+[ -n "$KERNEL_CONFIG_FRAGMENTS" ] && PKG_NEED_UNPACK+=" $KERNEL_CONFIG_FRAGMENTS"
 
 if [ -n "$KERNEL_TOOLCHAIN" ]; then
   PKG_DEPENDS_HOST="$PKG_DEPENDS_HOST gcc-$KERNEL_TOOLCHAIN:host"
@@ -110,6 +111,14 @@ post_patch() {
     # disable wireguard support if not enabled
     if [ ! "$WIREGUARD_SUPPORT" = yes ]; then
       sed -e "s|^CONFIG_WIREGUARD=.*$|# CONFIG_WIREGUARD is not set|" -i $PKG_BUILD/.config
+    fi
+
+    if [ -n "$KERNEL_CONFIG_FRAGMENTS" ]; then
+      for fragment in $KERNEL_CONFIG_FRAGMENTS; do
+        [ -r "$fragment" ] || die "ERROR: kernel config fragment not found: $fragment"
+      done
+
+      $PKG_BUILD/scripts/kconfig/merge_config.sh -m $PKG_BUILD/.config $KERNEL_CONFIG_FRAGMENTS
     fi
   fi
 }

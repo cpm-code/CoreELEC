@@ -1,0 +1,20 @@
+# Release-oriented fragment for Ugoos AM6B appliance builds.
+
+# Strip scheduler and timer runtime instrumentation.
+# CONFIG_SCHED_DEBUG is not set
+# CONFIG_SCHED_INFO is not set
+# CONFIG_SCHEDSTATS is not set
+# CONFIG_TIMER_STATS is not set
+
+# Strip common runtime debug checks from hot paths.
+# CONFIG_DEBUG_PREEMPT is not set
+# CONFIG_DEBUG_ATOMIC_SLEEP is not set
+# CONFIG_SLUB_DEBUG is not set
+
+# Strip the tracing/ftrace stack for release builds.
+# CONFIG_TRACING is not set
+# CONFIG_FTRACE is not set
+# CONFIG_FUNCTION_TRACER is not set
+# CONFIG_FTRACE_SYSCALLS is not set
+# CONFIG_DYNAMIC_FTRACE is not set
+# CONFIG_FUNCTION_PROFILER is not set

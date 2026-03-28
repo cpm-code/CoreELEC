@@ -27,6 +27,13 @@
             TARGET_CPU="cortex-a73.cortex-a53"
             ;;
         esac
+
+        KERNEL_CONFIG_FRAGMENTS=""
+        case "${SUBDEVICE}" in
+          Ugoos_AM6B)
+            KERNEL_CONFIG_FRAGMENTS+=" ${PROJECT_DIR}/${PROJECT}/devices/${DEVICE}/linux/meson64_am6b_release.fragment"
+            ;;
+        esac
         ;;
       arm)
         TARGET_KERNEL_ARCH="arm64"
