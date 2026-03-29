@@ -6,10 +6,20 @@
 # CONFIG_SCHEDSTATS is not set
 # CONFIG_TIMER_STATS is not set
 
+# Strip per-task runtime accounting used mainly for diagnostics.
+# CONFIG_TASKSTATS is not set
+# CONFIG_TASK_DELAY_ACCT is not set
+# CONFIG_TASK_XACCT is not set
+# CONFIG_TASK_IO_ACCOUNTING is not set
+
 # Strip common runtime debug checks from hot paths.
 # CONFIG_DEBUG_PREEMPT is not set
 # CONFIG_DEBUG_ATOMIC_SLEEP is not set
 # CONFIG_SLUB_DEBUG is not set
+
+# Strip kernel config export from the running image.
+# CONFIG_IKCONFIG is not set
+# CONFIG_IKCONFIG_PROC is not set
 
 # Strip the tracing/ftrace stack for release builds.
 # CONFIG_TRACING is not set
