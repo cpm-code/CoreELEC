@@ -7,6 +7,74 @@ _get_file_already_downloaded() {
   return 0
 }
 
+_rewrite_public_github_archive_url() {
+  local url="$1"
+
+  if [[ "${url}" =~ ^https://api\.github\.com/repos/([^/]+)/([^/]+)/(tarball|zipball)/(.+)$ ]]; then
+    local owner="${BASH_REMATCH[1]}"
+    local repo="${BASH_REMATCH[2]}"
+    local archive_type="${BASH_REMATCH[3]}"
+    local ref="${BASH_REMATCH[4]}"
+
+    case "${archive_type}" in
+      tarball)
+        echo "https://codeload.github.com/${owner}/${repo}/tar.gz/${ref}"
+        ;;
+      zipball)
+        echo "https://codeload.github.com/${owner}/${repo}/zip/${ref}"
+        ;;
+    esac
+    return 0
+  fi
+
+  echo "${url}"
+}
+
+_archive_from_local_github_checkout() {
+  local url="$1"
+  local package="$2"
+  local repo=""
+  local archive_type=""
+  local ref=""
+  local repo_dir=""
+  local prefix_ref=""
+
+  if [[ "${url}" =~ ^https://api\.github\.com/repos/[^/]+/([^/]+)/(tarball|zipball)/(.+)$ ]]; then
+    repo="${BASH_REMATCH[1]}"
+    archive_type="${BASH_REMATCH[2]}"
+    ref="${BASH_REMATCH[3]}"
+  elif [[ "${url}" =~ ^https://codeload\.github\.com/[^/]+/([^/]+)/(tar\.gz|zip)/(.+)$ ]]; then
+    repo="${BASH_REMATCH[1]}"
+    archive_type="${BASH_REMATCH[2]}"
+    ref="${BASH_REMATCH[3]}"
+  elif [[ "${url}" =~ ^https://github\.com/[^/]+/([^/]+)/archive/(.+)\.(tar\.gz|zip)$ ]]; then
+    repo="${BASH_REMATCH[1]}"
+    ref="${BASH_REMATCH[2]}"
+    archive_type="${BASH_REMATCH[3]}"
+  else
+    return 1
+  fi
+
+  repo_dir="$(dirname "${ROOT}")/${repo}"
+  [ -d "${repo_dir}/.git" ] || return 1
+  git -C "${repo_dir}" rev-parse --verify --quiet "${ref}^{commit}" >/dev/null 2>&1 || return 1
+
+  prefix_ref="${ref//\//-}"
+  build_msg "CLR_INFO" "INFO" "Using local checkout ${repo_dir} for ${repo}@${ref}"
+
+  case "${archive_type}" in
+    tarball|tar.gz)
+      git -C "${repo_dir}" archive --format=tar --prefix="${repo}-${prefix_ref}/" "${ref}" | gzip -n > "${package}"
+      ;;
+    zipball|zip)
+      git -C "${repo_dir}" archive --format=zip -o "${package}" --prefix="${repo}-${prefix_ref}/" "${ref}"
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
 # Latest file already present, exit now...
 _get_file_already_downloaded && exit 0
 
@@ -40,17 +108,18 @@ NBWGET=10
 NBCHKS=2
 while [ ${NBWGET} -gt 0 -a ${NBCHKS} -gt 0 ]; do
   for url in "${PKG_URL}" ${PACKAGE_MIRROR}; do
+    download_url="${url}"
     WGET_HEADERS=()
     CURL_HEADERS=()
 
     if [[ "$PKG_USETOKEN" == "yes" ]] && [[ -z "${GHTOKEN}" ]]; then
       if [[ $url == https://github.com/* || $url == https://api.github.com/* || $url == https://codeload.github.com/* ]]; then
-        die "\nGHTOKEN is not set, but ${PKG_NAME} requires a GitHub token to download ${url}\nExport GHTOKEN and retry.\n"
+        download_url="$(_rewrite_public_github_archive_url "${url}")"
       fi
     fi
 
     if [[ "$PKG_USETOKEN" == "yes" ]] && [[ -n "${GHTOKEN}" ]]; then
-      if [[ $url == https://github.com/* || $url == https://api.github.com/* || $url == https://codeload.github.com/* ]]; then
+      if [[ $download_url == https://github.com/* || $download_url == https://api.github.com/* || $download_url == https://codeload.github.com/* ]]; then
         _gh_auth_header="Authorization: token ${GHTOKEN}"
         WGET_HEADERS+=(--header="${_gh_auth_header}")
         CURL_HEADERS+=(-H "${_gh_auth_header}")
@@ -58,9 +127,24 @@ while [ ${NBWGET} -gt 0 -a ${NBCHKS} -gt 0 ]; do
     fi
 
     rm -f "${PACKAGE}"
-    [[ "${url}" =~ ^[fF][tT][pP]:* ]] && WGET_FTP=--passive-ftp || WGET_FTP=
-    if [[ $url == https://github.com/* || $url == https://api.github.com/* || $url == https://codeload.github.com/* ]] && [[ "$PKG_USETOKEN" == "yes" ]] && [[ -n "${GHTOKEN}" ]] && command -v curl >/dev/null 2>&1; then
-      if ${CURL_CMD} "${CURL_HEADERS[@]}" "${url}"; then
+    if _archive_from_local_github_checkout "${download_url}" "${PACKAGE}"; then
+      CALC_SHA256=$(sha256sum "${PACKAGE}" | cut -d" " -f1)
+
+      [ -z "${PKG_SHA256}" -o "${PKG_SHA256}" = "${CALC_SHA256}" ] && break 2
+
+      if [ "${CHANGE_HASH}" = "yes" ]; then
+        sed -e "s|^PKG_SHA256=.*|PKG_SHA256=\"${CALC_SHA256}\"|" -i "${PKG_DIR}/package.mk"
+        break 2
+      else
+        build_msg "CLR_WARNING" "WARNING" "Incorrect checksum calculated on local archive: got ${CALC_SHA256} wanted ${PKG_SHA256}"
+        NBCHKS=$((NBCHKS - 1))
+      fi
+      continue
+    fi
+
+    [[ "${download_url}" =~ ^[fF][tT][pP]:* ]] && WGET_FTP=--passive-ftp || WGET_FTP=
+    if [[ $download_url == https://github.com/* || $download_url == https://api.github.com/* || $download_url == https://codeload.github.com/* ]] && command -v curl >/dev/null 2>&1; then
+      if ${CURL_CMD} "${CURL_HEADERS[@]}" "${download_url}"; then
         CALC_SHA256=$(sha256sum "${PACKAGE}" | cut -d" " -f1)
 
         [ -z "${PKG_SHA256}" -o "${PKG_SHA256}" = "${CALC_SHA256}" ] && break 2
@@ -73,7 +157,7 @@ while [ ${NBWGET} -gt 0 -a ${NBCHKS} -gt 0 ]; do
           NBCHKS=$((NBCHKS - 1))
         fi
       fi
-    elif ${WGET_CMD} ${WGET_FTP} "${WGET_HEADERS[@]}" "${url}"; then
+    elif ${WGET_CMD} ${WGET_FTP} "${WGET_HEADERS[@]}" "${download_url}"; then
       CALC_SHA256=$(sha256sum "${PACKAGE}" | cut -d" " -f1)
 
       [ -z "${PKG_SHA256}" -o "${PKG_SHA256}" = "${CALC_SHA256}" ] && break 2
