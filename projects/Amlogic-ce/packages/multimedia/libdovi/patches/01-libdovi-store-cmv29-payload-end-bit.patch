@@ -1,0 +1,73 @@
+diff -urN a/dolby_vision/src/c_structs/vdr_dm_data.rs b/dolby_vision/src/c_structs/vdr_dm_data.rs
+--- a/dolby_vision/src/c_structs/vdr_dm_data.rs	2023-08-23 10:09:02.000000000 +0800
++++ b/dolby_vision/src/c_structs/vdr_dm_data.rs	2026-04-01 21:19:29.714013552 +0800
+@@ -42,6 +42,7 @@
+     source_min_pq: u16,
+     source_max_pq: u16,
+     source_diagonal: u16,
++    cmv29_payload_end_bit: usize,
+     dm_data: DmData,
+ }
+ 
+@@ -91,6 +92,7 @@
+             source_min_pq: data.source_min_pq,
+             source_max_pq: data.source_max_pq,
+             source_diagonal: data.source_diagonal,
++            cmv29_payload_end_bit: data.cmv29_payload_end_bit,
+             dm_data: DmData::combine_dm_data(
+                 data.cmv29_metadata.as_ref(),
+                 data.cmv40_metadata.as_ref(),
+diff -urN a/dolby_vision/src/rpu/dovi_rpu.rs b/dolby_vision/src/rpu/dovi_rpu.rs
+--- a/dolby_vision/src/rpu/dovi_rpu.rs	2023-08-23 10:09:02.000000000 +0800
++++ b/dolby_vision/src/rpu/dovi_rpu.rs	2026-04-01 21:19:29.702013572 +0800
+@@ -129,6 +129,7 @@
+     #[inline(always)]
+     fn read_rpu_data(bytes: &[u8], trailing_zeroes: usize) -> Result<DoviRpu> {
+         let mut reader = BsIoSliceReader::from_slice(bytes);
++        let total_bits = (bytes.len() * 8) as u64;
+ 
+         // CRC32 + 0x80 + trailing
+         let final_length = (32 + 8 + (trailing_zeroes * 8)) as u64;
+@@ -160,7 +161,7 @@
+             .unwrap_or(None);
+ 
+         let vdr_dm_data = if header.vdr_dm_metadata_present_flag {
+-            Some(vdr_dm_data_payload(&mut reader, &header, final_length)?)
++            Some(vdr_dm_data_payload(&mut reader, &header, final_length, total_bits)?)
+         } else {
+             None
+         };
+diff -urN a/dolby_vision/src/rpu/vdr_dm_data.rs b/dolby_vision/src/rpu/vdr_dm_data.rs
+--- a/dolby_vision/src/rpu/vdr_dm_data.rs	2023-08-23 10:09:02.000000000 +0800
++++ b/dolby_vision/src/rpu/vdr_dm_data.rs	2026-04-01 21:19:29.713013553 +0800
+@@ -60,6 +60,7 @@
+     pub source_min_pq: u16,
+     pub source_max_pq: u16,
+     pub source_diagonal: u16,
++    pub cmv29_payload_end_bit: usize,
+ 
+     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
+     pub cmv29_metadata: Option<DmData>,
+@@ -78,6 +79,7 @@
+     reader: &mut BsIoSliceReader,
+     header: &RpuDataHeader,
+     final_length: u64,
++    total_bits: u64,
+ ) -> Result<VdrDmData> {
+     let compressed_dm_data = header.reserved_zero_3bits == 1;
+ 
+@@ -95,7 +97,14 @@
+     };
+ 
+     if let Some(cmv29_dm_data) = DmData::parse::<CmV29DmData>(reader)? {
++        let trailing_alignment_bits = cmv29_dm_data
++            .blocks_ref()
++            .last()
++            .map_or(0, |block| block.length_bits() - block.required_bits());
++        let reader_end_bit = total_bits - reader.available()?;
++
+         vdr_dm_data.cmv29_metadata = Some(DmData::V29(cmv29_dm_data));
++        vdr_dm_data.cmv29_payload_end_bit = (reader_end_bit - trailing_alignment_bits) as usize;
+     }
+ 
+     // 16 bits min for required level 254
