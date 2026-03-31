@@ -2,8 +2,8 @@
 # Copyright (C) 2017-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="rust"
-PKG_VERSION="1.81.0"
-PKG_SHA256="872448febdff32e50c3c90a7e15f9bb2db131d13c588fe9071b0ed88837ccfa7"
+PKG_VERSION="1.94.1"
+PKG_SHA256="4c142a625f12e3cdf716c68ae19f4f60d98ad1482627b08579b15838e95ad514"
 PKG_LICENSE="MIT"
 PKG_SITE="https://www.rust-lang.org"
 PKG_URL="https://static.rust-lang.org/dist/rustc-${PKG_VERSION}-src.tar.gz"
@@ -36,12 +36,10 @@ configure_host() {
 change-id = 102579
 
 [target.${TARGET_NAME}]
-llvm-config = "${TOOLCHAIN}/bin/llvm-config"
 cxx = "${TARGET_PREFIX}g++"
 cc = "${TARGET_PREFIX}gcc"
 
 [target.${RUST_HOST}]
-llvm-config = "${TOOLCHAIN}/bin/llvm-config"
 cxx = "${CXX}"
 cc = "${CC}"
 
@@ -50,6 +48,7 @@ rpath = true
 channel = "stable"
 codegen-tests = false
 optimize = true
+llvm-tools = false
 
 [build]
 submodules = false
@@ -61,7 +60,7 @@ rustc = "${PKG_BUILD}/rust-snapshot/bin/rustc"
 cargo = "${PKG_BUILD}/rust-snapshot/bin/cargo"
 
 target = [
-  "${TARGET_NAME}",
+  "${PKG_BUILD}/targets/${TARGET_NAME}.json",
   "${RUST_HOST}"
 ]
 
@@ -70,6 +69,9 @@ host = [
 ]
 
 build = "${RUST_HOST}"
+
+[llvm]
+download-ci-llvm = true
 
 [install]
 prefix = "${TOOLCHAIN}"

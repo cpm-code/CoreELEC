@@ -25,7 +25,7 @@ PKG_MAINTAINER="Anton Voyl (awiouy)"
 make_target() {
   export RUSTC_LINKER=${CC}
   cargo build \
-    --target ${TARGET_NAME} \
+    --target ${RUST_TARGET_SPEC:-${TARGET_NAME}} \
     --release \
     --no-default-features \
     --features "alsa-backend pulseaudio-backend with-dns-sd"
