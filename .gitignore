@@ -43,4 +43,6 @@ tools/mkpkg/*.git
 
 # ignore old linux configs
 projects/**/*.old
+
 CoreELEC.code-workspace
+.config
