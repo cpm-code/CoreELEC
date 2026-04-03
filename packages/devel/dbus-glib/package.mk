@@ -23,6 +23,10 @@ PKG_CONFIGURE_OPTS_TARGET="ac_cv_have_abstract_sockets=yes \
                            --disable-bash-completion \
                            --enable-asserts=no"
 
+pre_configure_target() {
+  perl -0pi -e 's/dbus_bool_t bool;/dbus_bool_t boolean;/; s/&bool\)/&boolean)/; s/\(value, bool\)/(value, boolean)/' ${PKG_BUILD}/dbus/dbus-gvalue.c
+}
+
 post_makeinstall_target() {
   rm -rf ${INSTALL}/usr/bin/dbus-binding-tool
 }

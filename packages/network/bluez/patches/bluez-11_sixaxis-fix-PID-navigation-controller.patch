@@ -17,7 +17,7 @@ diff --git a/plugins/sixaxis.c b/plugins/sixaxis.c
 index 939fed7..f6baea7 100644
 --- a/plugins/sixaxis.c
 +++ b/plugins/sixaxis.c
-@@ -364,7 +364,13 @@ static bool setup_device(int fd, const char *sysfs_path,
+@@ -354,7 +354,13 @@ static bool setup_device(int fd, const char *sysfs_path,
  	info("sixaxis: setting up new device");
  
  	btd_device_device_set_name(device, cp->name);
@@ -36,7 +36,7 @@ diff --git a/profiles/input/sixaxis.h b/profiles/input/sixaxis.h
 index 8e6f3cc..321a918 100644
 --- a/profiles/input/sixaxis.h
 +++ b/profiles/input/sixaxis.h
-@@ -38,6 +38,7 @@ struct cable_pairing {
+@@ -25,6 +25,7 @@ struct cable_pairing {
  	uint16_t vid;
  	uint16_t pid;
  	uint16_t version;
@@ -44,7 +44,7 @@ index 8e6f3cc..321a918 100644
  	CablePairingType type;
  };
  
-@@ -59,6 +60,7 @@ get_pairing(uint16_t vid, uint16_t pid)
+@@ -54,6 +55,7 @@ get_pairing(uint16_t vid, uint16_t pid)
  			.vid = 0x054c,
  			.pid = 0x042f,
  			.version = 0x0000,

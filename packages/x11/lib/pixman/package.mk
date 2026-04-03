@@ -3,8 +3,8 @@
 # Copyright (C) 2019-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="pixman"
-PKG_VERSION="0.43.4"
-PKG_SHA256="48d8539f35488d694a2fef3ce17394d1153ed4e71c05d1e621904d574be5df19"
+PKG_VERSION="0.46.4"
+PKG_SHA256="a098c33924754ad43f981b740f6d576c70f9ed1006e12221b1845431ebce1239"
 PKG_LICENSE="OSS"
 PKG_SITE="https://www.x.org/"
 PKG_URL="https://xorg.freedesktop.org/archive/individual/lib/${PKG_NAME}-${PKG_VERSION}.tar.xz"
@@ -18,9 +18,9 @@ if [ "${TARGET_ARCH}" = arm ]; then
   else
     PIXMAN_NEON="-Dneon=disabled"
   fi
-  PIXMAN_CONFIG="-Dmmx=disabled -Dsse2=disabled -Dvmx=disabled -Darm-simd=enabled ${PIXMAN_NEON} -Diwmmxt=disabled"
+  PIXMAN_CONFIG="-Dmmx=disabled -Dsse2=disabled -Dvmx=disabled -Darm-simd=enabled ${PIXMAN_NEON}"
 elif [ "${TARGET_ARCH}" = aarch64 ]; then
-  PIXMAN_CONFIG="-Dmmx=disabled -Dsse2=disabled -Dvmx=disabled -Darm-simd=disabled -Dneon=disabled -Diwmmxt=disabled"
+  PIXMAN_CONFIG="-Dmmx=disabled -Dsse2=disabled -Dvmx=disabled -Darm-simd=disabled -Dneon=disabled"
 elif [ "${TARGET_ARCH}" = x86_64  ]; then
   PIXMAN_CONFIG="-Dmmx=enabled -Dsse2=enabled -Dssse3=disabled -Dvmx=disabled -Darm-simd=disabled -Dneon=disabled"
 fi

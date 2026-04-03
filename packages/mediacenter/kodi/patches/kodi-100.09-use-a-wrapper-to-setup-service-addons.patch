@@ -11,7 +11,7 @@ Subject: [PATCH] Use a wrapper to setup service addons
 
 --- a/xbmc/addons/Addon.cpp
 +++ b/xbmc/addons/Addon.cpp
-@@ -660,6 +660,37 @@ CAddonVersion CAddon::GetDependencyVersi
+@@ -657,6 +657,37 @@ CAddonVersion CAddon::GetDependencyVersi
    return m_addonInfo->DependencyVersion(dependencyID);
  }
 
@@ -49,7 +49,7 @@ Subject: [PATCH] Use a wrapper to setup service addons
  void OnPreInstall(const AddonPtr& addon)
  {
    //Fallback to the pre-install callback in the addon.
-@@ -689,6 +720,8 @@ void OnPostInstall(const AddonPtr& addon
+@@ -686,6 +717,8 @@ void OnPostInstall(const AddonPtr& addon
      }
      closedir(addonsDir);
    }
@@ -58,8 +58,8 @@ Subject: [PATCH] Use a wrapper to setup service addons
    // OE
 
    addon->OnPostInstall(update, modal);
-@@ -696,6 +729,8 @@ void OnPostInstall(const AddonPtr& addon
-
+@@ -693,6 +726,8 @@ void OnPostInstall(const AddonPtr& addon
+ 
  void OnPreUnInstall(const AddonPtr& addon)
  {
 +  LEAddonHook(addon, LE_ADDON_PRE_UNINSTALL);
@@ -87,23 +87,23 @@ Subject: [PATCH] Use a wrapper to setup service addons
  public:
 --- a/xbmc/addons/AddonManager.cpp
 +++ b/xbmc/addons/AddonManager.cpp
-@@ -12,6 +12,7 @@
- #include "FileItem.h"
+@@ -13,6 +13,7 @@
+ #include "FileItemList.h"
  #include "LangInfo.h"
  #include "ServiceBroker.h"
 +#include "addons/Addon.h"
  #include "addons/AddonBuilder.h"
  #include "addons/AddonDatabase.h"
  #include "addons/AddonEvents.h"
-@@ -863,6 +864,7 @@ bool CAddonMgr::DisableAddon(const std::
+@@ -847,6 +848,7 @@ bool CAddonMgr::DisableAddon(const std::
    AddonPtr addon;
    if (GetAddon(id, addon, AddonType::UNKNOWN, OnlyEnabled::CHOICE_NO) && addon != nullptr)
    {
 +    ADDON::LEAddonHook(addon, ADDON::LE_ADDON_DISABLED);
      auto eventLog = CServiceBroker::GetEventLog();
      if (eventLog)
-       eventLog->Add(EventPtr(new CAddonManagementEvent(addon, 24141)));
-@@ -914,6 +916,7 @@ bool CAddonMgr::EnableSingle(const std::
+       eventLog->Add(std::make_shared<CAddonManagementEvent>(addon, 24141));
+@@ -898,6 +900,7 @@ bool CAddonMgr::EnableSingle(const std::
    if (!m_database->EnableAddon(id))
      return false;
    m_disabled.erase(id);

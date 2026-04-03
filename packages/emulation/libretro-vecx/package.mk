@@ -2,8 +2,8 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="libretro-vecx"
-PKG_VERSION="a401c268e425dc8ae6a301e7fdb9a9e96f39b8ea"
-PKG_SHA256="348c335607af6bdbe12f72b4252110a8eac2a65e7f38fc8e746e697724ad1f4e"
+PKG_VERSION="eacee1f6f029688b043ed802cece29dd3c320e21"
+PKG_SHA256="f8dfd3da427b101b8d3e4fb187eea3bb326ad924942d3c09f3388fc879e08ba3"
 PKG_LICENSE="GPLv3"
 PKG_SITE="https://github.com/libretro/libretro-vecx"
 PKG_URL="https://github.com/libretro/libretro-vecx/archive/${PKG_VERSION}.tar.gz"
@@ -19,6 +19,11 @@ PKG_MAKE_OPTS_TARGET="-f Makefile.libretro"
 
 if [ "${OPENGL_SUPPORT}" = "yes" ]; then
   PKG_DEPENDS_TARGET+=" ${OPENGL}"
+fi
+
+if [ "${OPENGL_SUPPORT}" = "yes" ] &&
+   [ "${DISPLAYSERVER}" != "x11" ]; then
+  PKG_MAKE_OPTS_TARGET+=" USE_GLVND=1"
 fi
 
 if [ "${OPENGLES_SUPPORT}" = "yes" ]; then

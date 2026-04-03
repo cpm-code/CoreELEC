@@ -57,7 +57,9 @@ PKG_CONFIGURE_OPTS_TARGET="py_cv_mod_gtk_=yes \
                            --disable-nls"
 
 pre_configure_target() {
-  NOCONFIGURE=1 ./autogen.sh
+  if [ ! -x "${PKG_BUILD}/configure" ] && [ -x "${PKG_BUILD}/autogen.sh" ]; then
+    (cd "${PKG_BUILD}" && NOCONFIGURE=1 ./autogen.sh)
+  fi
 }
 
 post_configure_target() {
@@ -91,13 +93,6 @@ post_makeinstall_target() {
 
   mkdir -p ${INSTALL}/usr/share/services
     cp -P ${PKG_DIR}/default.d/*.conf ${INSTALL}/usr/share/services
-
-  # Kodi and other consumers use the toolchain sysroot for build-time discovery.
-  # Ensure avahi client/common development files are present there.
-  mkdir -p ${SYSROOT_PREFIX}/usr/include ${SYSROOT_PREFIX}/usr/lib ${SYSROOT_PREFIX}/usr/lib/pkgconfig
-    cp -PR ${INSTALL}/usr/include/avahi-* ${SYSROOT_PREFIX}/usr/include/
-    cp -P ${INSTALL}/usr/lib/libavahi*.so* ${SYSROOT_PREFIX}/usr/lib/
-    cp -P ${INSTALL}/usr/lib/pkgconfig/avahi*.pc ${SYSROOT_PREFIX}/usr/lib/pkgconfig/
 }
 
 post_install() {

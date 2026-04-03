@@ -9,7 +9,7 @@ Subject: [PATCH] refresh /etc/environment on install and uninstall
 
 --- a/xbmc/addons/Addon.cpp
 +++ b/xbmc/addons/Addon.cpp
-@@ -725,6 +725,9 @@ void OnPostInstall(const AddonPtr& addon
+@@ -722,6 +722,9 @@ void OnPostInstall(const AddonPtr& addon
    // OE
  
    addon->OnPostInstall(update, modal);
@@ -19,7 +19,7 @@ Subject: [PATCH] refresh /etc/environment on install and uninstall
  }
  
  void OnPreUnInstall(const AddonPtr& addon)
-@@ -737,6 +740,9 @@ void OnPreUnInstall(const AddonPtr& addo
+@@ -734,6 +737,9 @@ void OnPreUnInstall(const AddonPtr& addo
  void OnPostUnInstall(const AddonPtr& addon)
  {
    addon->OnPostUnInstall();

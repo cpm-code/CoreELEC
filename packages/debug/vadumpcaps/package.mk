@@ -2,8 +2,8 @@
 # Copyright (C) 2020-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="vadumpcaps"
-PKG_VERSION="38a446e33de5e65f0e5d263dd9a262a4e316a461"
-PKG_SHA256="04847fcae7ed5529371c3ff27518e6ef4623db65955ad6c7633a538c6b2aeae8"
+PKG_VERSION="792c27f95ef205a14f682f2261a634b48d65560d"
+PKG_SHA256="4a5a6807f0741e0e283372f394b7cced27df3dac2af78dd8f979b6a87607f37b"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/fhvwy/vadumpcaps"
 PKG_URL="https://github.com/fhvwy/vadumpcaps/archive/${PKG_VERSION}.tar.gz"

@@ -13,24 +13,24 @@ index 7e8b3f78a..1a27842fd 100644
  
  #ifndef TEMP_FAILURE_RETRY
  #define TEMP_FAILURE_RETRY(expression) \
-diff --git a/vendor/github.com/containers/common/pkg/config/config_linux.go b/vendor/github.com/containers/common/pkg/config/config_linux.go
+diff --git a/vendor/go.podman.io/common/pkg/config/config_linux.go b/vendor/go.podman.io/common/pkg/config/config_linux.go
 index 4ce5d0320..531de9ceb 100644
---- a/vendor/github.com/containers/common/pkg/config/config_linux.go
-+++ b/vendor/github.com/containers/common/pkg/config/config_linux.go
-@@ -6,10 +6,10 @@ import (
+--- a/vendor/go.podman.io/common/pkg/config/config_linux.go
++++ b/vendor/go.podman.io/common/pkg/config/config_linux.go
+@@ -7,10 +7,10 @@
  
  const (
- 	// OverrideContainersConfig holds the default config path overridden by the root user
--	OverrideContainersConfig = "/etc/" + _configPath
-+	OverrideContainersConfig = "/storage/.kodi/addons/service.system.podman/etc/" + _configPath
+ 	// overrideContainersConfig holds the default config path overridden by the root user.
+-	overrideContainersConfig = "/etc/" + _configPath
++	overrideContainersConfig = "/storage/.kodi/addons/service.system.podman/etc/" + _configPath
  
- 	// DefaultContainersConfig holds the default containers config path
--	DefaultContainersConfig = "/usr/share/" + _configPath
-+	DefaultContainersConfig = "/storage/.kodi/userdata/addon_data/service.system.podman/podman/etc/" + _configPath
+ 	// defaultContainersConfig holds the default containers config path.
+-	defaultContainersConfig = "/usr/share/" + _configPath
++	defaultContainersConfig = "/storage/.kodi/userdata/addon_data/service.system.podman/podman/etc/" + _configPath
  
  	// DefaultSignaturePolicyPath is the default value for the
  	// policy.json file.
-@@ -21,8 +21,5 @@ func ifRootlessConfigPath() (string, error) {
+@@ -22,10 +22,7 @@
  }
  
  var defaultHelperBinariesDir = []string{
@@ -40,3 +40,5 @@ index 4ce5d0320..531de9ceb 100644
 -	"/usr/lib/podman",
 +	"/storage/.kodi/addons/service.system.podman/bin",
  }
+ 
+ // Capabilities returns the capabilities parses the Add and Drop capability

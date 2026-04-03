@@ -16,7 +16,14 @@ PKG_CONFIGURE_OPTS_TARGET="--enable-devinput \
                            --enable-uinput \
                            --with-gnu-ld \
                            --without-x \
-                           --runstatedir=/run"
+                           --runstatedir=/run \
+                           --with-lockdir=/var/lock"
+
+post_unpack() {
+  # remove confusing static config.h in lirc 0.10.2 release package (temp fix)
+  # lead to "LIRC_LOCKDIR" redefined to "/var/lock/lockdir"
+  rm ${PKG_BUILD}/lib/lirc/config.h
+}
 
 pre_configure_target() {
   export HAVE_WORKING_POLL=yes
@@ -32,9 +39,6 @@ pre_configure_target() {
 
 post_configure_target() {
   libtool_remove_rpath libtool
-
-  nodots=$(grep "#define VERSION_NODOTS" ../lib/lirc/config.h)
-  sed -i "s/^#define VERSION_NODOTS.*/${nodots}/" config.h
 }
 
 post_makeinstall_target() {

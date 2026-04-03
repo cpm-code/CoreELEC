@@ -2,8 +2,8 @@
 # Copyright (C) 2020-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="bottom"
-PKG_VERSION="0.10.2"
-PKG_SHA256="1db45fe9bc1fabb62d67bf8a1ea50c96e78ff4d2a5e25bf8ae8880e3ad5af80a"
+PKG_VERSION="0.12.3"
+PKG_SHA256="1c70894f0eceb7034075959ff3080cf4706c11d7c012912c24e777abe4e62b70"
 PKG_LICENSE="MIT"
 PKG_SITE="https://github.com/ClementTsang/bottom"
 PKG_URL="https://github.com/ClementTsang/bottom/archive/${PKG_VERSION}.tar.gz"
@@ -13,7 +13,7 @@ PKG_TOOLCHAIN="manual"
 
 make_target() {
   cargo build \
-    --target ${RUST_TARGET_SPEC:-${TARGET_NAME}} \
+    --target ${TARGET_NAME} \
     --release \
     --locked \
     --all-features

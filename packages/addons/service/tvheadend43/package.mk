@@ -2,10 +2,10 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="tvheadend43"
-PKG_VERSION="3dcb7ecf36666dcb43211a84141b1b645c9ca757"
-PKG_SHA256="c7c8414bca5304276cc8f07aa291e36b50e1190d441f2af2ce256631b7c033c2"
-PKG_VERSION_NUMBER="4.3-2180"
-PKG_REV="1"
+PKG_VERSION="eb023c5733f78c2d87cd00fe6265cbf17048b1d3"
+PKG_SHA256="6a8a269d8f427e2f3d8608201b4e77f2ac9fc56632ebffc323bb3ac873486560"
+PKG_VERSION_NUMBER="4.3-2634"
+PKG_REV="2"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="http://www.tvheadend.org"
@@ -123,9 +123,9 @@ addon() {
   cp -P ${PKG_INSTALL}/usr/lib/capmt_ca.so ${ADDON_BUILD}/${PKG_ADDON_ID}/bin
   cp -P $(get_install_dir comskip)/usr/bin/comskip ${ADDON_BUILD}/${PKG_ADDON_ID}/bin
 
-  if [ "${TARGET_ARCH}" = "x86_64" ]; then
+  if [ "${TARGET_ARCH}" = "aarch64" ] || [ "${TARGET_ARCH}" = "x86_64" ]; then
     mkdir -p ${ADDON_BUILD}/${PKG_ADDON_ID}/lib.private
-    cp -P $(get_install_dir x265)/usr/lib/libx265.so.212 ${ADDON_BUILD}/${PKG_ADDON_ID}/lib.private
+    cp -P $(get_install_dir x265)/usr/lib/libx265.so.215 ${ADDON_BUILD}/${PKG_ADDON_ID}/lib.private
     patchelf --add-rpath '${ORIGIN}/../lib.private' ${ADDON_BUILD}/${PKG_ADDON_ID}/bin/{comskip,tvheadend}
   fi
 

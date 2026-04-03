@@ -1,0 +1,206 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: GitHub Copilot <copilot@github.com>
+Date: Fri, 3 Apr 2026 11:55:00 +0000
+Subject: [PATCH] libnl: guard newer ILA attrs for older kernel headers
+
+The Amlogic-ng 4.9 header set provides the base ILA definitions but not
+the newer IDENT_TYPE and HOOK_TYPE attributes added later. Guard those
+optional fields so libnl still builds against the older target headers.
+---
+ .../nh_encap_ila.c => /tmp/nh_encap_ila.new.c      | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+
+diff --git a/a/lib/route/nh_encap_ila.c bb/lib/route/nh_encap_ila.c
+index 684c2e8411..d6566601cb 100644
+--- a/a/lib/route/nh_encap_ila.c
++++ bb/lib/route/nh_encap_ila.c
+@@ -11,14 +11,24 @@
+ #include "nl-aux-route/nl-route.h"
+ #include "nl-route.h"
+
++#if defined(ILA_ATTR_IDENT_TYPE) && defined(ILA_ATTR_HOOK_TYPE)
++#define HAVE_ILA_IDENT_AND_HOOK_TYPE 1
++#else
++#define HAVE_ILA_IDENT_AND_HOOK_TYPE 0
++#endif
++
+ struct ila_tunnel_encap {
+ 	uint64_t locator;
+ 	uint8_t csum_mode;
++#if HAVE_ILA_IDENT_AND_HOOK_TYPE
+ 	uint8_t ident_type;
+ 	uint8_t hook_type;
++#endif
+ 	bool has_csum_mode : 1;
++#if HAVE_ILA_IDENT_AND_HOOK_TYPE
+ 	bool has_ident_type : 1;
+ 	bool has_hook_type : 1;
++#endif
+ };
+
+ static void ila_encap_dump(void *priv, struct nl_dump_params *dp)
+@@ -30,11 +40,13 @@ static void ila_encap_dump(void *priv, struct nl_dump_params *dp)
+ 	if (ila_encap->has_csum_mode)
+ 		nl_dump(dp, " csum-mode %u ", ila_encap->csum_mode);
+
++#if HAVE_ILA_IDENT_AND_HOOK_TYPE
+ 	if (ila_encap->has_ident_type)
+ 		nl_dump(dp, " ident-type %u ", ila_encap->ident_type);
+
+ 	if (ila_encap->has_hook_type)
+ 		nl_dump(dp, " hook-type %u ", ila_encap->hook_type);
++#endif
+ }
+
+ static int ila_encap_build_msg(struct nl_msg *msg, void *priv)
+@@ -46,11 +58,13 @@ static int ila_encap_build_msg(struct nl_msg *msg, void *priv)
+ 	if (ila_encap->has_csum_mode)
+ 		NLA_PUT_U8(msg, ILA_ATTR_CSUM_MODE, ila_encap->csum_mode);
+
++#if HAVE_ILA_IDENT_AND_HOOK_TYPE
+ 	if (ila_encap->has_ident_type)
+ 		NLA_PUT_U8(msg, ILA_ATTR_IDENT_TYPE, ila_encap->ident_type);
+
+ 	if (ila_encap->has_hook_type)
+ 		NLA_PUT_U8(msg, ILA_ATTR_HOOK_TYPE, ila_encap->hook_type);
++#endif
+
+ 	return 0;
+
+@@ -80,6 +94,7 @@ static int ila_encap_compare(void *_a, void *_b)
+ 	if (a->has_csum_mode && a->csum_mode != b->csum_mode)
+ 		return 1;
+
++#if HAVE_ILA_IDENT_AND_HOOK_TYPE
+ 	if (a->has_ident_type != b->has_ident_type)
+ 		return 1;
+
+@@ -91,6 +106,7 @@ static int ila_encap_compare(void *_a, void *_b)
+
+ 	if (a->has_hook_type && a->hook_type != b->hook_type)
+ 		return 1;
++#endif
+
+ 	return 0;
+ }
+@@ -98,8 +114,10 @@ static int ila_encap_compare(void *_a, void *_b)
+ static struct nla_policy ila_encap_policy[ILA_ATTR_MAX + 1] = {
+ 	[ILA_ATTR_LOCATOR] = { .type = NLA_U64 },
+ 	[ILA_ATTR_CSUM_MODE] = { .type = NLA_U8 },
++#if HAVE_ILA_IDENT_AND_HOOK_TYPE
+ 	[ILA_ATTR_IDENT_TYPE] = { .type = NLA_U8 },
+ 	[ILA_ATTR_HOOK_TYPE] = { .type = NLA_U8 },
++#endif
+ };
+
+ static int ila_encap_parse_msg(struct nlattr *nla,
+@@ -134,6 +152,7 @@ static int ila_encap_parse_msg(struct nlattr *nla,
+ 			return err;
+ 	}
+
++#if HAVE_ILA_IDENT_AND_HOOK_TYPE
+ 	if (tb[ILA_ATTR_IDENT_TYPE]) {
+ 		err = rtnl_nh_set_encap_ila_ident_type(
+ 			nh_encap, nla_get_u8(tb[ILA_ATTR_IDENT_TYPE]));
+@@ -147,6 +166,7 @@ static int ila_encap_parse_msg(struct nlattr *nla,
+ 		if (err < 0)
+ 			return err;
+ 	}
++#endif
+
+ 	*encap_out = _nl_steal_pointer(&nh_encap);
+
+@@ -249,6 +269,9 @@ int rtnl_nh_get_encap_ila_csum_mode(struct rtnl_nh_encap *nh_encap)
+ int rtnl_nh_set_encap_ila_ident_type(struct rtnl_nh_encap *nh_encap,
+ 				     uint8_t ident_type)
+ {
++#if !HAVE_ILA_IDENT_AND_HOOK_TYPE
++        return -NLE_OPNOTSUPP;
++#else
+ 	struct ila_tunnel_encap *ila_encap;
+
+ 	ila_encap = nh_encap_get_ila(nh_encap);
+@@ -259,10 +282,14 @@ int rtnl_nh_set_encap_ila_ident_type(struct rtnl_nh_encap *nh_encap,
+ 	ila_encap->has_ident_type = true;
+
+ 	return 0;
++#endif
+ }
+
+ int rtnl_nh_clear_encap_ila_ident_type(struct rtnl_nh_encap *nh_encap)
+ {
++#if !HAVE_ILA_IDENT_AND_HOOK_TYPE
++        return -NLE_OPNOTSUPP;
++#else
+ 	struct ila_tunnel_encap *ila_encap;
+
+ 	ila_encap = nh_encap_get_ila(nh_encap);
+@@ -273,10 +300,14 @@ int rtnl_nh_clear_encap_ila_ident_type(struct rtnl_nh_encap *nh_encap)
+ 	ila_encap->ident_type = 0;
+
+ 	return 0;
++#endif
+ }
+
+ int rtnl_nh_get_encap_ila_ident_type(struct rtnl_nh_encap *nh_encap)
+ {
++#if !HAVE_ILA_IDENT_AND_HOOK_TYPE
++        return -NLE_OPNOTSUPP;
++#else
+ 	struct ila_tunnel_encap *ila_encap;
+
+ 	ila_encap = nh_encap_get_ila(nh_encap);
+@@ -287,11 +318,15 @@ int rtnl_nh_get_encap_ila_ident_type(struct rtnl_nh_encap *nh_encap)
+ 		return -NLE_MISSING_ATTR;
+
+ 	return ila_encap->ident_type;
++#endif
+ }
+
+ int rtnl_nh_set_encap_ila_hook_type(struct rtnl_nh_encap *nh_encap,
+ 				    uint8_t hook_type)
+ {
++#if !HAVE_ILA_IDENT_AND_HOOK_TYPE
++        return -NLE_OPNOTSUPP;
++#else
+ 	struct ila_tunnel_encap *ila_encap;
+
+ 	ila_encap = nh_encap_get_ila(nh_encap);
+@@ -302,10 +337,14 @@ int rtnl_nh_set_encap_ila_hook_type(struct rtnl_nh_encap *nh_encap,
+ 	ila_encap->has_hook_type = true;
+
+ 	return 0;
++#endif
+ }
+
+ int rtnl_nh_clear_encap_ila_hook_type(struct rtnl_nh_encap *nh_encap)
+ {
++#if !HAVE_ILA_IDENT_AND_HOOK_TYPE
++        return -NLE_OPNOTSUPP;
++#else
+ 	struct ila_tunnel_encap *ila_encap;
+
+ 	ila_encap = nh_encap_get_ila(nh_encap);
+@@ -316,10 +355,14 @@ int rtnl_nh_clear_encap_ila_hook_type(struct rtnl_nh_encap *nh_encap)
+ 	ila_encap->hook_type = 0;
+
+ 	return 0;
++#endif
+ }
+
+ int rtnl_nh_get_encap_ila_hook_type(struct rtnl_nh_encap *nh_encap)
+ {
++#if !HAVE_ILA_IDENT_AND_HOOK_TYPE
++        return -NLE_OPNOTSUPP;
++#else
+ 	struct ila_tunnel_encap *ila_encap;
+
+ 	ila_encap = nh_encap_get_ila(nh_encap);
+@@ -330,4 +373,5 @@ int rtnl_nh_get_encap_ila_hook_type(struct rtnl_nh_encap *nh_encap)
+ 		return -NLE_MISSING_ATTR;
+
+ 	return ila_encap->hook_type;
++#endif
+ }
+--
+2.51.0

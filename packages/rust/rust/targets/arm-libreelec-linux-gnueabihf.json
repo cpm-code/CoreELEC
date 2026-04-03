@@ -9,6 +9,7 @@
   "features": "+strict-align,+v6,+vfp2,-d32",
   "has-rpath": true,
   "has-thread-local": true,
+  "llvm-floatabi": "hard",
   "llvm-target": "arm-unknown-linux-gnueabihf",
   "max-atomic-width": 64,
   "os": "linux",

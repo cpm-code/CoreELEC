@@ -2,8 +2,8 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="libretro-dinothawr"
-PKG_VERSION="33fb82a8df4e440f96d19bba38668beaa1b414fc"
-PKG_SHA256="092c5c97b73605747baa4cfb3156c7ff80ba2128618ee1cc4d8f12900a0d374b"
+PKG_VERSION="d66dde551be8e68e47c05e88838b4f1c6b114c99"
+PKG_SHA256="a9dc2fcdc276943ed6fbab1c724ca20162499a3da0f2001a6d41de12596fc3a7"
 PKG_LICENSE="CC-BY-NC-SA-3.0"
 PKG_SITE="https://github.com/libretro/Dinothawr"
 PKG_URL="https://github.com/libretro/Dinothawr/archive/${PKG_VERSION}.tar.gz"

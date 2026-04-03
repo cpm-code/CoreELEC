@@ -9,17 +9,12 @@ PKG_LICENSE="GPL"
 PKG_SITE="http://www.busybox.net"
 PKG_URL="https://busybox.net/downloads/${PKG_NAME}-${PKG_VERSION}.tar.bz2"
 PKG_DEPENDS_HOST="toolchain:host"
-PKG_DEPENDS_TARGET="toolchain hdparm hd-idle dosfstools e2fsprogs zip usbutils parted procps-ng libtirpc cryptsetup"
+PKG_DEPENDS_TARGET="toolchain libtirpc cryptsetup"
 PKG_DEPENDS_INIT="toolchain libtirpc"
 PKG_LONGDESC="BusyBox combines tiny versions of many common UNIX utilities into a single small executable."
-PKG_BUILD_FLAGS="-parallel"
+PKG_BUILD_FLAGS="-parallel +lto"
 
-# nano text editor
-if [ "${NANO_EDITOR}" = "yes" ]; then
-  PKG_DEPENDS_TARGET+=" nano"
-fi
-
-if [ "${DEVICE}" = "Amlogic-ne" -o "${DEVICE}" = "Amlogic-no" ]; then
+if [ "${DEVICE}" = "Amlogic-no" ]; then
   PKG_DEPENDS_TARGET+=" pciutils"
 fi
 
@@ -64,9 +59,6 @@ configure_target() {
       sed -i -e "s|^CONFIG_FEATURE_MOUNT_CIFS=.*$|# CONFIG_FEATURE_MOUNT_CIFS is not set|" .config
     fi
 
-    # optimize for size
-    CFLAGS=$(echo ${CFLAGS} | sed -e "s|-Ofast|-Os|")
-    CFLAGS=$(echo ${CFLAGS} | sed -e "s|-O.|-Os|")
     CFLAGS+=" -I${SYSROOT_PREFIX}/usr/include/tirpc"
 
     LDFLAGS+=" -fwhole-program"
@@ -82,9 +74,6 @@ configure_init() {
     # set install dir
     sed -i -e "s|^CONFIG_PREFIX=.*$|CONFIG_PREFIX=\"${INSTALL}/usr\"|" .config
 
-    # optimize for size
-    CFLAGS=$(echo ${CFLAGS} | sed -e "s|-Ofast|-Os|")
-    CFLAGS=$(echo ${CFLAGS} | sed -e "s|-O.|-Os|")
     CFLAGS+=" -I${SYSROOT_PREFIX}/usr/include/tirpc"
 
     LDFLAGS+=" -fwhole-program"
@@ -104,9 +93,10 @@ makeinstall_target() {
       cp ${PKG_DIR}/scripts/update-bootloader-edid-rpi ${INSTALL}/usr/bin/update-bootloader-edid
       cp ${PKG_DIR}/scripts/getedid-drm ${INSTALL}/usr/bin/getedid
     fi
-    if [ "${PROJECT}" = "Amlogic" ]; then
-      cp ${PKG_DIR}/scripts/update-bootloader-edid-amlogic ${INSTALL}/usr/bin/getedid
+    if [ "${PROJECT}" = "Amlogic" ] || [ "${PROJECT}" = "Rockchip" ]; then
+      cp ${PKG_DIR}/scripts/update-bootloader-edid-extlinux ${INSTALL}/usr/bin/getedid
     fi
+    cp ${PKG_DIR}/scripts/simple_zip.py ${INSTALL}/usr/bin/
     cp ${PKG_DIR}/scripts/createlog ${INSTALL}/usr/bin/
     cp ${PKG_DIR}/scripts/dthelper ${INSTALL}/usr/bin
       ln -sf dthelper ${INSTALL}/usr/bin/dtfile
@@ -115,14 +105,18 @@ makeinstall_target() {
       ln -sf dthelper ${INSTALL}/usr/bin/dtsoc
     cp ${PKG_DIR}/scripts/ledfix ${INSTALL}/usr/bin
     cp ${PKG_DIR}/scripts/lsb_release ${INSTALL}/usr/bin/
-    cp ${PKG_DIR}/scripts/apt-get ${INSTALL}/usr/bin/
+    cp ${PKG_DIR}/scripts/pkgapp ${INSTALL}/usr/bin/
+      ln -sf pkgapp ${INSTALL}/usr/bin/apt
+      ln -sf pkgapp ${INSTALL}/usr/bin/apt-get
+      ln -sf pkgapp ${INSTALL}/usr/bin/dnf
+      ln -sf pkgapp ${INSTALL}/usr/bin/rpm
+      ln -sf pkgapp ${INSTALL}/usr/bin/yum
     cp ${PKG_DIR}/scripts/sudo ${INSTALL}/usr/bin/
     cp ${PKG_DIR}/scripts/pastebinit ${INSTALL}/usr/bin/
       sed -e "s/@DISTRONAME@-@OS_VERSION@/${DISTRONAME}-${OS_VERSION}/g" \
           -i ${INSTALL}/usr/bin/pastebinit
       ln -sf pastebinit ${INSTALL}/usr/bin/paste
     cp ${PKG_DIR}/scripts/convert_dtname ${INSTALL}/usr/bin
-    cp ${PKG_DIR}/scripts/vfd-clock ${INSTALL}/usr/bin/
 
   mkdir -p ${INSTALL}/usr/sbin
     cp ${PKG_DIR}/scripts/kernel-overlays-setup ${INSTALL}/usr/sbin
@@ -173,7 +167,6 @@ post_install() {
   enable_service fs-resize.service
   enable_service ledfix.service
   enable_service shell.service
-  enable_service vfd-clock.service
   enable_service var.mount
   enable_service locale.service
   enable_service restore-storage-permissions.service

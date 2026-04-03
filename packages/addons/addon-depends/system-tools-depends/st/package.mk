@@ -2,8 +2,8 @@
 # Copyright (C) 2020-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="st"
-PKG_VERSION="0.9.2"
-PKG_SHA256="6b215d4f472b21d6232f30f221117a777e24bcfee68955ddefb7426467f9494b"
+PKG_VERSION="0.9.3"
+PKG_SHA256="9ed9feabcded713d4ded38c8cebf36a3b08f0042ef7934a0e2b2409da56e649b"
 PKG_ARCH="x86_64"
 PKG_LICENSE="GPL"
 PKG_SITE="https://st.suckless.org/"
@@ -12,8 +12,8 @@ PKG_DEPENDS_TARGET="toolchain libX11 libXft libXrender fontconfig freetype ncurs
 PKG_LONGDESC="A simple terminal implementation for X"
 PKG_BUILD_FLAGS="-sysroot"
 
-PKG_MAKE_OPTS_TARGET="X11INC=$(get_build_dir libXft)/include \
-                      X11LIB=$(get_build_dir libXft)/.${TARGET_NAME}/src/.libs"
+PKG_MAKE_OPTS_TARGET="X11INC=$(get_install_dir libXft)/usr/include \
+                      X11LIB=$(get_install_dir libXft)/usr/lib"
 
 pre_configure_target() {
   LDFLAGS="-lXrender ${LDFLAGS}"

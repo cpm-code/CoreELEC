@@ -3,16 +3,13 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="xf86-video-nvidia"
-# Remember to run "python3 packages/x11/driver/xf86-video-nvidia/scripts/make_nvidia_udev.py" and commit
-# changes to "packages/x11/driver/xf86-video-nvidia/udev.d/96-nvidia.rules" whenever bumping version.
-# The build host may require installation of python3-lxml and python3-requests packages.
-PKG_VERSION="550.107.02"
-PKG_SHA256="94299354125c6aa1c98fd7f9ebb26a73b6a39205c84b4790888c1949c890b0a3"
+PKG_VERSION="580.142"
+PKG_SHA256="fb218f6e99ff16f2a0a8188e6fa53d820138dad8b7735626948e5d8907c90565"
 PKG_ARCH="x86_64"
 PKG_LICENSE="nonfree"
 PKG_SITE="https://www.nvidia.com/en-us/drivers/unix/"
 PKG_URL="http://us.download.nvidia.com/XFree86/Linux-x86_64/${PKG_VERSION}/NVIDIA-Linux-x86_64-${PKG_VERSION}-no-compat32.run"
-PKG_DEPENDS_TARGET="util-macros xorg-server libvdpau libglvnd"
+PKG_DEPENDS_TARGET="util-macros xorg-server libglvnd"
 PKG_LONGDESC="The Xorg driver for NVIDIA GPUs supporting the GeForce 600 Series & above."
 PKG_TOOLCHAIN="manual"
 
@@ -39,12 +36,12 @@ make_target() {
 
 makeinstall_target() {
   # Linux kernel modules
-  mkdir -p ${INSTALL}/usr/lib/nvidia
-    cp -P kernel/nvidia.ko ${INSTALL}/usr/lib/nvidia
   mkdir -p ${INSTALL}/$(get_full_module_dir)/nvidia
-    ln -sf /var/lib/nvidia.ko      ${INSTALL}/$(get_full_module_dir)/nvidia/nvidia.ko
-    cp -P kernel/nvidia-uvm.ko     ${INSTALL}/$(get_full_module_dir)/nvidia
-    cp -P kernel/nvidia-modeset.ko ${INSTALL}/$(get_full_module_dir)/nvidia
+    cp -P kernel/*.ko ${INSTALL}/$(get_full_module_dir)/nvidia
+
+  # GSP firmware files
+  mkdir -p ${INSTALL}/$(get_full_firmware_dir)/nvidia/${PKG_VERSION}
+    cp firmware/gsp*.bin           ${INSTALL}/$(get_full_firmware_dir)/nvidia/${PKG_VERSION}
 
   # X driver
   mkdir -p ${INSTALL}/${XORG_PATH_MODULES}/drivers
@@ -112,11 +109,17 @@ makeinstall_target() {
     ln -s /var/lib/nvidia-xconfig ${INSTALL}/usr/bin/nvidia-xconfig
     cp nvidia-xconfig ${INSTALL}/usr/bin/nvidia-main-xconfig
 
-  # VDPAU
-  mkdir -p ${INSTALL}/usr/lib/vdpau
-    cp libvdpau_nvidia.so* ${INSTALL}/usr/lib/vdpau/libvdpau_nvidia-main.so.1
-    ln -sf /var/lib/libvdpau_nvidia.so ${INSTALL}/usr/lib/vdpau/libvdpau_nvidia.so
-    ln -sf /var/lib/libvdpau_nvidia.so.1 ${INSTALL}/usr/lib/vdpau/libvdpau_nvidia.so.1
+  # CUDA
+  mkdir -p ${INSTALL}/usr/lib
+    cp -P libcuda.so.${PKG_VERSION}  ${INSTALL}/usr/lib/
+    ln -sf libcuda.so.${PKG_VERSION} ${INSTALL}/usr/lib/libcuda.so.1
+    ln -sf libcuda.so.1              ${INSTALL}/usr/lib/libcuda.so
+
+  # nvcuvid
+  mkdir -p ${INSTALL}/usr/lib
+    cp -P libnvcuvid.so.${PKG_VERSION}  ${INSTALL}/usr/lib/
+    ln -sf libnvcuvid.so.${PKG_VERSION} ${INSTALL}/usr/lib/libnvcuvid.so.1
+    ln -sf libnvcuvid.so.1              ${INSTALL}/usr/lib/libnvcuvid.so
 
   # App profiles
   mkdir -p ${INSTALL}/usr/share/nvidia

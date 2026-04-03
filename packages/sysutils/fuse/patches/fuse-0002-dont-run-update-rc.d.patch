@@ -1,6 +1,6 @@
---- a/util/Makefile.in	2017-06-23 22:47:36.762827097 +0200
-+++ b/util/Makefile.in	2017-06-23 22:47:47.358852950 +0200
-@@ -734,10 +734,6 @@
+--- a/util/Makefile.am	2017-06-23 22:47:36.762827097 +0200
++++ b/util/Makefile.am	2017-06-23 22:47:47.358852950 +0200
+@@ -39,10 +39,6 @@
  	$(INSTALL_PROGRAM) $(builddir)/mount.fuse $(DESTDIR)$(MOUNT_FUSE_PATH)/mount.fuse
  	$(MKDIR_P) $(DESTDIR)$(INIT_D_PATH)
  	$(INSTALL_SCRIPT) $(srcdir)/init_script $(DESTDIR)$(INIT_D_PATH)/fuse

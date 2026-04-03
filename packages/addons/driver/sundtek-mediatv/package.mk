@@ -4,7 +4,7 @@
 
 PKG_NAME="sundtek-mediatv"
 PKG_VERSION="7.0"
-PKG_REV="0"
+PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="nonfree"
 PKG_SITE="http://support.sundtek.com/"
@@ -35,7 +35,7 @@ make_target() {
       ;;
   esac
 
-  wget -O installer.tar.gz ${INSTALLER_URL}
+  curl --fail -o installer.tar.gz ${INSTALLER_URL}
 
   tar -xzf installer.tar.gz
 
@@ -45,7 +45,7 @@ make_target() {
   rm -f  opt/bin/lirc.sh
   rm -fr opt/lib/pm/
 
-  wget -O version.used http://sundtek.de/media/latest.phtml
+  curl --fail -o version.used http://sundtek.de/media/latest.phtml
 }
 
 addon() {

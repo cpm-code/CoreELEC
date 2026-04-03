@@ -9,22 +9,3 @@
  if test "x$HAVE_PNG" = xyes; then
    AC_DEFINE(HAVE_LIBPNG, 1, [Define if you have libpng])
  fi
---- a/examples/Makefile.am
-+++ b/examples/Makefile.am
-@@ -19,4 +19,4 @@ EXTRA_DIST = \
- INCLUDES = -I$(top_srcdir)/src
- 
- LDADD = $(top_builddir)/src/libzvbi.la \
--	$(PTHREAD_LIB) -lm $(PNG_LIB)
-+	$(PTHREAD_LIB) $(PNG_LIB) -lm
---- a/examples/Makefile.in
-+++ b/examples/Makefile.in
-@@ -262,7 +262,7 @@ EXTRA_DIST = \
- 
- INCLUDES = -I$(top_srcdir)/src
- LDADD = $(top_builddir)/src/libzvbi.la \
--	$(PTHREAD_LIB) -lm $(PNG_LIB)
-+	$(PTHREAD_LIB) $(PNG_LIB) -lm
- 
- all: all-am
- 

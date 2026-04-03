@@ -8,14 +8,10 @@ PKG_VERSION=""
 PKG_LICENSE="GPL"
 PKG_SITE="http://www.openelec.tv"
 PKG_URL=""
-PKG_DEPENDS_INIT="libc:init busybox:init splash-image:init util-linux:init e2fsprogs:init dosfstools:init terminus-font:init bkeymaps:init fakeroot:host"
-PKG_DEPENDS_TARGET="toolchain initramfs:init"
+PKG_DEPENDS_INIT="libc:init busybox:init splash-image:init util-linux:init e2fsprogs:init dosfstools:init bkeymaps:init fakeroot:host"
+PKG_DEPENDS_TARGET="toolchain ${PKG_NAME}:init"
 PKG_SECTION="virtual"
 PKG_LONGDESC="Metapackage for installing initramfs"
-
-if [ "${ISCSI_SUPPORT}" = yes ]; then
-  PKG_DEPENDS_INIT+=" open-iscsi:init"
-fi
 
 if [ "${INITRAMFS_PARTED_SUPPORT}" = yes ]; then
   PKG_DEPENDS_INIT+=" parted:init"
@@ -26,17 +22,17 @@ for i in ${PKG_DEPENDS_INIT}; do
 done
 
 post_install() {
-  if [ "$BUILD_ANDROID_BOOTIMG" = "yes" ]; then
-  ( 
-    cd $BUILD/initramfs
+  if [ "${BUILD_ANDROID_BOOTIMG}" = "yes" ]; then
+  (
+    cd ${BUILD}/${PKG_NAME}
 
-    ln -sfn /usr/lib  $BUILD/initramfs/lib
-    ln -sfn /usr/bin  $BUILD/initramfs/bin
-    ln -sfn /usr/sbin $BUILD/initramfs/sbin
+    ln -sfn /usr/lib  ${BUILD}/${PKG_NAME}/lib
+    ln -sfn /usr/bin  ${BUILD}/${PKG_NAME}/bin
+    ln -sfn /usr/sbin ${BUILD}/${PKG_NAME}/sbin
 
-    mkdir -p $BUILD/image
+    mkdir -p ${BUILD}/image
     fakeroot -- sh -c \
-      "mkdir -p dev; mknod -m 600 dev/console c 5 1; find . | cpio -H newc -ov -R 0:0 > $BUILD/image/initramfs.cpio"
+      "mkdir -p dev; mknod -m 600 dev/console c 5 1; find . | cpio -H newc -ov -R 0:0 > ${BUILD}/image/${PKG_NAME}.cpio"
   )
   fi
-} 
+}

@@ -33,13 +33,18 @@ configure_host() {
   esac
 
   cat >${PKG_BUILD}/config.toml  <<END
-change-id = 102579
+change-id = 148671
+
+[llvm]
+download-ci-llvm = false
 
 [target.${TARGET_NAME}]
+llvm-config = "${TOOLCHAIN}/bin/llvm-config"
 cxx = "${TARGET_PREFIX}g++"
 cc = "${TARGET_PREFIX}gcc"
 
 [target.${RUST_HOST}]
+llvm-config = "${TOOLCHAIN}/bin/llvm-config"
 cxx = "${CXX}"
 cc = "${CC}"
 
@@ -48,7 +53,7 @@ rpath = true
 channel = "stable"
 codegen-tests = false
 optimize = true
-llvm-tools = false
+download-rustc = false
 
 [build]
 submodules = false
@@ -60,7 +65,7 @@ rustc = "${PKG_BUILD}/rust-snapshot/bin/rustc"
 cargo = "${PKG_BUILD}/rust-snapshot/bin/cargo"
 
 target = [
-  "${PKG_BUILD}/targets/${TARGET_NAME}.json",
+  "${TARGET_NAME}",
   "${RUST_HOST}"
 ]
 
@@ -69,9 +74,6 @@ host = [
 ]
 
 build = "${RUST_HOST}"
-
-[llvm]
-download-ci-llvm = true
 
 [install]
 prefix = "${TOOLCHAIN}"
@@ -85,7 +87,7 @@ END
   CARGO_HOME="${PKG_BUILD}/cargo_home"
   mkdir -p "${CARGO_HOME}"
 
-  cat >${CARGO_HOME}/config <<END
+  cat >${CARGO_HOME}/config.toml <<END
 [target.${TARGET_NAME}]
 linker = "${TARGET_PREFIX}gcc"
 
@@ -112,6 +114,8 @@ make_host() {
   unset LDFLAGS
 
   export RUST_TARGET_PATH="${PKG_BUILD}/targets/"
+  export HOST_CMAKE="${TOOLCHAIN}/bin/cmake"
+  export HOST_CMAKE_TOOLCHAIN_FILE="${CMAKE_CONF}"
 
   python3 src/bootstrap/bootstrap.py -j ${CONCURRENCY_MAKE_LEVEL} build --stage 2 --verbose
 }

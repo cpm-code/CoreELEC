@@ -23,4 +23,3 @@ PKG_CONFIGURE_OPTS_TARGET="--exec-prefix=/usr/ \
                            --with-fuse=external \
                            --with-uuid \
                            --disable-mount-helper"
-

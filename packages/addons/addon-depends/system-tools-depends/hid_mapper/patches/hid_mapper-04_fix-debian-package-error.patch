@@ -1,0 +1,35 @@
+From 3d47623015f0f0920bc07dfc4137595738100357 Mon Sep 17 00:00:00 2001
+From: Portisch <hugo.portisch@yahoo.de>
+Date: Thu, 26 Dec 2024 21:18:18 +0100
+Subject: [PATCH] fix debian package error
+
+---
+ debian/control | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/debian/control b/debian/control
+index 3b46322..35e515a 100644
+--- a/debian/control
++++ b/debian/control
+@@ -1,10 +1,16 @@
+-Package: hid-mapper
++Source: hid-mapper
+ Version: 2.0.1
+ Section: misc
+ Priority: optional
++Build-Depends: debhelper (>= 9)
++Maintainer: Sylvain Leroux <sylvain@chicoree.fr>
++
++Package: hid-mapper
++Section: base
++Priority: optional
+ Architecture: amd64
+ Depends: libc6 (>= 2.11.3)
+-Maintainer: Sylvain Leroux <sylvain@chicoree.fr>
+ Description: HID event mapper
+  Developed to map USB HID IR remote to keyboard events.
+  Should work with any USB HID device.
++
+-- 
+2.34.1
+

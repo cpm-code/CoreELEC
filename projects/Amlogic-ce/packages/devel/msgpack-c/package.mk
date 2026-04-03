@@ -10,5 +10,6 @@ PKG_URL="https://github.com/msgpack/msgpack-c/archive/${PKG_VERSION}.tar.gz"
 PKG_DEPENDS_TARGET="toolchain"
 PKG_LONGDESC="Its like JSON but fast and small."
 
-PKG_CMAKE_OPTS_TARGET="-DMSGPACK_ENABLE_SHARED=OFF \
+PKG_CMAKE_OPTS_TARGET="-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+                       -DMSGPACK_ENABLE_SHARED=OFF \
                        -DMSGPACK_ENABLE_STATIC=ON"

@@ -2,11 +2,11 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="opus"
-PKG_VERSION="1.4"
-PKG_SHA256="c9b32b4253be5ae63d1ff16eea06b94b5f0f2951b7a02aceef58e3a3ce49c51f"
+PKG_VERSION="1.6.1"
+PKG_SHA256="6ffcb593207be92584df15b32466ed64bbec99109f007c82205f0194572411a1"
 PKG_LICENSE="BSD"
 PKG_SITE="http://www.opus-codec.org"
-PKG_URL="https://github.com/xiph/opus/releases/download/v${PKG_VERSION}/${PKG_NAME}-${PKG_VERSION}.tar.gz"
+PKG_URL="https://ftp.osuosl.org/pub/xiph/releases/opus/${PKG_NAME}-${PKG_VERSION}.tar.gz"
 PKG_DEPENDS_TARGET="toolchain"
 PKG_LONGDESC="Codec designed for interactive speech and audio transmission over the Internet."
 PKG_TOOLCHAIN="configure"

@@ -1,7 +1,7 @@
-From 9fa1b4e3d5c5cbdbac22a9db1db5e8725dfcfcda Mon Sep 17 00:00:00 2001
+From 30eaee80cdc925ecc12224392672122ef8563a8d Mon Sep 17 00:00:00 2001
 From: Christian Hewitt <christianshewitt@gmail.com>
 Date: Sun, 26 May 2024 12:53:07 +0000
-Subject: [PATCH 52/52] WIP: arm64: dts: meson: add Odroid-C2 HiFi-Shield
+Subject: [PATCH 52/99] WIP: arm64: dts: meson: add Odroid-C2 HiFi-Shield
  boards
 
 Add experimental device-tree files for Odroid C2 with HiFi-Shield+ (pcm5102a)
@@ -10,30 +10,30 @@ and HiFi-Shield2 (pcm5242) mezzanine boards.
 Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
 ---
  arch/arm64/boot/dts/amlogic/Makefile          |   4 +
- .../meson-gxbb-odroidc2-hifishield.dts        | 443 +++++++++++++++++
- .../meson-gxbb-odroidc2-hifishield2.dts       | 447 ++++++++++++++++++
- 3 files changed, 894 insertions(+)
+ .../meson-gxbb-odroidc2-hifishield.dts        | 446 +++++++++++++++++
+ .../meson-gxbb-odroidc2-hifishield2.dts       | 458 ++++++++++++++++++
+ 3 files changed, 908 insertions(+)
  create mode 100644 arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2-hifishield.dts
  create mode 100644 arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2-hifishield2.dts
 
 diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
-index d106a18c39a8..e634b37a5af1 100644
+index 15f9c817e502..c82f3f55526f 100644
 --- a/arch/arm64/boot/dts/amlogic/Makefile
 +++ b/arch/arm64/boot/dts/amlogic/Makefile
-@@ -96,3 +96,7 @@ dtb-$(CONFIG_ARCH_MESON) += meson-sm1-x96-air.dtb
- # Overlays
- meson-g12a-fbx8am-brcm-dtbs	:= meson-g12a-fbx8am.dtb meson-g12a-fbx8am-brcm.dtbo
+@@ -105,3 +105,7 @@ meson-g12a-fbx8am-brcm-dtbs	:= meson-g12a-fbx8am.dtb meson-g12a-fbx8am-brcm.dtbo
  meson-g12a-fbx8am-realtek-dtbs	:= meson-g12a-fbx8am.dtb meson-g12a-fbx8am-realtek.dtbo
+ meson-g12b-a311d-khadas-vim3-ts050-dtbs := meson-g12b-a311d-khadas-vim3.dtb meson-khadas-vim3-ts050.dtbo
+ meson-sm1-khadas-vim3l-ts050-dtbs	:= meson-sm1-khadas-vim3l.dtb meson-khadas-vim3-ts050.dtbo
 +
 +# Experimental
 +dtb-$(CONFIG_ARCH_MESON) += meson-gxbb-odroidc2-hifishield.dtb
 +dtb-$(CONFIG_ARCH_MESON) += meson-gxbb-odroidc2-hifishield2.dtb
 diff --git a/arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2-hifishield.dts b/arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2-hifishield.dts
 new file mode 100644
-index 000000000000..906adc1f622b
+index 000000000000..80b44c2abac2
 --- /dev/null
 +++ b/arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2-hifishield.dts
-@@ -0,0 +1,443 @@
+@@ -0,0 +1,446 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2016 Andreas Färber
@@ -220,13 +220,6 @@ index 000000000000..906adc1f622b
 +	sound {
 +		compatible = "amlogic,gx-sound-card";
 +		model = "ODROID-C2";
-+		assigned-clocks = <&clkc CLKID_MPLL0>,
-+				  <&clkc CLKID_MPLL1>,
-+				  <&clkc CLKID_MPLL2>;
-+		assigned-clock-parents = <0>, <0>, <0>;
-+		assigned-clock-rates = <294912000>,
-+				       <270950400>,
-+				       <393216000>;
 +
 +		dai-link-0 {
 +			sound-dai = <&aiu AIU_CPU CPU_I2S_FIFO>;
@@ -275,6 +268,16 @@ index 000000000000..906adc1f622b
 +	pinctrl-0 = <&ao_cec_pins>;
 +	pinctrl-names = "default";
 +	hdmi-phandle = <&hdmi_tx>;
++};
++
++&clkc {
++	assigned-clocks = <&clkc CLKID_MPLL0>,
++			  <&clkc CLKID_MPLL1>,
++			  <&clkc CLKID_MPLL2>;
++	assigned-clock-parents = <0>, <0>, <0>;
++	assigned-clock-rates = <294912000>,
++			       <270950400>,
++			       <393216000>;
 +};
 +
 +&ethmac {
@@ -479,10 +482,10 @@ index 000000000000..906adc1f622b
 +};
 diff --git a/arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2-hifishield2.dts b/arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2-hifishield2.dts
 new file mode 100644
-index 000000000000..91697f5b5cd7
+index 000000000000..e94d6dc75fec
 --- /dev/null
 +++ b/arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2-hifishield2.dts
-@@ -0,0 +1,447 @@
+@@ -0,0 +1,458 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2016 Andreas Färber
@@ -669,13 +672,6 @@ index 000000000000..91697f5b5cd7
 +	sound {
 +		compatible = "amlogic,gx-sound-card";
 +		model = "ODROID-C2";
-+		assigned-clocks = <&clkc CLKID_MPLL0>,
-+				  <&clkc CLKID_MPLL1>,
-+				  <&clkc CLKID_MPLL2>;
-+		assigned-clock-parents = <0>, <0>, <0>;
-+		assigned-clock-rates = <294912000>,
-+				       <270950400>,
-+				       <393216000>;
 +
 +		dai-link-0 {
 +			sound-dai = <&aiu AIU_CPU CPU_I2S_FIFO>;
@@ -704,6 +700,14 @@ index 000000000000..91697f5b5cd7
 +		};
 +
 +		dai-link-4 {
++			sound-dai = <&aiu AIU_CPU CPU_SPDIF_ENCODER>;
++
++			codec-0 {
++				sound-dai = <&pcm5242>;
++			};
++		};
++
++		dai-link-5 {
 +			sound-dai = <&aiu AIU_HDMI CTRL_OUT>;
 +
 +			codec-0 {
@@ -724,6 +728,16 @@ index 000000000000..91697f5b5cd7
 +	pinctrl-0 = <&ao_cec_pins>;
 +	pinctrl-names = "default";
 +	hdmi-phandle = <&hdmi_tx>;
++};
++
++&clkc {
++	assigned-clocks = <&clkc CLKID_MPLL0>,
++			  <&clkc CLKID_MPLL1>,
++			  <&clkc CLKID_MPLL2>;
++	assigned-clock-parents = <0>, <0>, <0>;
++	assigned-clock-rates = <294912000>,
++			       <270950400>,
++			       <393216000>;
 +};
 +
 +&ethmac {
@@ -931,5 +945,5 @@ index 000000000000..91697f5b5cd7
 +	};
 +};
 -- 
-2.34.1
+2.43.0
 

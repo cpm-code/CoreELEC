@@ -1,6 +1,16 @@
 --- a/Makefile
 +++ b/Makefile
-@@ -1,16 +1,17 @@
+@@ -3,6 +3,7 @@
+ OS := $(shell uname -s)
+ endif
+ 
++AR    := $(CROSS_COMPILE)ar
+ CC    := $(CROSS_COMPILE)gcc
+ STRIP := $(CROSS_COMPILE)strip
+ 
+@@ -26,19 +27,19 @@
+   LDFLAGS += -lrt
+ endif
  
 -LIBSRCS += hdhomerun_channels.c
 -LIBSRCS += hdhomerun_channelscan.c
@@ -11,7 +21,9 @@
 -LIBSRCS += hdhomerun_discover.c
 -LIBSRCS += hdhomerun_os_posix.c
 -LIBSRCS += hdhomerun_pkt.c
+-LIBSRCS += hdhomerun_sock.c
 -LIBSRCS += hdhomerun_sock_posix.c
+-LIBSRCS += hdhomerun_sock_$(IF_DETECT).c
 -LIBSRCS += hdhomerun_video.c
 +LIBSRCS += hdhomerun_channels.o
 +LIBSRCS += hdhomerun_channelscan.o
@@ -22,16 +34,16 @@
 +LIBSRCS += hdhomerun_discover.o
 +LIBSRCS += hdhomerun_os_posix.o
 +LIBSRCS += hdhomerun_pkt.o
++LIBSRCS += hdhomerun_sock.o
 +LIBSRCS += hdhomerun_sock_posix.o
++LIBSRCS += hdhomerun_sock_$(IF_DETECT).o
 +LIBSRCS += hdhomerun_video.o
  
-+AR    := $(CROSS_COMPILE)ar
- CC    := $(CROSS_COMPILE)gcc
- STRIP := $(CROSS_COMPILE)strip
+ ifeq ($(OS),Darwin)
  
-@@ -38,14 +39,17 @@ else
-   endif
- endif
+@@ -69,14 +70,17 @@
+ 
+ else
  
 -all : hdhomerun_config$(BINEXT) libhdhomerun$(LIBEXT)
 +all : hdhomerun_config$(BINEXT) libhdhomerun.a
@@ -44,9 +56,9 @@
  	$(STRIP) $@
  
 -libhdhomerun$(LIBEXT) : $(LIBSRCS)
--	$(CC) $(CFLAGS) -fPIC -DDLL_EXPORT $(SHARED) $+ $(LDFLAGS) -o $@
+-	$(CC) $(CFLAGS) -DDLL_EXPORT -fPIC $(SHARED) $+ $(LDFLAGS) -o $@
 +libhdhomerun.a : $(LIBSRCS)
 +	$(AR) rcs libhdhomerun.a $(LIBSRCS)
  
- clean :
- 	-rm -f hdhomerun_config$(BINEXT)
+ endif
+ 

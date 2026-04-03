@@ -19,6 +19,7 @@ pre_configure_target() {
 }
 
 pre_make_target() {
+  rm -rf $PKG_BUILD/utgard/r7p0/platform
   ln -s $PKG_BUILD/utgard/platform $PKG_BUILD/utgard/r7p0/platform
 }
 
@@ -35,7 +36,7 @@ makeinstall_target() {
   kernel_make -C $(kernel_path) M=$PKG_BUILD/bifrost/r12p0/kernel/drivers/gpu/arm \
     INSTALL_MOD_PATH=$INSTALL/$(get_kernel_overlay_dir) INSTALL_MOD_STRIP=1 DEPMOD=: \
   modules_install
-  
+
   kernel_make -C $(kernel_path) M=$PKG_BUILD/utgard/r7p0 \
     INSTALL_MOD_PATH=$INSTALL/$(get_kernel_overlay_dir) INSTALL_MOD_STRIP=1 DEPMOD=: \
   modules_install

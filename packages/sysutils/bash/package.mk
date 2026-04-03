@@ -2,13 +2,17 @@
 # Copyright (C) 2022-present Team CoreELEC (https://coreelec.org)
 
 PKG_NAME="bash"
-PKG_VERSION="5.2.15"
-PKG_SHA256="13720965b5f4fc3a0d4b61dd37e7565c741da9a5be24edc2ae00182fc1b3588c"
+PKG_VERSION="5.2.37"
+PKG_SHA256="9599b22ecd1d5787ad7d3b7bf0c59f312b3396d1e281175dd1f8a4014da621ff"
 PKG_LICENSE="GPL"
 PKG_SITE="https://www.gnu.org/software/bash/"
 PKG_URL="https://ftp.gnu.org/gnu/${PKG_NAME}/${PKG_NAME}-${PKG_VERSION}.tar.gz"
 PKG_DEPENDS_TARGET="toolchain ncurses readline"
 PKG_LONGDESC="Bash is the GNU Project shell - the Bourne Again SHell."
+
+pre_configure_target() {
+  CFLAGS+=" -std=gnu17"
+}
 
 PKG_CONFIGURE_OPTS_TARGET="--with-curses \
                            --without-bash-malloc \

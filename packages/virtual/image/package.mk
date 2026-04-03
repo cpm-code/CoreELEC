@@ -4,12 +4,15 @@
 PKG_NAME="image"
 PKG_LICENSE="GPL"
 PKG_SITE="https://libreelec.tv"
-PKG_DEPENDS_TARGET="toolchain squashfs-tools:host pigz:host dosfstools:host fakeroot:host kmod:host mtools:host populatefs:host libc gcc linux linux-drivers linux-firmware ${BOOTLOADER} busybox util-linux mmc-utils corefonts network misc-packages debug exfatprogs"
+PKG_DEPENDS_TARGET="toolchain squashfs-tools:host pigz:host dosfstools:host fakeroot:host kmod:host mtools:host populatefs:host libc gcc linux linux-drivers linux-firmware ${BOOTLOADER} busybox util-linux corefonts network misc-packages debug hdparm hd-idle parted dosfstools e2fsprogs exfatprogs usbutils procps-ng"
 PKG_SECTION="virtual"
 PKG_LONGDESC="Root package used to build and create complete image"
 
 # Bash is default shell
 PKG_DEPENDS_TARGET+=" bash"
+
+# nano text editor
+[ "${NANO_EDITOR}" = "yes" ] && PKG_DEPENDS_TARGET+=" nano"
 
 # Graphic support
 [ ! "${DISPLAYSERVER}" = "no" ] && PKG_DEPENDS_TARGET+=" ${DISPLAYSERVER}"

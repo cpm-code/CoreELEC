@@ -2,8 +2,8 @@
 # Copyright (C) 2022-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="gst-plugins-bad"
-PKG_VERSION="1.24.8"
-PKG_SHA256="35ad70de3d7cbca3089f33bb77c45750daad2ae93d79827fdbb469fa8aba84eb"
+PKG_VERSION="1.29.1"
+PKG_SHA256="629d70cdf75faca70805dbd5fa4db819f30c1f775b599f2d578d04eeb626ade5"
 PKG_LICENSE="LGPL-2.1-or-later"
 PKG_SITE="https://gstreamer.freedesktop.org/modules/gst-plugins-bad.html"
 PKG_URL="https://gstreamer.freedesktop.org/src/gst-plugins-bad/${PKG_NAME}-${PKG_VERSION}.tar.xz"
@@ -75,7 +75,6 @@ pre_configure_target() {
                          -Dvideoparsers=enabled \
                          -Dvideosignal=disabled \
                          -Dvmnc=disabled \
-                         -Dy4m=disabled \
                          -Dopencv=disabled \
                          -Dwayland=disabled \
                          -Dx11=disabled \
@@ -177,9 +176,9 @@ pre_configure_target() {
                          -Dintrospection=disabled \
                          -Dnls=disabled \
                          -Dorc=disabled \
-                         -Dgobject-cast-checks=disabled \
-                         -Dglib-asserts=disabled \
-                         -Dglib-checks=disabled \
+                         -Dglib_debug=disabled \
+                         -Dglib_assert=false \
+                         -Dglib_checks=false \
                          -Dpackage-name=gst-plugins-bad \
                          -Dpackage-origin=LibreELEC.tv \
                          -Ddoc=disabled"

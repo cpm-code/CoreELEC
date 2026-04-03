@@ -2,13 +2,13 @@
 # Copyright (C) 2017-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="libarchive"
-PKG_VERSION="3.7.5"
-PKG_SHA256="ca74ff8f99dd40ab8a8274424d10a12a7ec3f4428dd35aee9fdda8bdb861b570"
+PKG_VERSION="3.8.6"
+PKG_SHA256="8ac57c1f5e99550948d1fe755c806d26026e71827da228f36bef24527e372e6f"
 PKG_LICENSE="GPL"
 PKG_SITE="https://www.libarchive.org"
 PKG_URL="https://www.libarchive.org/downloads/${PKG_NAME}-${PKG_VERSION}.tar.xz"
 PKG_DEPENDS_HOST="cmake:host ninja:host"
-PKG_DEPENDS_TARGET="cmake:host gcc:host"
+PKG_DEPENDS_TARGET="cmake:host gcc:host bzip2 lz4 lzo openssl pcre2 xz zlib zstd"
 PKG_SHORTDESC="A multi-format archive and compression library."
 
 PKG_CMAKE_OPTS_TARGET="-DCMAKE_POSITION_INDEPENDENT_CODE=1 \
@@ -28,7 +28,7 @@ PKG_CMAKE_OPTS_TARGET="-DCMAKE_POSITION_INDEPENDENT_CODE=1 \
                        -DENABLE_LIBGCC=ON \
                        -DENABLE_LIBXML2=OFF \
                        -DENABLE_LZ4=ON \
-                       -DENABLE_LZMA=OFF \
+                       -DENABLE_LZMA=ON \
                        -DENABLE_LZO=ON \
                        -DENABLE_MBEDTLS=OFF \
                        -DENABLE_NETTLE=OFF \
@@ -43,4 +43,5 @@ PKG_CMAKE_OPTS_TARGET="-DCMAKE_POSITION_INDEPENDENT_CODE=1 \
                        -DENABLE_WERROR=0 \
                        -DENABLE_XATTR=ON \
                        -DENABLE_ZLIB=ON \
-                       -DENABLE_ZSTD=ON"
+                       -DENABLE_ZSTD=ON \
+                       -DPOSIX_REGEX_LIB=LIBPCRE2POSIX"

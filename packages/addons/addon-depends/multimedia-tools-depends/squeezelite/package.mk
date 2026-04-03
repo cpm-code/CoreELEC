@@ -2,8 +2,8 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="squeezelite"
-PKG_VERSION="c751ef146265c243cdbd7c0353dd0b70ab51730c"
-PKG_SHA256="19fd23ca52039b4e216ff74e7d93b7fd8079ab8bfd63d5fb2286bfb743e334ed"
+PKG_VERSION="e977d1045f5f4c1a51ba0d66387f26fd19a2f42a"
+PKG_SHA256="32f0b25888e400dcf571f9159079db1275a674d43e8567217a5d673fd38f4cca"
 PKG_LICENSE="GPLv3"
 PKG_SITE="https://github.com/ralph-irving/squeezelite"
 PKG_URL="https://github.com/ralph-irving/squeezelite/archive/${PKG_VERSION}.tar.gz"

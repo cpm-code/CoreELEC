@@ -1,7 +1,7 @@
 diff -Nur a/libpcre/aclocal.m4 b/libpcre/aclocal.m4
 --- a/libpcre/aclocal.m4	2023-06-24 01:53:07.000000000 +0000
 +++ b/libpcre/aclocal.m4	2024-07-29 11:29:45.699525807 +0000
-@@ -32,10 +32,10 @@
+@@ -376,10 +376,10 @@
  # generated from the m4 files accompanying Automake X.Y.
  # (This private macro should not be called outside this file.)
  AC_DEFUN([AM_AUTOMAKE_VERSION],
@@ -14,7 +14,7 @@ diff -Nur a/libpcre/aclocal.m4 b/libpcre/aclocal.m4
        [AC_FATAL([Do not call $0, use AM_INIT_AUTOMAKE([$1]).])])dnl
  ])
  
-@@ -51,7 +51,7 @@
+@@ -395,7 +395,7 @@
  # Call AM_AUTOMAKE_VERSION and AM_AUTOMAKE_VERSION so they can be traced.
  # This function is AC_REQUIREd by AM_INIT_AUTOMAKE.
  AC_DEFUN([AM_SET_CURRENT_AUTOMAKE_VERSION],
@@ -26,7 +26,7 @@ diff -Nur a/libpcre/aclocal.m4 b/libpcre/aclocal.m4
 diff -Nur a/libpcre/configure b/libpcre/configure
 --- a/libpcre/configure	2024-02-28 16:06:30.000000000 +0000
 +++ b/libpcre/configure	2024-07-29 11:25:14.134081052 +0000
-@@ -2758,7 +2758,7 @@
+@@ -2895,7 +2895,7 @@
  
  
  
@@ -63,10 +63,10 @@ diff -Nur a/libssh2/aclocal.m4 b/libssh2/aclocal.m4
 diff -Nur a/libssh2/configure b/libssh2/configure
 --- a/libssh2/configure	2024-02-28 17:39:06.000000000 +0000
 +++ b/libssh2/configure	2024-07-29 11:25:39.590945455 +0000
-@@ -3236,7 +3236,7 @@
+@@ -3243,7 +3243,7 @@
  fi
  
- LIBSSH2VER=`$SED -ne 's/^#define LIBSSH2_VERSION *"\(.*\)"/\1/p' ${srcdir}/include/libssh2.h`
+ LIBSSH2_VERSION=`$SED -ne 's/^#define LIBSSH2_VERSION *"\(.*\)"/\1/p' ${srcdir}/include/libssh2.h`
 -am__api_version='1.16'
 +am__api_version='1.17'
  

@@ -3,14 +3,16 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="iptables"
-PKG_VERSION="1.8.10"
-PKG_SHA256="5cc255c189356e317d070755ce9371eb63a1b783c34498fb8c30264f3cc59c9c"
+PKG_VERSION="1.8.13"
+PKG_SHA256="1afcd33da9e8f913ace6a2126788162e207e26f5d5e29c6573c0e581ffc58b99"
 PKG_LICENSE="GPL"
 PKG_SITE="https://www.netfilter.org/"
 PKG_URL="https://www.netfilter.org/projects/iptables/files/${PKG_NAME}-${PKG_VERSION}.tar.xz"
 PKG_DEPENDS_TARGET="autotools:host gcc:host linux:host libmnl libnftnl"
 PKG_LONGDESC="IP packet filter administration."
 PKG_TOOLCHAIN="autotools"
+
+PKG_CONFIGURE_OPTS_TARGET+=" --enable-nftables --disable-ipv4 --disable-ipv6"
 
 post_configure_target() {
   libtool_remove_rpath libtool
@@ -25,6 +27,13 @@ post_makeinstall_target() {
 
   mkdir -p ${INSTALL}/usr/lib/libreelec
     cp ${PKG_DIR}/scripts/iptables_helper ${INSTALL}/usr/lib/libreelec
+
+  ln -sf xtables-nft-multi ${INSTALL}/usr/sbin/iptables
+  ln -sf xtables-nft-multi ${INSTALL}/usr/sbin/iptables-restore
+  ln -sf xtables-nft-multi ${INSTALL}/usr/sbin/iptables-save
+  ln -sf xtables-nft-multi ${INSTALL}/usr/sbin/ip6tables
+  ln -sf xtables-nft-multi ${INSTALL}/usr/sbin/ip6tables-restore
+  ln -sf xtables-nft-multi ${INSTALL}/usr/sbin/ip6tables-save
 }
 
 post_install() {

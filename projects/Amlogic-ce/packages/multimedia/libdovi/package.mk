@@ -14,7 +14,7 @@ PKG_TOOLCHAIN="manual"
 
 pre_make_target() {
   CARGO_CRATE_DIR="${PKG_BUILD}/dolby_vision"
-  CARGO_TARGET="${RUST_TARGET_SPEC:-${TARGET_NAME}}"
+  CARGO_TARGET="${TARGET_NAME}"
   CARGO_TARGET_DIR_NAME="${TARGET_NAME}"
   CARGO_STATICLIB="${PKG_BUILD}/.${TARGET_NAME}/target/${CARGO_TARGET_DIR_NAME}/release/libdolby_vision.a"
   CARGO_HEADER="${PKG_BUILD}/.${TARGET_NAME}/target/${CARGO_TARGET_DIR_NAME}/release/rpu_parser.h"

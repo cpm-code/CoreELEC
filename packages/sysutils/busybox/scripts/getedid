@@ -136,7 +136,7 @@ create_edid() {
 }
 
 intel_amd() {
-  # check which output is connnected:
+  # check which output is connected:
   counter=0
   for i in /sys/class/drm/*; do
     if [ "$(cat "$i"/status 2>/dev/null)" = "connected" ]; then

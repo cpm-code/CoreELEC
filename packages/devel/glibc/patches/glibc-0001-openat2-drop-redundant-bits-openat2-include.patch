@@ -1,0 +1,27 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: GitHub Copilot <copilot@github.com>
+Date: Fri, 3 Apr 2026 11:00:00 +0000
+Subject: [PATCH] openat2: drop redundant bits header include
+
+fcntl.h already pulls in bits/openat2.h on this build, so including the
+bits header directly here causes struct open_how to be defined twice.
+Removing the redundant include keeps the implementation aligned with the
+public declaration path.
+---
+ sysdeps/unix/sysv/linux/openat2.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/sysdeps/unix/sysv/linux/openat2.c b/sysdeps/unix/sysv/linux/openat2.c
+index b0b2d4c2c1..4a3b9c1a9f 100644
+--- a/sysdeps/unix/sysv/linux/openat2.c
++++ b/sysdeps/unix/sysv/linux/openat2.c
+@@ -17,7 +17,6 @@
+    <https://www.gnu.org/licenses/>.  */
+
+ #include <fcntl.h>
+-#include <bits/openat2.h>
+ #include <sysdep-cancel.h>
+
+ int
+--
+2.51.0

@@ -2,8 +2,8 @@
 # Copyright (C) 2025-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="scikit-build-core"
-PKG_VERSION="0.11.6"
-PKG_SHA256="803f6c8942a90f3d5e763123628348b13e2a82fd9c71b2186a892cbcaa000d0c"
+PKG_VERSION="0.12.2"
+PKG_SHA256="a938e333126d51b40007c715b833e1cbf28059655a37aac85e158d9578ead113"
 PKG_LICENSE="Apache-2.0"
 PKG_SITE="https://github.com/scikit-build/scikit-build-core"
 PKG_URL="https://github.com/scikit-build/scikit-build-core/archive/refs/tags/v${PKG_VERSION}.tar.gz"

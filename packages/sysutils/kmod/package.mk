@@ -2,32 +2,34 @@
 # Copyright (C) 2009-2016 Stephan Raue (stephan@openelec.tv)
 
 PKG_NAME="kmod"
-PKG_VERSION="33"
-PKG_SHA256="dc768b3155172091f56dc69430b5481f2d76ecd9ccb54ead8c2540dbcf5ea9bc"
+PKG_VERSION="34.2"
+PKG_SHA256="5a5d5073070cc7e0c7a7a3c6ec2a0e1780850c8b47b3e3892226b93ffcb9cb54"
 PKG_LICENSE="GPL"
 PKG_SITE="https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git"
 PKG_URL="https://www.kernel.org/pub/linux/utils/kernel/kmod/${PKG_NAME}-${PKG_VERSION}.tar.xz"
-PKG_DEPENDS_HOST="autotools:host"
-PKG_DEPENDS_TARGET="autotools:host gcc:host"
+PKG_DEPENDS_HOST="meson:host ninja:host"
+PKG_DEPENDS_TARGET="meson:host gcc:host openssl"
 PKG_LONGDESC="kmod offers the needed flexibility and fine grained control over insertion, removal, configuration and listing of kernel modules."
+PKG_BUILD_FLAGS="-gold -mold"
 
-PKG_CONFIGURE_OPTS_HOST="--enable-tools \
-                         --disable-logging \
-                         --disable-debug \
-                         --disable-manpages \
-                         --with-gnu-ld \
-                         --without-xz \
-                         --without-zlib \
-                         --without-zstd"
+PKG_MESON_OPTS_COMMON="-Dbashcompletiondir=no \
+                       -Dfishcompletiondir=no \
+                       -Dzshcompletiondir=no \
+                       -Dzstd=disabled \
+                       -Dxz=disabled \
+                       -Dzlib=disabled \
+                       -Dopenssl=enabled \
+                       -Dtools=true \
+                       -Ddebug-messages=false \
+                       -Dbuild-tests=false \
+                       -Dmanpages=false \
+                       -Ddocs=false"
 
-PKG_CONFIGURE_OPTS_TARGET="--enable-tools \
-                           --enable-logging \
-                           --disable-debug \
-                           --disable-manpages \
-                           --with-gnu-ld \
-                           --without-xz \
-                           --without-zlib \
-                           --without-zstd"
+PKG_MESON_OPTS_HOST="${PKG_MESON_OPTS_COMMON} \
+                     -Dlogging=false"
+
+PKG_MESON_OPTS_TARGET="${PKG_MESON_OPTS_COMMON} \
+                       -Dlogging=true"
 
 post_makeinstall_host() {
   ln -sf kmod ${TOOLCHAIN}/bin/depmod
@@ -44,6 +46,7 @@ post_makeinstall_target() {
     ln -sf /usr/bin/kmod ${INSTALL}/usr/sbin/depmod
 
   mkdir -p ${INSTALL}/etc
+    rmdir ${INSTALL}/etc/modprobe.d
     ln -sf /storage/.config/modprobe.d ${INSTALL}/etc/modprobe.d
 
   # add user modprobe.d dir

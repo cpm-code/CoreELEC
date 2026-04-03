@@ -5,16 +5,15 @@
 # with 1.0.0 repeat delay is broken. test on upgrade
 
 PKG_NAME="v4l-utils"
-PKG_VERSION="1.28.1"
-PKG_SHA256="0fa075ce59b6618847af6ea191b6155565ccaa44de0504581ddfed795a328a82"
+PKG_VERSION="1.32.0"
+PKG_SHA256="6828828a17775526eb93fb258a9294d1d1073d633c344dd71ecd4e7a1ffb7dfc"
 PKG_LICENSE="GPL"
 PKG_SITE="https://linuxtv.org/"
 PKG_URL="https://linuxtv.org/downloads/v4l-utils/${PKG_NAME}-${PKG_VERSION}.tar.xz"
 PKG_DEPENDS_TARGET="toolchain alsa-lib elfutils ir-bpf-decoders libbpf systemd zlib"
 PKG_LONGDESC="Linux V4L2 and DVB API utilities and v4l libraries (libv4l)."
-PKG_MESON_OPTS_TARGET="-Ddefault_library=static \
-                       -Dprefer_static=true \
-                       -Dbpf=enabled \
+
+PKG_MESON_OPTS_TARGET="-Dbpf=enabled \
                        -Dgconv=disabled \
                        -Djpeg=disabled \
                        -Dqvidcap=disabled \
@@ -36,7 +35,7 @@ create_multi_keymap() {
 post_makeinstall_target() {
   local f keymap
 
-  if [ ! "${LIBREELEC_VERSION}" == "devel" ]; then
+  if [ ! "${DISTRO_VERSION}" == "devel" ]; then
     rm ${INSTALL}/usr/bin/v4l2-compliance
   fi
 
@@ -44,7 +43,6 @@ post_makeinstall_target() {
 
   rm -rf ${INSTALL}/usr/include
   rm -rf ${INSTALL}/usr/lib/gconv
-  rm -rf ${INSTALL}/usr/lib/lib*
   rm -rf ${INSTALL}/usr/lib/pkgconfig
 
   rm -rf ${INSTALL}/etc/rc_keymaps

@@ -3,8 +3,8 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="glibc"
-PKG_VERSION="2.40"
-PKG_SHA256="19a890175e9263d748f627993de6f4b1af9cd21e03f080e4bfb3a1fac10205a2"
+PKG_VERSION="2.43"
+PKG_SHA256="d9c86c6b5dbddb43a3e08270c5844fc5177d19442cf5b8df4be7c07cd5fa3831"
 PKG_LICENSE="GPL"
 PKG_SITE="https://www.gnu.org/software/libc/"
 PKG_URL="https://ftp.gnu.org/pub/gnu/glibc/${PKG_NAME}-${PKG_VERSION}.tar.xz"
@@ -18,10 +18,10 @@ case "${LINUX}" in
     OPT_ENABLE_KERNEL=4.9.0
     ;;
   amlogic-5.*)
-    OPT_ENABLE_KERNEL=5.4.0
+    OPT_ENABLE_KERNEL=5.15.0
     ;;
   *)
-    OPT_ENABLE_KERNEL=6.1.0
+    OPT_ENABLE_KERNEL=6.12.0
     ;;
 esac
 
@@ -152,14 +152,16 @@ make_init() {
 }
 
 makeinstall_init() {
+  local runtime_dir="${TOOLCHAIN}/${TARGET_NAME}/sysroot/usr/lib"
+
   mkdir -p ${INSTALL}/usr/lib
-    cp -PR ${PKG_BUILD}/.${TARGET_NAME}/elf/ld*.so* ${INSTALL}/usr/lib
-    cp -PR ${PKG_BUILD}/.${TARGET_NAME}/libc.so* ${INSTALL}/usr/lib
-    cp -PR ${PKG_BUILD}/.${TARGET_NAME}/math/libm.so* ${INSTALL}/usr/lib
-    cp -PR ${PKG_BUILD}/.${TARGET_NAME}/nptl/libpthread.so* ${INSTALL}/usr/lib
-    cp -PR ${PKG_BUILD}/.${TARGET_NAME}/rt/librt.so* ${INSTALL}/usr/lib
-    cp -PR ${PKG_BUILD}/.${TARGET_NAME}/resolv/libnss_dns.so* ${INSTALL}/usr/lib
-    cp -PR ${PKG_BUILD}/.${TARGET_NAME}/resolv/libresolv.so* ${INSTALL}/usr/lib
+    cp -PR ${runtime_dir}/ld*.so* ${INSTALL}/usr/lib
+    cp -PR ${runtime_dir}/libc.so* ${INSTALL}/usr/lib
+    cp -PR ${runtime_dir}/libm.so* ${INSTALL}/usr/lib
+    cp -PR ${runtime_dir}/libpthread.so* ${INSTALL}/usr/lib
+    cp -PR ${runtime_dir}/librt.so* ${INSTALL}/usr/lib
+    cp -PR ${runtime_dir}/libnss_dns.so* ${INSTALL}/usr/lib
+    cp -PR ${runtime_dir}/libresolv.so* ${INSTALL}/usr/lib
 }
 
 post_makeinstall_init() {

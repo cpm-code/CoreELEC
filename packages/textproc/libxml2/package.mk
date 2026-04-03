@@ -3,8 +3,8 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="libxml2"
-PKG_VERSION="2.13.4"
-PKG_SHA256="ba783b43e8b3475cbd2b1ef40474da6a4465105ee9818d76cd3ac7863550afce"
+PKG_VERSION="2.15.2"
+PKG_SHA256="0444485702877ad65b1e0fcec2389230997d250d0ac8575eed8026e68355657e"
 PKG_LICENSE="MIT"
 PKG_SITE="http://xmlsoft.org"
 PKG_URL="https://gitlab.gnome.org/GNOME/${PKG_NAME}/-/archive/v${PKG_VERSION}/${PKG_NAME}-v${PKG_VERSION}.tar.bz2"
@@ -14,14 +14,16 @@ PKG_LONGDESC="The libxml package contains an XML library, which allows you to ma
 PKG_TOOLCHAIN="cmake"
 
 PKG_CMAKE_OPTS_ALL="-DBUILD_SHARED_LIBS=ON \
-                    -DLIBXML2_WITH_LZMA=OFF \
-                    -DLIBXML2_WITH_TESTS=OFF"
+                    -DLIBXML2_WITH_ICONV=OFF \
+                    -DLIBXML2_WITH_ICU=OFF \
+                    -DLIBXML2_WITH_TESTS=OFF \
+                    -DLIBXML2_WITH_THREADS=ON \
+                    -DLIBXML2_WITH_PYTHON=OFF \
+                    -DLIBXML2_WITH_ZLIB=OFF"
 
-PKG_CMAKE_OPTS_HOST="${PKG_CMAKE_OPTS_ALL} \
-                     -DLIBXML2_WITH_PYTHON=ON"
+PKG_CMAKE_OPTS_HOST="${PKG_CMAKE_OPTS_ALL}"
 
-PKG_CMAKE_OPTS_TARGET="${PKG_CMAKE_OPTS_ALL} \
-                       -DLIBXML2_WITH_PYTHON=OFF"
+PKG_CMAKE_OPTS_TARGET="${PKG_CMAKE_OPTS_ALL}"
 
 post_makeinstall_target() {
   sed -e "s:\(['= ]\)/usr:\\1${SYSROOT_PREFIX}/usr:g" -i ${SYSROOT_PREFIX}/usr/bin/xml2-config

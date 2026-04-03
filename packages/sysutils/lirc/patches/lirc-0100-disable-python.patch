@@ -1,5 +1,4 @@
 diff --git a/Makefile.am b/Makefile.am
-index 9f3dd143..9619a6eb 100644
 --- a/Makefile.am
 +++ b/Makefile.am
 @@ -5,7 +5,9 @@ ACLOCAL_AMFLAGS         = -I m4
@@ -12,7 +11,7 @@ index 9f3dd143..9619a6eb 100644
  
  GIT_COMMIT      = $(shell git log -1 --pretty=format:%h || echo UNKNOWN)
  GIT_DATE        = $(shell git log -1 --pretty=format:%cd || echo UNKNOWN)
-@@ -34,13 +36,17 @@ MANTAINERCLEANFILES     = config.sub install-sh depcomp py-compile \
+@@ -39,13 +41,17 @@ MANTAINERCLEANFILES     = config.sub ins
  AM_DISTCHECK_CONFIGURE_FLAGS = \
      --with-systemdsystemunitdir=$${dc_install_base}/lib/systemd/system
  
@@ -31,7 +30,7 @@ index 9f3dd143..9619a6eb 100644
  
  if INSTALL_ETC
  
-@@ -61,7 +67,9 @@ endif
+@@ -66,7 +72,9 @@ endif
  
  dist_doc_DATA           = VERSION
  
@@ -41,16 +40,16 @@ index 9f3dd143..9619a6eb 100644
  
  pkgconfigdir            = $(libdir)/pkgconfig
  dist_pkgconfig_DATA     = lirc.pc lirc-driver.pc
-@@ -71,6 +79,7 @@ nobase_header_HEADERS   = include/media/lirc.h \
-                           include/linux/input-event-codes.h
- header_HEADERS          = drivers/irpipe/irpipe.h
+@@ -78,6 +86,7 @@ header_HEADERS          = include/linux/
+ mediadir                = $(includedir)/lirc/media
+ media_HEADERS           = include/media/lirc.h
  
 +if HAVE_PYTHON
  py_pkgdir               = $(pkgdatadir)/python-pkg
  dist_py_pkg_DATA        = python-pkg/setup.py \
                            python-pkg/README.rst
-@@ -134,6 +143,8 @@ all-local:
- 	    $(if $(VERBOSE),,-q) build
+@@ -143,6 +152,8 @@ all-local:
+ 	    $(PYTHON) setup.py $(if $(VERBOSE),,-q) build
  endif
  
 +endif
@@ -58,7 +57,7 @@ index 9f3dd143..9619a6eb 100644
  install-data-hook:
  	$(SED) -i -e '/^plugindir/s|/usr/lib|$(libdir)|' \
  	    $(DESTDIR)$(lirc_confdir)/lirc_options.conf
-@@ -170,6 +181,7 @@ fix-version: .phony
+@@ -177,6 +188,7 @@ fix-version: .phony
  	$(SED) -i '/DATE/s/=.*/="$(GIT_DATE)"/' $(distdir)/VERSION
  	$(SED) -i '/REFS/s|=.*|="$(GIT_REFS)"|' $(distdir)/VERSION
  
@@ -66,7 +65,7 @@ index 9f3dd143..9619a6eb 100644
  $(abs_builddir)/python-pkg/setup.py:
  	cp -ar $(top_srcdir)/python-pkg  $(abs_builddir)
  	chmod -R u+w  python-pkg
-@@ -193,6 +205,7 @@ python-pkg/lirc/config.py: Makefile  $(abs_builddir)/python-pkg/setup.py
+@@ -202,6 +214,7 @@ python-pkg/lirc/config.py: Makefile  $(a
  	@echo 'DOCDIR="$(docdir)"' >>$@
  	@echo 'MODINFO="$(MODINFO)"' >>$@
  	@echo 'VERSION="$(VERSION)"' >>$@
@@ -75,10 +74,9 @@ index 9f3dd143..9619a6eb 100644
  paths.h: Makefile
  	@echo "#ifndef PATHS_H"          >paths.h
 diff --git a/configure.ac b/configure.ac
-index 58347d88..48ce5629 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -43,7 +43,8 @@ AC_CHECK_PROG([DOXYGEN],[doxygen],[yes],[no])
+@@ -47,7 +47,8 @@ AC_CHECK_PROG([DOXYGEN],[doxygen],[yes],
  AM_CONDITIONAL(HAVE_DOXYGEN, test x$DOXYGEN = xyes)
  LT_INIT([disable-static])
  
@@ -86,18 +84,29 @@ index 58347d88..48ce5629 100644
 +AM_PATH_PYTHON([3.1],,[:])
 +AM_CONDITIONAL([HAVE_PYTHON], [test "$PYTHON" != :])
  PKG_CHECK_MODULES([PYTHON],[python-${PYTHON_VERSION}m],,[true])
- test -z "$PYTHON_LIBS" && \
+ test -z "$PYTHON_CFLAGS" && \
      PKG_CHECK_MODULES([PYTHON], [python-$PYTHON_VERSION],,[true])
-@@ -580,6 +581,7 @@ AX_REPORT_CONDITIONAL([DEVEL])
+@@ -138,11 +139,7 @@ test -d "/var/lock/lockdev" || lockdir_d
+ enable_uinput_default="no"
+ test -e "/dev/uinput" && enable_uinput_default="yes"
+ 
+-version_nodots=$( $PYTHON << EOF
+-v = "$VERSION".split("rc").pop(0).split("-").pop(0).split(".")
+-print(int(v.pop(0)) * 10000 + int(v.pop(0)) * 100 + int(v.pop(0)))
+-EOF
+-)
++version_nodots=$( echo $VERSION|tr '.' ' '|(read m v r;echo $((m*10000+v*100+r))) )
+ AC_DEFINE_UNQUOTED(VERSION_NODOTS, [$version_nodots])
+ 
+ AC_MSG_CHECKING([for linux kernel])
+@@ -572,6 +569,7 @@ AX_REPORT_CONDITIONAL([DEVEL])
  AX_REPORT_CONDITIONAL([LINUX_KERNEL])
  AX_REPORT_CONDITIONAL([HAVE_DEVINPUT])
  AX_REPORT_CONDITIONAL([WITH_SYSTEMDSYSTEMUNITDIR])
 +AX_REPORT_CONDITIONAL([HAVE_PYTHON])
  AX_REPORT_CONDITIONAL([HAVE_PYTHON35])
  
- echo
-diff --git a/tools/Makefile.am b/tools/Makefile.am
-index abfb9911..8aff1cff 100644
+ AS_IF([test x$HAVE_PYMOD_YAML != xyes], AC_MSG_WARN([
 --- a/tools/Makefile.am
 +++ b/tools/Makefile.am
 @@ -71,12 +71,17 @@ xmode2_SOURCES          = xmode2.cpp
@@ -118,7 +127,7 @@ index abfb9911..8aff1cff 100644
  dist_bin_SCRIPTS        += pronto2lirc irdb-get irtext2udp lirc-postinstall
  dist_sbin_SCRIPTS       = lircd-setup
  dist_noinst_SCRIPTS     = make_rel_symlink.py check_configs.py
-@@ -121,6 +126,7 @@ install-data-hook:
+@@ -122,6 +127,7 @@ install-data-hook:
  	$(PYTHON) $(srcdir)/make_rel_symlink.py \
  	    $(DESTDIR)/$(pkgdatadir)/configs \
  	        $(DESTDIR)/$(setupdir)/configs

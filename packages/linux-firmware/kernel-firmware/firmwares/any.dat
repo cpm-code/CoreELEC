@@ -23,3 +23,6 @@ rtl_bt/*
 rtlwifi/*
 rtw88/*
 rtw89/*
+
+#mali
+arm/mali/arch10.8/mali_csffw.bin:mali_csffw.bin

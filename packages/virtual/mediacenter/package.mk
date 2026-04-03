@@ -23,7 +23,6 @@ if [ "${MEDIACENTER}" = "kodi" ]; then
 
   # some python stuff needed for various addons
   PKG_DEPENDS_TARGET="${PKG_DEPENDS_TARGET} Pillow \
-                                            simplejson \
                                             pycryptodome"
 
   # settings addon
@@ -43,7 +42,7 @@ if [ "${MEDIACENTER}" = "kodi" ]; then
     PKG_DEPENDS_TARGET+=" intel-vaapi-driver media-driver"
   fi
 
-  if listcontains "${GRAPHIC_DRIVERS}" "nvidia-ng"; then
+  if listcontains "${GRAPHIC_DRIVERS}" "(nvidia|nvidia-ng)"; then
     PKG_DEPENDS_TARGET+=" nvidia-vaapi-driver"
   fi
 fi

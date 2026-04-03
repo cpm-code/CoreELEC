@@ -4,7 +4,7 @@
 # Copyright (C) 2022-present Team CoreELEC (https://coreelec.tv)
 
 PKG_NAME="kodi"
-PKG_VERSION="207ae89f287cf18550c931782f9fa4fd8c27c027"
+PKG_VERSION="09795c9d240eb14d9fdd5a0adbf0369739a9a3fd"
 PKG_SHA256=""
 PKG_LICENSE="GPL"
 PKG_SITE="http://www.kodi.tv"
@@ -243,6 +243,7 @@ configure_package() {
       fi
     elif [ "${KODIPLAYER_DRIVER}" = libamcodec ]; then
       KODI_PLATFORM="-DCORE_PLATFORM_NAME=aml -DAPP_RENDER_SYSTEM=gles"
+      PKG_DEPENDS_TARGET+=" wayland"
     fi
   fi
 
@@ -251,16 +252,16 @@ configure_package() {
                          -DWITH_JSONSCHEMABUILDER=${TOOLCHAIN}/bin/JsonSchemaBuilder \
                          -DSWIG_EXECUTABLE=${TOOLCHAIN}/bin/swig \
                          -DPYTHON_EXECUTABLE=${TOOLCHAIN}/bin/${PKG_PYTHON_VERSION} \
-                         -DPYTHON_INCLUDE_DIRS=${SYSROOT_PREFIX}/usr/include/${PKG_PYTHON_VERSION} \
                          -DGIT_VERSION=${PKG_VERSION} \
                          -DFFMPEG_PATH=${SYSROOT_PREFIX}/usr \
                          -DENABLE_INTERNAL_CROSSGUID=OFF \
                          -DENABLE_INTERNAL_EXIV2=OFF \
-                         -DENABLE_INTERNAL_FFMPEG=ON \
+                         -DENABLE_INTERNAL_FFMPEG=OFF \
+                         -DDISABLE_FFMPEG_SOURCE_PLUGINS=ON \
                          -DENABLE_INTERNAL_FLATBUFFERS=OFF \
-                         -DENABLE_INTERNAL_RapidJSON=OFF \
+                         -DENABLE_INTERNAL_MARIADBCLIENT=OFF \
+                         -DENABLE_INTERNAL_NLOHMANNJSON=OFF \
                          -DENABLE_INTERNAL_SPDLOG=OFF \
-                         -DENABLE_INTERNAL_UDFREAD=OFF \
                          -DENABLE_UDEV=ON \
                          -DENABLE_DBUS=ON \
                          -DENABLE_XSLT=ON \

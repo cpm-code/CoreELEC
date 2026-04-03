@@ -2,17 +2,18 @@
 # Copyright (C) 2023-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="podman-bin"
-PKG_VERSION="5.2.2"
-PKG_SHA256="571658f175d61724269c1a20626c1e39424af59b7bcf7ff94135d03b790bbecb"
+PKG_VERSION="5.8.0"
+PKG_SHA256="19723cda810e087ded8903fb0f33918b10d81f7fd1d8964880c41ec30d1daa70"
 PKG_LICENSE="Apache-2.0"
 PKG_SITE="https://podman.io/"
 PKG_URL="https://github.com/containers/podman/archive/v${PKG_VERSION}.tar.gz"
 PKG_DEPENDS_TARGET="toolchain go:host gpgme libassuan libseccomp systemd"
+PKG_DEPENDS_CONFIG="gpgme libassuan libseccomp"
 PKG_LONGDESC="Podman: A tool for managing OCI containers and pods."
 PKG_TOOLCHAIN="manual"
 
 # Git commit of the matching release https://github.com/containers/podman
-export PKG_GIT_COMMIT="fcee48106a12dd531702d729d17f40f6e152027f"
+export PKG_GIT_COMMIT="07efc23e05c3d9aa15a0f30d57194737bfc4b6b1"
 
 PKG_PODMAN_BUILDTAGS="exclude_graphdriver_devicemapper \
                       exclude_graphdriver_btrfs \
@@ -20,8 +21,6 @@ PKG_PODMAN_BUILDTAGS="exclude_graphdriver_devicemapper \
                       systemd"
 
 configure_target() {
-  export PKG_CONFIG_PATH="$(get_install_dir libassuan)/usr/lib/pkgconfig:$(get_install_dir gpgme)/usr/lib/pkgconfig:$(get_install_dir libseccomp)/usr/lib/pkgconfig:${PKG_CONFIG_PATH}"
-
   go_configure
 
   # used for podman commit

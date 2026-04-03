@@ -3,8 +3,8 @@
 # Copyright (C) 2019-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="pciutils"
-PKG_VERSION="3.13.0"
-PKG_SHA256="77f11f78298502634d1af50308f15a5788629f6cf45cba376f5009aea4cb4926"
+PKG_VERSION="3.14.0"
+PKG_SHA256="e7713409882813991d2269d125e40dad1f54a019a52b78b3962941c1d4a6f86f"
 PKG_LICENSE="GPL"
 PKG_SITE="http://mj.ucw.cz/pciutils.shtml"
 PKG_URL="https://www.kernel.org/pub/software/utils/pciutils/${PKG_NAME}-${PKG_VERSION}.tar.xz"

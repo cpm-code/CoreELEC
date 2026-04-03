@@ -2,8 +2,8 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="mariadb-connector-c"
-PKG_VERSION="3.4.1"
-PKG_SHA256="4979916af92aaf7f7b09578897b7dd885d4acd9bfa8a6a0026334dbe98a0d2ab"
+PKG_VERSION="3.4.8"
+PKG_SHA256="ced7e5063c91fe2bfafd9d63a759490fe53e81df80599a9abad01c570c202f0c"
 PKG_LICENSE="LGPL"
 PKG_SITE="https://mariadb.org/"
 PKG_URL="https://github.com/mariadb-corporation/mariadb-connector-c/archive/v${PKG_VERSION}.tar.gz"
@@ -20,32 +20,21 @@ PKG_CMAKE_OPTS_TARGET="-DWITH_EXTERNAL_ZLIB=ON
                        -DDEFAULT_SSL_VERIFY_SERVER_CERT=OFF
                       "
 
+pre_configure_target() {
+  export CFLAGS+=" -Wno-discarded-qualifiers"
+}
+
 post_makeinstall_target() {
-  # keep modern authentication plugins
-  PLUGINP=${INSTALL}/usr/lib/mariadb/plugin
-  LIBP=${INSTALL}/usr/lib/mariadb
-
-  mkdir -p ${INSTALL}/.tmp/plugins ${INSTALL}/.tmp/lib
-  mv ${PLUGINP}/{caching_sha2_password,client_ed25519,sha256_password}.so ${INSTALL}/.tmp/plugins
-
-  # Keep the client library for consumers like Kodi.
-  if ls ${LIBP}/libmariadb.so* >/dev/null 2>&1; then
-    mv ${LIBP}/libmariadb.so* ${INSTALL}/.tmp/lib/
-  fi
+  # keep mariadb shared library and modern authentication plugins
+  LIBDIR=${INSTALL}/usr/lib
+  mkdir -p ${INSTALL}/.tmp/mariadb/plugin
+  mv ${LIBDIR}/mariadb/libmariadb.so* ${INSTALL}/.tmp
+  mv ${LIBDIR}/mariadb/plugin/{caching_sha2_password,client_ed25519,sha256_password}.so ${INSTALL}/.tmp/mariadb/plugin
 
   # drop all unneeded
   rm -rf ${INSTALL}/usr
 
-  mkdir -p ${PLUGINP}
-  mkdir -p ${INSTALL}/usr/lib/mariadb
-  mkdir -p ${INSTALL}/usr/lib
-
-  mv ${INSTALL}/.tmp/plugins/* ${PLUGINP}/
-  if ls ${INSTALL}/.tmp/lib/* >/dev/null 2>&1; then
-    # Put libmariadb into the default runtime search path.
-    mv ${INSTALL}/.tmp/lib/* ${INSTALL}/usr/lib/
-    ln -sf ../libmariadb.so.3 ${INSTALL}/usr/lib/mariadb/libmariadb.so.3
-  fi
-
-  rmdir ${INSTALL}/.tmp/plugins ${INSTALL}/.tmp/lib ${INSTALL}/.tmp
+  mkdir -p ${LIBDIR}
+  mv ${INSTALL}/.tmp/* ${LIBDIR}/
+  rmdir ${INSTALL}/.tmp
 }
