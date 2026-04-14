@@ -45,5 +45,7 @@ tools/mkpkg/*.git
 # ignore old linux configs
 projects/**/*.old
 
+# misc
 CoreELEC.code-workspace
 .config
+.vscode/settings.json
