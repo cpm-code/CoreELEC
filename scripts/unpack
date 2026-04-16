@@ -40,12 +40,16 @@ mkdir -p ${BUILD}/build
 PKG_DEEPHASH=
 for i in ${BUILD}/build/${PKG_NAME}-*; do
   if [ -d ${i} -a -f "${i}/.libreelec-unpack" ]; then
-    . "${i}/.libreelec-unpack"
-    if [ "${STAMP_PKG_NAME}" = "${PKG_NAME}" ]; then
-      [ -z "${PKG_DEEPHASH}" ] && PKG_DEEPHASH=$(calculate_stamp)
-      if [ ! "${PKG_DEEPHASH}" = "${STAMP_PKG_DEEPHASH}" ]; then
-        ${SCRIPTS}/clean "${PKG_NAME}"
+    if load_key_value_file "${i}/.libreelec-unpack" STAMP_PKG_NAME STAMP_PKG_DEEPHASH; then
+      if [ "${STAMP_PKG_NAME}" = "${PKG_NAME}" ]; then
+        [ -z "${PKG_DEEPHASH}" ] && PKG_DEEPHASH=$(calculate_stamp)
+        if [ ! "${PKG_DEEPHASH}" = "${STAMP_PKG_DEEPHASH}" ]; then
+          ${SCRIPTS}/clean "${PKG_NAME}"
+        fi
       fi
+    else
+      build_msg "CLR_WARNING" "*" "$(print_color "CLR_WARNING_DIM" "Removing package tree with corrupt unpack stamp: ${i}")"
+      rm -rf "${i}"
     fi
   fi
 done
@@ -56,8 +60,14 @@ if [ -d "${PKG_BUILD}" -a ! -f "${STAMP}" ]; then
 fi
 
 if [ -f "${STAMP}" ]; then
-  pkg_lock_status "UNLOCK" "${PKG_NAME}" "unpack" "already unpacked"
-  exit 0
+  if load_key_value_file "${STAMP}" STAMP_PKG_NAME STAMP_PKG_DEEPHASH; then
+    pkg_lock_status "UNLOCK" "${PKG_NAME}" "unpack" "already unpacked"
+    exit 0
+  fi
+
+  build_msg "CLR_WARNING" "*" "$(print_color "CLR_WARNING_DIM" "Cleaning package tree with corrupt unpack stamp: ${PKG_BUILD}")"
+  rm -f "${STAMP}"
+  ${SCRIPTS}/clean "${PKG_NAME}"
 fi
 
 pkg_lock_status "ACTIVE" "${PKG_NAME}" "unpack"
@@ -109,7 +119,7 @@ if [ -d "${SOURCES}/${PKG_NAME}" -o -d "${PKG_DIR}/sources" ] || pkg_call_exists
   fi
 
   # Add a tag to the unpacked folder before transferring into the shared build folder
-  echo "INFO_PKG_NAME=\"${PKG_NAME}\"" >"${PKG_UNPACK_DIR}/.intermediate/.libreelec-package"
+  write_key_value_file "${PKG_UNPACK_DIR}/.intermediate/.libreelec-package" "INFO_" PKG_NAME
 
   # Restore original PKG_BUILD, and transfer the unpacked folder
   PKG_BUILD="${PKG_BUILD_ORIG}"
@@ -216,12 +226,10 @@ pkg_call_finish
 
 if [ "${PKG_SECTION}" != "virtual" ]; then
   mkdir -p "${PKG_BUILD}"
-  echo "INFO_PKG_NAME=\"${PKG_NAME}\"" >"${PKG_BUILD}/.libreelec-package"
+  write_key_value_file "${PKG_BUILD}/.libreelec-package" "INFO_" PKG_NAME
 
   PKG_DEEPHASH=$(calculate_stamp)
-  for i in PKG_NAME PKG_DEEPHASH; do
-    echo "STAMP_${i}=\"${!i}\"" >>${STAMP}
-  done
+  write_key_value_file "${STAMP}" "STAMP_" PKG_NAME PKG_DEEPHASH
 fi
 
 pkg_lock_status "UNLOCK" "${PKG_NAME}" "unpack" "unpacked"

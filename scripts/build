@@ -43,13 +43,16 @@ pkg_lock "${PKG_NAME}:${TARGET}" "build" "${PARENT_PKG}"
 mkdir -p ${STAMPS}/${PKG_NAME}
 STAMP=${STAMPS}/${PKG_NAME}/build_${TARGET}
 if [ -f ${STAMP} ]; then
-  . ${STAMP}
-  PKG_DEEPHASH=$(calculate_stamp)
+  if load_key_value_file "${STAMP}" STAMP_PKG_NAME STAMP_PKG_DEEPHASH STAMP_BUILD_WITH_DEBUG; then
+    PKG_DEEPHASH=$(calculate_stamp)
 
-  if [ "${PKG_DEEPHASH}" = "${STAMP_PKG_DEEPHASH}" -a "${BUILD_WITH_DEBUG}" = "${STAMP_BUILD_WITH_DEBUG}" ]; then
-    # stamp matched: already built, do nothing
-    pkg_lock_status "UNLOCK" "${PKG_NAME}:${TARGET}" "build" "already built"
-    exit 0
+    if [ "${PKG_DEEPHASH}" = "${STAMP_PKG_DEEPHASH}" -a "${BUILD_WITH_DEBUG}" = "${STAMP_BUILD_WITH_DEBUG}" ]; then
+      # stamp matched: already built, do nothing
+      pkg_lock_status "UNLOCK" "${PKG_NAME}:${TARGET}" "build" "already built"
+      exit 0
+    fi
+  else
+    build_msg "CLR_WARNING" "*" "$(print_color "CLR_WARNING_DIM" "Ignoring corrupt build stamp: ${STAMP}")"
   fi
 
   rm -f ${STAMP}
@@ -83,9 +86,7 @@ fi
 # virtual packages are not built as they only contain dependencies, so dont go further here
 if [ "${PKG_SECTION}" = "virtual" ]; then
   PKG_DEEPHASH=$(calculate_stamp)
-  for i in PKG_NAME PKG_DEEPHASH BUILD_WITH_DEBUG; do
-    echo "STAMP_${i}=\"${!i}\"" >>${STAMP}
-  done
+  write_key_value_file "${STAMP}" "STAMP_" PKG_NAME PKG_DEEPHASH BUILD_WITH_DEBUG
 
   pkg_lock_status "UNLOCK" "${PKG_NAME}:${TARGET}" "build" "built"
   exit 0
@@ -589,9 +590,7 @@ fi
 cd ${ROOT}
 
 PKG_DEEPHASH=$(calculate_stamp)
-for i in PKG_NAME PKG_DEEPHASH BUILD_WITH_DEBUG; do
-  echo "STAMP_${i}=\"${!i}\"" >>${STAMP}
-done
+write_key_value_file "${STAMP}" "STAMP_" PKG_NAME PKG_DEEPHASH BUILD_WITH_DEBUG
 
 pkg_lock_status "UNLOCK" "${PKG_NAME}:${TARGET}" "build" "built"
 

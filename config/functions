@@ -191,6 +191,46 @@ safe_remove() {
   done
 }
 
+load_key_value_file() {
+  local file="${1}"
+  shift
+
+  local var
+
+  [ -f "${file}" ] || return 1
+
+  for var in "$@"; do
+    unset "${var}"
+  done
+
+  . "${file}" 2>/dev/null || return 1
+
+  for var in "$@"; do
+    [ -n "${!var}" ] || return 1
+  done
+
+  return 0
+}
+
+write_key_value_file() {
+  local file="${1}"
+  local prefix="${2}"
+  local tmp_file="${file}.tmp.$$"
+  shift 2
+
+  : >"${tmp_file}" || return 1
+
+  local var
+  for var in "$@"; do
+    printf '%s="%s"\n' "${prefix}${var}" "${!var}" >>"${tmp_file}" || {
+      rm -f "${tmp_file}"
+      return 1
+    }
+  done
+
+  mv -f "${tmp_file}" "${file}"
+}
+
 ### BUILDSYSTEM HELPERS ###
 # check if a flag is enabled
 # $1: flag-name, $2: default (yes/no), $3: ingenious check (none,only-disable,only-enable)
