@@ -6,6 +6,7 @@
 
 import sys
 import os
+import errno
 import datetime, time
 import argparse
 import json
@@ -52,6 +53,61 @@ def rusage_run(*popenargs, parent=None, timeout=None, **kwargs):
     res.rusage = process.rusage
     parent.child = None
     return res
+
+def rusage_stream_run(*popenargs, parent=None, timeout=None, stream_callback=None, **kwargs):
+    master_fd, slave_fd = os.openpty()
+
+    kwargs = dict(kwargs)
+    kwargs["stdout"] = slave_fd
+    kwargs["stderr"] = subprocess.STDOUT
+    kwargs.pop("universal_newlines", None)
+    kwargs.pop("encoding", None)
+    kwargs.pop("errors", None)
+    try:
+        with RusagePopen(*popenargs, **kwargs) as process:
+            try:
+                parent.child = process
+                os.close(slave_fd)
+                slave_fd = -1
+
+                decoder = codecs.getincrementaldecoder("utf-8")("replace")
+                while True:
+                    try:
+                        chunk = os.read(master_fd, 4096)
+                    except OSError as e:
+                        if e.errno == errno.EIO:
+                            chunk = b""
+                        else:
+                            raise
+
+                    if not chunk:
+                        break
+
+                    text = decoder.decode(chunk)
+                    if text and stream_callback:
+                        stream_callback(text)
+
+                tail = decoder.decode(b"", final=True)
+                if tail and stream_callback:
+                    stream_callback(tail)
+
+                retcode = process.wait(timeout=timeout)
+            except subprocess.TimeoutExpired:
+                process.kill()
+                process.wait()
+                raise
+            except:
+                process.kill()
+                raise
+
+        res = subprocess.CompletedProcess(process.args, retcode, None, None)
+        res.rusage = process.rusage
+        return res
+    finally:
+        parent.child = None
+        if slave_fd != -1:
+            os.close(slave_fd)
+        os.close(master_fd)
 
 class GeneratorEmpty(Exception):
     pass
@@ -250,7 +306,8 @@ class Generator:
                 self.delRefCounts(p)
 
 class BuildProcess(threading.Thread):
-    def __init__(self, slot, maxslot, jobtotal, haltonerror, work, complete):
+    def __init__(self, slot, maxslot, jobtotal, haltonerror, work, complete,
+                 output_handler=None, error_handler=None, bookends=True):
         threading.Thread.__init__(self, daemon=True)
 
         self.slot = slot
@@ -259,6 +316,9 @@ class BuildProcess(threading.Thread):
         self.haltonerror = haltonerror
         self.work = work
         self.complete = complete
+        self.output_handler = output_handler
+        self.error_handler = error_handler
+        self.bookends = bookends
 
         self.active = False
 
@@ -316,7 +376,9 @@ class BuildProcess(threading.Thread):
         job["start"] = time.time()
         returncode = 1
         try:
-            if job["logfile"]:
+            if job.get("stream_output"):
+                returncode = self.executeStreaming(job)
+            elif job["logfile"]:
                 with open(job["logfile"], "w") as logfile:
                     cmd = rusage_run(job["args"], cwd=ROOT,
                                      stdin=subprocess.PIPE, stdout=logfile, stderr=subprocess.STDOUT,
@@ -351,6 +413,35 @@ class BuildProcess(threading.Thread):
             job["cpu"] = round((job["utime"] + job["stime"]) * 100 / job["elapsed"])
 
         return (returncode != 0)
+
+    def emitOutput(self, data):
+        if self.output_handler:
+            self.output_handler(data, end="", flush=True)
+        else:
+            print(data, end="", flush=True)
+
+    def executeStreaming(self, job):
+        if self.bookends:
+            self.emitOutput("<<< %s seq %s <<<\n" % (job["name"], job["seq"]))
+
+        def handle_stream_chunk(logfile, text):
+            text = text.replace("\r\n", "\n")
+            logfile.write(text)
+            logfile.flush()
+            self.emitOutput(text)
+
+        with open(job["logfile"], "w", encoding="utf-8", errors="replace") as logfile:
+            cmd = rusage_stream_run(job["args"], cwd=ROOT,
+                                    stdin=subprocess.PIPE, shell=False, parent=self,
+                                    start_new_session=True,
+                                    stream_callback=lambda text: handle_stream_chunk(logfile, text))
+
+        if self.bookends:
+            self.emitOutput(">>> %s seq %s >>>\n" % (job["name"], job["seq"]))
+
+        job["cmdproc"] = cmd
+        job["output_streamed"] = True
+        return cmd.returncode
 
 class Builder:
     def __init__(self, maxthreadcount, inputfilename, jobglog, loadstats, stats_interval, \
@@ -408,12 +499,17 @@ class Builder:
 
         self.work = queue.Queue()
         self.complete = queue.Queue()
+        self.output_lock = threading.RLock()
         self.processes = []
 
         # Init all processes
         self.processes = []
         for i in range(1, self.threadcount + 1):
-            self.processes.append(BuildProcess(i, self.threadcount, self.jobtotal, self.haltonerror, self.work, self.complete))
+            self.processes.append(BuildProcess(i, self.threadcount, self.jobtotal, self.haltonerror,
+                                               self.work, self.complete,
+                                               output_handler=self.oprint,
+                                               error_handler=self.eprint,
+                                               bookends=self.bookends))
 
         # work and completion sequences
         self.wseq = 0
@@ -509,7 +605,9 @@ class Builder:
 
                 self.wseq += 1
                 job["seq"] = self.wseq
-                if self.log_burst:
+                job["stream_output"] = self.shouldStreamJobOutput(job)
+                job["output_streamed"] = False
+                if self.log_burst or job["stream_output"]:
                     job["logfile"] = "%s/logs/%d.log" % (THREAD_CONTROL, job["seq"])
 
                 self.work.put(job)
@@ -598,6 +696,9 @@ class Builder:
         else:
             return (self.nextstats - now)
 
+    def shouldStreamJobOutput(self, job):
+        return job.get("build_output") == "follow" and self.log_combine == "always"
+
     def displayProgress(self):
         if self.progress:
             freeslots = self.threadcount - self.generator.activeJobCount()
@@ -664,6 +765,9 @@ class Builder:
 
     # If configured, send output for a job (either a logfile, or captured stdout) to stdout
     def processJobOutput(self, job):
+        if job.get("output_streamed"):
+            return
+
         log_processed = False
         log_size = 0
         log_start = time.time()
@@ -774,35 +878,38 @@ class Builder:
         self.stopProcesses()
 
     def flush(self):
-        if self.stdout_dirty:
-            sys.stdout.flush()
-            self.stdout_dirty = False
+        with self.output_lock:
+            if self.stdout_dirty:
+                sys.stdout.flush()
+                self.stdout_dirty = False
 
-        if self.stderr_dirty:
-            sys.stderr.flush()
-            self.stderr_dirty = False
+            if self.stderr_dirty:
+                sys.stderr.flush()
+                self.stderr_dirty = False
 
     def oprint(self, *args, flush=False, **kwargs):
-        if self.progress_dirty:
-            self.clearProgress()
+        with self.output_lock:
+            if self.progress_dirty:
+                self.clearProgress()
 
-        if self.stderr_dirty:
-            sys.stderr.flush()
-            self.stderr_dirty = False
+            if self.stderr_dirty:
+                sys.stderr.flush()
+                self.stderr_dirty = False
 
-        print(*args, **kwargs, file=sys.stdout, flush=flush)
-        self.stdout_dirty = not flush
+            print(*args, **kwargs, file=sys.stdout, flush=flush)
+            self.stdout_dirty = not flush
 
     def eprint(self, *args, flush=False, isProgress=False, **kwargs):
-        if self.stdout_dirty:
-            sys.stdout.flush()
-            self.stdout_dirty = False
+        with self.output_lock:
+            if self.stdout_dirty:
+                sys.stdout.flush()
+                self.stdout_dirty = False
 
-        if not isProgress and self.progress_dirty:
-            self.clearProgress()
+            if not isProgress and self.progress_dirty:
+                self.clearProgress()
 
-        print(*args, **kwargs, file=sys.stderr, flush=flush)
-        self.stderr_dirty = not flush
+            print(*args, **kwargs, file=sys.stderr, flush=flush)
+            self.stderr_dirty = not flush
 
     def getLoad(self):
         return open("/proc/loadavg", "r").readline().split()

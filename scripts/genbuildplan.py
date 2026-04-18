@@ -9,9 +9,10 @@ import sys, os, codecs, json, argparse, re
 ROOT_PKG = "__root__"
 
 class LibreELEC_Package:
-    def __init__(self, name, section):
+    def __init__(self, name, section, build_output=""):
         self.name = name
         self.section = section
+        self.build_output = build_output
         self.deps = {"bootstrap": [],
                      "init":      [],
                      "host":      [],
@@ -145,7 +146,7 @@ def loadPackages():
 
 # Create a fully formed LibreELEC_Package object
 def initPackage(package):
-    pkg = LibreELEC_Package(package["name"], package["section"])
+    pkg = LibreELEC_Package(package["name"], package["section"], package.get("build_output", ""))
 
     for target in ["bootstrap", "init", "host", "target"]:
         pkg.addDependencies(target, package[target])
@@ -255,7 +256,8 @@ def processPackages(args, packages):
             "init": "",
             "host": " ".join(get_packages_by_target("host", args.build)),
             "target": " ".join(get_packages_by_target("target", args.build)),
-            "unpack": ""
+            "unpack": "",
+            "build_output": ""
           }
 
     packages[pkg["name"]] = initPackage(pkg)
@@ -390,7 +392,8 @@ if args.with_json:
                      "name": step[1],
                      "section": ALL_PACKAGES[pkg_name].section,
                      "wants": [d.fqname for d in REQUIRED_PKGS[step[1]].edges],
-                     "unpacks": ALL_PACKAGES[pkg_name].unpacks if pkg_name in ALL_PACKAGES else []})
+                     "unpacks": ALL_PACKAGES[pkg_name].unpacks if pkg_name in ALL_PACKAGES else [],
+                     "build_output": ALL_PACKAGES[pkg_name].build_output if pkg_name in ALL_PACKAGES else ""})
 
     with open(args.with_json, "w") as out:
         print(json.dumps(plan, indent=2, sort_keys=False), file=out)

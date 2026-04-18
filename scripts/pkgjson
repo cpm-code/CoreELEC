@@ -41,7 +41,8 @@ json_worker() {
     "init": "${PKG_DEPENDS_INIT}",
     "host": "${PKG_DEPENDS_HOST}",
     "target": "${PKG_DEPENDS_TARGET}",
-    "unpack": "${PKG_DEPENDS_UNPACK}"
+    "unpack": "${PKG_DEPENDS_UNPACK}",
+    "build_output": "${PKG_BUILD_OUTPUT}"
   },
 EOF
   done
