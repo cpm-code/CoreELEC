@@ -49,3 +49,4 @@ projects/**/*.old
 CoreELEC.code-workspace
 .config
 .vscode/settings.json
+.vscode/tasks.json

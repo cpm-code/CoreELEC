@@ -23,7 +23,8 @@ post_unpack() {
 }
 
 pre_configure_host() {
-  PKG_MESON_OPTS_HOST="-Ddoctool=disabled"
+  PKG_MESON_OPTS_HOST="-Ddoctool=disabled \
+                       -Dbuild_introspection_data=false"
 
   # prevent g-ir-scanner from writing cache data to $HOME
   export GI_SCANNER_DISABLE_CACHE=1

@@ -6,6 +6,7 @@ Reference upstream:
 - Remote: `ce`
 - Branch: `coreelec-22`
 - Verified tip on 2026-04-02: `0bfaef01c106aa4e1673d3856af2b35907878635`
+- Latest fetched tip on 2026-05-09: `fd86bfc2f66f489140fe5029f79482e686366b89`
 
 Goal:
 - Move `master` closer to CoreELEC 22 userspace and packaging where safe.
@@ -326,4 +327,250 @@ Progress log:
   - `giflib`
   - `elfutils`
   - `rsync`
-- 2026-04-03: latest AM6B blocker at this checkpoint is `Python3:host`, where the CE22 package update is still carrying stale master-only patch files (`0004`, `0012`, and `py312-*`) that no longer apply cleanly.
+- 2026-04-03: latest AM6B blocker at that checkpoint was `Python3:host`, where the CE22 package update was still carrying stale master-only patch files (`0004`, `0012`, and `py312-*`) that no longer applied cleanly.
+- 2026-05-09: fetched `ce/coreelec-22` and refreshed the upstream reference tip to `fd86bfc2f66f489140fe5029f79482e686366b89`.
+- 2026-05-09: synced the remaining low-risk addon dependency version drift still present against `ce/coreelec-22`:
+  - `at-spi2-core` -> `2.60.3`
+  - `cups` -> `2.4.19`
+  - `docker-compose` -> `5.1.3`
+  - `aspnet8-runtime` -> `8.0.26`
+  - `aspnet9-runtime` -> `9.0.15`
+  - `docker cli` -> matching `moby 29.4.3` tag commit `055a478ea9010a19d0d4674c0d0e87ade37a4223`
+  - `containerd` -> `2.3.0`
+  - `moby` -> `29.4.3`
+- 2026-05-09: focused validation passed for the eight updated addon dependency package files:
+  - `bash -n` clean for all edited `package.mk` files
+  - exact `git diff ce/coreelec-22` clean for those files
+- 2026-05-09: left the local edit in `projects/Amlogic-ce/packages/mediacenter/kodi/package.mk` untouched because it is an in-progress project override change outside this addon sync batch.
+- 2026-05-09: synced a second low-risk generic package batch to the latest CE22 metadata:
+  - `7-zip` -> `26.01`
+  - `sqlite` -> `3.53.1`
+  - `strace` -> `7.0`
+  - `autoconf` -> `2.73`
+  - `ccache` -> `4.13.6`
+  - `cmake` -> `4.3.2`
+  - `libcap-ng` -> `0.9.3`
+  - `libcap` -> `2.78`
+- 2026-05-09: focused validation passed for the eight updated generic package files:
+  - `bash -n` clean for all edited `package.mk` files
+  - exact `git diff ce/coreelec-22` clean for those files
+- 2026-05-09: after the two metadata-only batches above, `git diff --name-only ce/coreelec-22 -- 'packages/**/package.mk' | wc -l` still reports `488`; the remaining CE22 uplift should continue in reviewed batches rather than a wholesale package sweep.
+- 2026-05-09: rechecked `packages/lang/Python3/` against `ce/coreelec-22`; the patch directory already matches upstream and the remaining drift was only `package.mk` metadata.
+- 2026-05-09: updated `Python3` to `3.14.4` with the CE22 source hash.
+- 2026-05-09: focused Python validation passed:
+  - `bash -n packages/lang/Python3/package.mk` clean
+  - `PROJECT=Amlogic-ce DEVICE=Amlogic-ng SUBDEVICE=Ugoos_AM6B ARCH=aarch64 ./scripts/build Python3:host` completed successfully
+- 2026-05-09: the old Python3 blocker note is no longer current for this branch; `Python3:host` is not the active CE22 sync blocker anymore.
+- 2026-05-09: after syncing `Python3`, `git diff --name-only ce/coreelec-22 -- 'packages/**/package.mk' | wc -l` reports `487` remaining package diffs.
+- 2026-05-09: synced a third metadata-only addon batch to the latest CE22 values:
+  - `dtv-scan-tables`
+  - `libexif`
+  - `libgpiod`
+  - `iperf`
+  - `udpxy`
+  - `libsodium`
+  - `md4c`
+  - `htop`
+  - `stress-ng`
+  - `hdhomerun`
+- 2026-05-09: focused validation passed for the third metadata-only batch:
+  - `bash -n` clean for all ten edited `package.mk` files
+  - exact `git diff ce/coreelec-22` clean for those files after correcting the local `hdhomerun` `PKG_REV`
+- 2026-05-09: synced a fourth metadata-only addon service batch to the latest CE22 values:
+  - `minisatip`
+  - `mpd`
+  - `nextpvr`
+  - `prometheus-node-exporter`
+  - `rsyslog`
+  - `snapclient`
+  - `snapserver`
+  - `syncthing`
+  - `tinc`
+  - `ttyd`
+- 2026-05-09: focused validation passed for the fourth metadata-only batch:
+  - `bash -n` clean for all ten edited `package.mk` files
+  - exact `git diff ce/coreelec-22` clean for those files
+- 2026-05-09: synced a fifth directory-clean metadata batch where each package directory differed from CE22 only by `package.mk`:
+  - `btrfs-progs` addon
+  - `dotnet-runtime` addon
+  - `network-tools` addon
+  - `system-tools` addon
+  - `xorg-intel-gpu-tools`
+  - `groovy`
+  - `mimalloc`
+  - `mold`
+- 2026-05-09: focused validation passed for the fifth metadata-only batch:
+  - `bash -n` clean for all eight edited `package.mk` files
+  - exact `git diff ce/coreelec-22` clean for those files
+- 2026-05-09: after the three additional metadata-only batches above, `git diff --name-only ce/coreelec-22 -- 'packages/**/package.mk' | wc -l` reports `459` remaining package diffs.
+- 2026-05-09: synced a final small metadata-only batch in this pass:
+  - `enca`
+  - `shairport-sync`
+  - `vdr-plugin-iptv`
+  - `vdr-plugin-live`
+  - `tailscale` addon metadata
+- 2026-05-09: focused validation passed for the final small metadata-only batch:
+  - `bash -n` clean for all five edited `package.mk` files
+  - exact `git diff ce/coreelec-22` clean for those files
+- 2026-05-09: skipped `inotify-tools` in this pass because the remaining CE22 drift there includes a `pre_configure_target()` flag change, not just package metadata.
+- 2026-05-09: after the final small metadata-only batch above, `git diff --name-only ce/coreelec-22 -- 'packages/**/package.mk' | wc -l` reports `454` remaining package diffs.
+- 2026-05-09: full `DEVICE=Amlogic-ng SUBDEVICE=Ugoos_AM6B make release` validation exposed a local `cmake:host` blocker after the CE22 `cmake 4.3.2` bump.
+- 2026-05-09: `cmake:host` failed while building the default `all` target because upstream `CMakeLibTests` linked with unresolved `testCMakePath` and debugger helper symbols; the package does not need that test binary for the host toolchain.
+- 2026-05-09: fixed `packages/devel/cmake/package.mk` by overriding `make_host()` to build only `cmake`, `ctest`, and `cpack`, and `makeinstall_host()` to install with `./bin/cmake --install .`.
+- 2026-05-09: focused validation passed for the `cmake:host` fix:
+  - visible `DEVICE=Amlogic-ng SUBDEVICE=Ugoos_AM6B ./scripts/build cmake:host` task exited `0`
+  - rerun of the visible full AM6B release build advanced past `[016/394] [DONE] build   cmake:host`
+- 2026-05-09: the next full-build blocker was local `autoconf:host` patch drift after the CE22 `autoconf 2.73` bump.
+- 2026-05-09: `autoconf:host` failed during unpack because a stale local `autoconf-autoreconf-exclude.patch` no longer applied to `2.73`, and the remaining man-page patch filename no longer matched upstream CE22.
+- 2026-05-09: fixed `packages/devel/autoconf/patches/` by deleting the stale `autoconf-autoreconf-exclude.patch`, removing the locally renamed `man-exclude.patch`, and restoring the upstream CE22 patch file `autoconf-0001-man-exclude.patch`.
+- 2026-05-09: focused validation passed for the `autoconf:host` fix:
+  - visible `DEVICE=Amlogic-ng SUBDEVICE=Ugoos_AM6B ./scripts/build autoconf:host` task exited `0`
+  - rerun of the visible full AM6B release build progressed beyond the old `autoconf:host` stop and continued into later packages
+- 2026-05-09: the next full-build blocker was `strace:target` after the CE22 `strace 7.0` bump.
+- 2026-05-09: `strace 7.0` failed to build on this branch because bundled `linux/taskstats.h` now requires `linux/time_types.h`, and that header is missing in both the bundled UAPI set and the local target sysroot, which is consistent with the local older kernel-header boundary.
+- 2026-05-09: held `packages/debug/strace/package.mk` back to `6.19` with the previous source hash instead of importing newer kernel headers into the local `Amlogic-ng` path.
+- 2026-05-09: focused validation passed for the `strace` hold-back:
+  - visible `DEVICE=Amlogic-ng SUBDEVICE=Ugoos_AM6B ./scripts/build strace:target` task completed successfully
+  - full install/staging completed for `strace-6.19` into both `.sysroot/strace.target` and `install_pkg/strace-6.19`
+- 2026-05-09: after the `cmake`, `autoconf`, and `strace` fixes, a full `DEVICE=Amlogic-ng SUBDEVICE=Ugoos_AM6B make release` completed successfully again, and follow-up smoke testing on the AM6B path looked okay.
+- 2026-05-09: resumed the metadata-only CE22 sync lane after the green AM6B checkpoint and synced a six-package generic library batch:
+  - `fluidsynth` -> `2.5.4`
+  - `assimp` -> `6.0.5`
+  - `giflib` -> `6.1.3`
+  - `lcms2` -> `2.19.1`
+  - `libpng` -> `1.6.58`
+  - `libraw` -> `0.22.1`
+- 2026-05-09: focused validation passed for the six-package generic library batch:
+  - `bash -n` clean for all six edited `package.mk` files
+  - exact `git diff ce/coreelec-22` clean for those files
+- 2026-05-09: synced a seven-package graphics/Vulkan metadata batch:
+  - `spirv-headers` -> `1a22b167081842915a1c78a0b5b5a353a23284aa`
+  - `spirv-tools` -> `2ec8457ab33d539b6f1fecc998360c0b8b05ed4f`
+  - `glslang` -> `16.3.0`
+  - `volk` -> `1.4.350`
+  - `vulkan-headers` -> `1.4.350`
+  - `vulkan-loader` -> `1.4.350`
+  - `vulkan-tools` -> `1.4.350`
+- 2026-05-09: focused validation passed for the seven-package graphics/Vulkan batch:
+  - `bash -n` clean for all seven edited `package.mk` files
+  - exact `git diff ce/coreelec-22` clean for those files
+- 2026-05-09: after the resumed post-build metadata batches above, `git diff --name-only ce/coreelec-22 -- 'packages/**/package.mk' | wc -l` reports `443` remaining package diffs.
+- 2026-05-09: switched to a broader blocker-finding pass instead of only tiny metadata batches and synced an eight-package core userspace batch:
+  - `pipewire` -> `1.6.4`
+  - `wireplumber` -> `0.5.14`
+  - `libcec` -> CE22 commit-based package source `c7c4c82dc171c49decfbfe5d2959706d3e2ea47c`
+  - `tbb` -> `2023.0.0`
+  - `mpc` -> `1.4.1`
+  - `gdk-pixbuf` -> `2.44.6`
+  - `harfbuzz` -> `14.2.0`
+  - `libdrm` -> `2.4.133`
+- 2026-05-09: focused validation passed for the eight-package broader core batch:
+  - `bash -n` clean for all eight edited `package.mk` files
+  - exact `git diff ce/coreelec-22` clean for those files
+- 2026-05-09: a full `DEVICE=Amlogic-ng SUBDEVICE=Ugoos_AM6B make release` completed successfully after that broader batch and advanced through the edited stack, including `libdrm`, `harfbuzz`, and `libcec`, without exposing a new blocker.
+- 2026-05-09: used `elfutils` as the next aggressive reviewed package because it was the first nearby core package whose CE22 drift also included patch-stack changes.
+- 2026-05-09: updating `elfutils` to `0.195` immediately exposed the next real blocker during `./scripts/build elfutils:target`: local patches `elfutils-0003-link_map-c--declare-name_no_sysroot-only-if-openat2.patch` and `elfutils-0004-Fix-const-correctness-issues.patch` now fail as reversed because their changes are already present upstream in `0.195`.
+- 2026-05-09: fixed the `elfutils` blocker by deleting those two obsolete local patches and keeping the two older local patches that still apply cleanly on this branch.
+- 2026-05-09: focused validation passed for the `elfutils` fix:
+  - visible `DEVICE=Amlogic-ng SUBDEVICE=Ugoos_AM6B ./scripts/build elfutils:target` exited `0` after removing the obsolete reversed patches
+- 2026-05-09: a second full `DEVICE=Amlogic-ng SUBDEVICE=Ugoos_AM6B make release` completed successfully after the `elfutils` update, reaching `image:target` and creating the system image without failures.
+- 2026-05-09: residual `elfutils` drift versus CE22 is now limited to the two surviving patch files `elfutils-0001-*` and `elfutils-0002-*`; the package metadata is synced and the package builds cleanly on this branch.
+- 2026-05-09: after the broader core batch plus the `elfutils` reviewed update, `git diff --name-only ce/coreelec-22 -- 'packages/**/package.mk' | wc -l` reports `434` remaining package diffs.
+- 2026-05-09: took a deliberately larger metadata-only pass through `packages/mediacenter/kodi-binary-addons/` and synced `155` directory-clean addon `package.mk` files directly to the CE22 reference in one batch.
+- 2026-05-09: focused validation passed for the large Kodi binary addon batch:
+  - `bash -n` clean across all `155` bulk-synced addon `package.mk` files
+  - exact `git diff ce/coreelec-22` clean for those files
+- 2026-05-09: one missed adjacent file, `audiodecoder.ncsf`, was then corrected separately and validated clean against CE22.
+- 2026-05-09: the Kodi binary addon family is now reduced to two intentional outliers only:
+  - `pvr.waipu`, because its remaining CE22 drift changes `PKG_DEPENDS_TARGET` from `nlohmann-json` to `rapidjson`
+  - `visualization.matrix`, because its remaining CE22 drift is not metadata-only
+- 2026-05-09: after the aggressive Kodi binary addon batch plus the `audiodecoder.ncsf` follow-up, `git diff --name-only ce/coreelec-22 -- 'packages/**/package.mk' | wc -l` reports `278` remaining package diffs.
+- 2026-05-09: took the next large directory-clean family, `packages/emulation/`, and synced `61` metadata-only `package.mk` files directly to the CE22 reference in one batch.
+- 2026-05-09: focused validation passed for the large emulation batch:
+  - `bash -n` clean across all `61` bulk-synced emulation `package.mk` files
+  - exact `git diff ce/coreelec-22` clean for those files
+- 2026-05-09: three libretro emulation packages were intentionally left out of the bulk pass because their package directories still carry patch-stack drift in addition to `package.mk` metadata:
+  - `libretro-cannonball` (`patches/libretro-cannonball-0041-Set-the-c--17-standard.patch`)
+  - `libretro-opera` (`patches/libretro-opera-995.01-crosscompile.patch`)
+  - `libretro-tyrquake` (`patches/0001-Allow-compile-with-std-c23.patch`)
+- 2026-05-09: after the aggressive emulation batch, `git diff --name-only ce/coreelec-22 -- 'packages/**/package.mk' | wc -l` reports `214` remaining package diffs.
+- 2026-05-09: took an aggressive direct-sync pass across the remaining directory-clean `package.mk` drift and synced `128` same-path CE22 files while intentionally preserving the known local `cmake` and `strace` branch fixes.
+- 2026-05-09: that pass also recreated `13` CE22 package paths missing from this tree and verified their contents directly against `git show ce/coreelec-22:<path>`.
+- 2026-05-09: `21` remaining `package.mk` outliers from the old directory-clean set could not be taken wholesale because their CE22 paths no longer match this branch tree; they need reviewed handling rather than blind replacement.
+- 2026-05-09: after the large same-path sync, `git diff --name-only ce/coreelec-22 -- 'packages/**/package.mk' | wc -l` reports `99` remaining package diffs.
+- 2026-05-09: the first full AM6B validation build after that pass exposed a real branch-specific dependency bug in `packages/linux/package.mk`: `linux:host` executes `sed` during `headers_install` but did not depend on `sed:host`, allowing a race when `sed` was rebuilt. Adding `sed:host` to `PKG_DEPENDS_HOST` fixed that blocker.
+- 2026-05-09: the next blocker was `gcc:bootstrap` failing in `btfout.cc` because this branch lacked CE22's `packages/devel/binutils/patches/binutils-03-libctf-gcc-16.patch`; importing that patch fixed the missing `CTF_K_DECL_TAG` and `CTF_K_TYPE_TAG` definitions.
+- 2026-05-09: focused validation passed for the toolchain fix:
+  - visible `DEVICE=Amlogic-ng SUBDEVICE=Ugoos_AM6B ./scripts/build gcc:bootstrap` exited `0` after adding the missing binutils libctf patch
+- 2026-05-09: a follow-up visible full `DEVICE=Amlogic-ng SUBDEVICE=Ugoos_AM6B make release` is running past both repaired blockers, including `linux:host` and `gcc:bootstrap`.
+- 2026-05-09: the next full-build blocker was `mesa:target` during configure after syncing to Mesa `26.1.0`; the CE22 package had dropped this branch's Amlogic-specific fallback for proprietary GLES systems with `DISPLAYSERVER="no"` and no Mesa Gallium drivers.
+- 2026-05-09: restored the branch-specific Mesa target behavior in `packages/graphics/mesa/package.mk`:
+  - fall back to `softpipe` when `${GALLIUM_DRIVERS}` is empty
+  - keep the non-x11/non-wayland path on `-Dplatforms=wayland` with `wayland` and `wayland-protocols` target dependencies so Mesa can still provide GBM/EGL
+  - restore the `post_makeinstall_target()` cleanup that prevents Mesa from overwriting the proprietary Amlogic `libEGL` and `libGLESv2` runtime sonames
+- 2026-05-09: focused validation passed for the Mesa repair:
+  - visible `DEVICE=Amlogic-ng SUBDEVICE=Ugoos_AM6B ./scripts/build mesa:target` exited `0`
+  - Mesa `26.1.0` now configures on this branch with `-Dgallium-drivers=softpipe -Dplatforms=wayland -Degl=enabled -Dgbm=enabled`
+- 2026-05-09: the next full-build blocker after Mesa was `xkeyboard-config:target`; CE22 removed this branch's `post_makeinstall_target()` override in `packages/x11/data/xkeyboard-config/package.mk`, reintroducing a sysroot copy collision when `/usr/share/X11/xkb` was installed as a symlink over an existing directory.
+- 2026-05-09: restored the branch-local `xkeyboard-config` post-install override that normalizes `/usr/share/X11/xkb` into a real directory copy in both `${SYSROOT_PREFIX}` and `${INSTALL}`.
+- 2026-05-09: focused validation passed for the xkeyboard-config repair:
+  - synchronous `DEVICE=Amlogic-ng SUBDEVICE=Ugoos_AM6B ./scripts/build xkeyboard-config:target` returned cleanly with no failure output
+- 2026-05-09: the follow-up visible full `DEVICE=Amlogic-ng SUBDEVICE=Ugoos_AM6B make release` is now running well past both the old Mesa and xkeyboard-config failure points.
+- 2026-05-09: a later rerun failed at `rust:host` before build because the pinned aarch64 Rust `1.94.1` bootstrap snapshot checksums in `packages/rust/{rustc-snapshot,cargo-snapshot,rust-std-snapshot}/package.mk` were stale relative to the official `static.rust-lang.org` artifacts.
+- 2026-05-09: refreshed the aarch64 Rust `1.94.1` bootstrap snapshot checksums to the current official values:
+  - `rustc`: `fb4ff31b71d7a2b6a793fb88fac18429befe807ddab3472bf87cbf92b6e5fbf6`
+  - `cargo`: `69a99d7f0af6d9a86c89c1f991953e924d9910eb06847524e3833063338e3923`
+  - `rust-std`: `2be613d5525a4ce8b7e2a1a55beeb64198314507be0d2da5aea4fd166cdde21f`
+- 2026-05-09: focused validation for the Rust snapshot fix:
+  - visible `DEVICE=Amlogic-ng SUBDEVICE=Ugoos_AM6B ./scripts/build rust:host` exited `0`
+  - local snapshot archives now hash to those updated official values and all three unpack dirs exist under `build.CoreELEC-Amlogic-ng.aarch64-22/build/`
+  - host Rust tools were installed into the toolchain, including `rustc`, `cargo`, `rustfmt`, and `clippy-driver`
+- 2026-05-09: the next full-build blocker after that rerun was `cargo:host`, but the immediate failure was not Cargo source drift:
+  - `rust:host` had accumulated duplicate host Rust runtime/install artifacts in `toolchain/lib/rustlib/aarch64-unknown-linux-gnu/lib` and `toolchain/lib/librustc_driver-*.so`
+  - that left multiple `libstd`/`compiler_builtins` candidates in the sysroot and caused bogus missing-prelude errors during `cargo:host`
+- 2026-05-09: fixed the host Rust install root cause in `packages/rust/rust/package.mk` by removing Rust-owned toolchain bins, `toolchain/lib/rustlib`, and stale `librustc_driver-*.so` before copying stage2 outputs.
+- 2026-05-09: the follow-up clean `rust:host` rebuild then exposed a second blocker inside bootstrap defaults: it still tried to build in-tree `rust-analyzer`, which failed at `stage2-tools/.../output-lib-parser` with `can't find crate for rustc_expand which rustc_driver depends on`.
+- 2026-05-09: constrained the Rust bootstrap config in `packages/rust/rust/package.mk` to `tools = ["clippy", "rustfmt"]` so `rust:host` no longer builds the unneeded in-tree `rust-analyzer` path for this package.
+- 2026-05-09: focused validation for the Rust/Cargo host repair:
+  - direct `rustc` smoke test printed `Some(1)` after stale pre-May9 Rust runtime artifacts were removed from the generated toolchain view, confirming the duplicate-sysroot diagnosis
+  - regenerated `build/rust-1.94.1/config.toml` now contains `tools = ["clippy", "rustfmt"]`
+  - focused visible `cargo:host` rerun exited without recreating the old `rust-analyzer` parser failure; `.stamps/cargo/build_host` was refreshed at `18:33:32` and `toolchain/bin/cargo` was updated at the same time
+- 2026-05-09: the next full-build blocker after that rerun was `linux:target`; the `amlogic-4.9` kernel tree was racing under the `modules` pass and intermittently failed with missing generated intermediates such as `drivers/gpu/drm/drm_debugfs.o` and `drivers/md/.tmp_dm-rq.ver`.
+- 2026-05-09: restored a branch-local kernel build safeguard in `projects/Amlogic-ce/packages/linux/package.mk` by serializing the `amlogic-4.9` `kernel_make modules` passes with `-j1` only for that legacy kernel tree.
+- 2026-05-09: focused validation passed for the Linux repair:
+  - visible `DEVICE=Amlogic-ng SUBDEVICE=Ugoos_AM6B ./scripts/build linux:target` completed after reboot recovery
+  - `build.CoreELEC-Amlogic-ng.aarch64-22/.stamps/linux/build_target` and `install_pkg/linux-bbb2b4a39ea651ab130ccdb96de4a37f9a59c5e0/.libreelec-package` were updated at `15:48:33`
+- 2026-05-09: closeout pass on the remaining CE22 userspace drift synced another broad exact-upstream batch plus the missing addon/tool directories under `packages/addons/tools/`, `packages/addons/flatpak/`, and `packages/addons/addon-depends/flatpak-depends/appstream/`.
+- 2026-05-09: `nfs-utils 2.9.1` on the local `amlogic-4.9` branch needs both the existing `--disable-nfsdctl` configure guard and a narrow local patch that wraps `NETLINK_EXT_ACK` in `support/export/cache.c`, `support/export/cache_flush.c`, and `utils/nfsdctl/nfsdctl.c`.
+- 2026-05-09: `util-linux 2.42` remains CE22-synced here only with the local `if [ "${LINUX}" = "amlogic-4.9" ]; then PKG_CONFIGURE_OPTS_TARGET+=" --disable-lsfd"; fi` compatibility guard.
+- 2026-05-09: `libtool 2.5.4` does not survive `autoreconf` cleanly on this branch because `libtoolize --ltdl` no longer leaves a usable `libltdl/ltdl.mk`; added package-level `PKG_AUTORECONF="no"` support in `scripts/build`, set it in `packages/devel/libtool/package.mk`, and refresh the shipped `Makefile.in` files in `post_patch()` so `make` does not try to rerun missing `automake-1.17` tooling.
+- 2026-05-09: `parted 3.7` and `nettle 4.0` already include two older local fixes; the branch must drop `packages/sysutils/parted/patches/parted-0001-fix-do_version-declaration.patch` and `packages/security/nettle/patches/nettle-0001-host-lib64.patch` because they now fail as reversed.
+- 2026-05-09: `openssh 10.3p1` also needed the CE22 support stack restored exactly; the older local `openssh-8.9p1-keydir.patch` variant and related service-unit edits no longer apply cleanly, but the upstream CE22 `packages/network/openssh/` directory still preserves `/storage/.cache/ssh` key handling.
+- 2026-05-09: after the closeout fixes above, `DEVICE=Amlogic-ng SUBDEVICE=Ugoos_AM6B make release` completed successfully again and produced `target/CoreELEC-Amlogic-ng.aarch64-22.0-Piers_cpm_20260509200931.tar`.
+- 2026-05-09: remaining `packages/**/package.mk` drift versus `ce/coreelec-22` is now `64` files and is largely the expected residual set: moved addon-depends paths, local-newer addon/service packages, and intentional 4.9/platform hold-backs such as `linux`, `linux-drivers`, `mesa`, `systemd`, `rust`, `kodi`, `ffmpeg`, `glibc`, `nfs-utils`, `util-linux`, and `xkeyboard-config`.
+- 2026-05-09: indexed the already-restored exact-upstream addon/tool additions under `packages/addons/addon-depends/flatpak-depends/appstream/`, `packages/addons/flatpak/`, and `packages/addons/tools/{externalhelper,flatpak,gnupg,terminal.foot}/`, which reduced remaining `packages/**/package.mk` drift versus `ce/coreelec-22` from `65` to `56` without changing content.
+- 2026-05-09: final remaining `package.mk` residue is now cleanly bucketed as:
+  - `22` same-path unresolved entries, almost entirely intentional branch-local hold-backs or reviewed-but-not-finished directories: `hyperion`, `tvheadend43`, `strace`, `cmake`, `glibc`, `libtool`, `libretro-{cannonball,opera,tyrquake}`, `mesa`, `RTL8189FS`, `linux`, `kodi`, `ffmpeg`, `nfs-utils`, Rust snapshots/runtime, `systemd`, `util-linux`, and `xkeyboard-config`
+  - `34` branch-only or path-mismatch entries that are not direct CE22 same-path sync candidates on this tree, including local bootstrap/addon support packages such as `dbus-glib`, `glib-initial`, `gobject-introspection`, `pgi`, `pygobject`, `dbus-python`, `simplejson`, `ntfs-3g_ntfsprogs`, `terminus-font`, and the branch-local GPU/driver package paths
+- 2026-05-09: took one more reviewed late pass on `ffmpeg` and `rust`.
+- 2026-05-09: `packages/multimedia/ffmpeg/package.mk` now matches CE22 again by restoring the missing `--enable-encoder=eac3` configure flag; the only remaining ffmpeg drift is the intentional local patch `packages/multimedia/ffmpeg/patches/libreelec/ffmpeg-003-pgs-bt2020-colorspace.patch`.
+- 2026-05-09: upgraded Rust back to CE22 `1.95.0` and synced the aarch64 snapshot checksums to the CE22 `1.95.0` values while preserving the branch-local fixes in `packages/rust/rust/package.mk`:
+  - copy local JSON target specs into `${PKG_BUILD}/targets`
+  - keep `extended = true` with `tools = ["clippy", "rustfmt"]`
+  - clean stale Rust-owned toolchain outputs before install
+  - install the local JSON target specs into `${TOOLCHAIN}/lib/rustlib`
+- 2026-05-09: focused validation passed for the late `ffmpeg`/`rust` pass:
+  - `DEVICE=Amlogic-ng SUBDEVICE=Ugoos_AM6B ./scripts/build rust:host` refreshed `build.CoreELEC-Amlogic-ng.aarch64-22/.stamps/rust/build_host` at `22:59:01` on `rust-1.95.0`
+  - `DEVICE=Amlogic-ng SUBDEVICE=Ugoos_AM6B ./scripts/build ffmpeg:target` refreshed `build.CoreELEC-Amlogic-ng.aarch64-22/.stamps/ffmpeg/build_target` at `23:03:14`
+- 2026-05-09: after the `ffmpeg` sync and Rust `1.95.0` uplift, remaining `packages/**/package.mk` drift versus `ce/coreelec-22` is now `52` files, split as:
+  - `18` same-path unresolved entries: `hyperion`, `tvheadend43`, `strace`, `cmake`, `glibc`, `libtool`, `libretro-{cannonball,opera,tyrquake}`, `mesa`, `RTL8189FS`, `linux`, `kodi`, `nfs-utils`, `rust`, `systemd`, `util-linux`, and `xkeyboard-config`
+  - `34` branch-only or path-mismatch entries, unchanged from the prior classification
+- 2026-05-09: reviewed the `34` branch-only/path-mismatch package diffs and found a small additional safe batch with clear upstream counterparts but different local paths.
+- 2026-05-09: upgraded these branch-only packages by porting the CE22 counterpart metadata into the local path while preserving local path-specific behavior:
+  - `packages/addons/addon-depends/libiconv/package.mk` -> `1.19`
+  - `packages/addons/addon-depends/libseccomp/package.mk` -> `2.6.0`
+  - `packages/sysutils/ntfs-3g_ntfsprogs/package.mk` -> `2022.10.3` plus CE22 build flags / `--disable-mount-helper`, while keeping the local post-install helper layout
+- 2026-05-09: held the other branch-only/path-mismatch entries in place for now because they either have no obvious CE22 counterpart path, imply a larger build-system shift (`libXft`), or remain kernel/driver-sensitive (`libgpiod`, GPU/driver packages).
+- 2026-05-09: focused validation passed for that late branch-only batch:
+  - `bash -n` clean for the three edited `package.mk` files
+  - `DEVICE=Amlogic-ng SUBDEVICE=Ugoos_AM6B ./scripts/build ntfs-3g_ntfsprogs:target` refreshed `.stamps/ntfs-3g_ntfsprogs/build_target` at `23:18:26` on `ntfs-3g_ntfsprogs-2022.10.3`

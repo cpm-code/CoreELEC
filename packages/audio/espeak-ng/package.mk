@@ -2,8 +2,8 @@
 # Copyright (C) 2021-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="espeak-ng"
-PKG_VERSION="0d451f8c1c6ae837418b823bd9c4cbc574ea9ff5"
-PKG_SHA256="e0c9737c57f07bf351d3ae85d8c1e90faae36302d697ba2d646780e2b2e8f41a"
+PKG_VERSION="fbe4b3764285c35b1f035cb8d09ad9fc19f71c30"
+PKG_SHA256="8a997899a38d55a5035b934539b497ff033a15976ce99377d708929a686ba4c3"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/espeak-ng/espeak-ng"
 PKG_URL="https://github.com/espeak-ng/espeak-ng/archive/${PKG_VERSION}.tar.gz"
@@ -15,11 +15,13 @@ PKG_BUILD_FLAGS="+pic"
 PKG_CMAKE_OPTS_HOST="-DBUILD_SHARED_LIBS=OFF \
                      -DCOMPILE_INTONATIONS=OFF \
                      -DENABLE_TESTS=OFF \
+                     -DESPEAK_COMPAT=OFF \
                      -DUSE_LIBSONIC=ON"
 
 PKG_CMAKE_OPTS_TARGET="-DBUILD_SHARED_LIBS=ON \
                        -DCOMPILE_INTONATIONS=ON \
                        -DENABLE_TESTS=OFF \
+                       -DESPEAK_COMPAT=OFF \
                        -DUSE_LIBSONIC=ON \
                        -DNativeBuild_DIR=${TOOLCHAIN}/bin"
 

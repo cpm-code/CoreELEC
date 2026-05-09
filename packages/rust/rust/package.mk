@@ -2,8 +2,8 @@
 # Copyright (C) 2017-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="rust"
-PKG_VERSION="1.94.1"
-PKG_SHA256="4c142a625f12e3cdf716c68ae19f4f60d98ad1482627b08579b15838e95ad514"
+PKG_VERSION="1.95.0"
+PKG_SHA256="ea9b82a83e46967537c3569ce9d6fa16811c043a96e651376c349e70241ca515"
 PKG_LICENSE="MIT"
 PKG_SITE="https://www.rust-lang.org"
 PKG_URL="https://static.rust-lang.org/dist/rustc-${PKG_VERSION}-src.tar.gz"
@@ -60,6 +60,8 @@ submodules = false
 docs = false
 profiler = true
 vendor = true
+extended = true
+tools = ["clippy", "rustfmt"]
 
 rustc = "${PKG_BUILD}/rust-snapshot/bin/rustc"
 cargo = "${PKG_BUILD}/rust-snapshot/bin/cargo"
@@ -121,6 +123,10 @@ make_host() {
 }
 
 makeinstall_host() {
+  rm -f ${TOOLCHAIN}/bin/{cargo-clippy,cargo-fmt,clippy-driver,rustc,rustdoc,rustfmt}
+  rm -rf ${TOOLCHAIN}/lib/rustlib
+  rm -f ${TOOLCHAIN}/lib/librustc_driver-*.so
+
   mkdir -p ${TOOLCHAIN}/bin
     cp -a build/${RUST_HOST}/stage2/bin/* ${TOOLCHAIN}/bin
 

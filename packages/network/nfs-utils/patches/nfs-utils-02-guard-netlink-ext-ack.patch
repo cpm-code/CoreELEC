@@ -1,0 +1,47 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: GitHub Copilot <copilot@github.com>
+Date: Sat, 9 May 2026 19:30:00 +0000
+Subject: [PATCH] Guard NETLINK_EXT_ACK on older kernel headers
+
+The Amlogic-ng 4.9 header set does not expose NETLINK_EXT_ACK. Newer
+nfs-utils uses the option in cache export code in addition to nfsdctl,
+which breaks the 2.9.1 userspace uplift even when nfsdctl itself is
+disabled. Skip the setsockopt calls when the header constant is absent.
+
+---
+ support/export/cache.c      | 2 ++
+ support/export/cache_flush.c| 2 ++
+ utils/nfsdctl/nfsdctl.c    | 2 ++
+ 3 files changed, 6 insertions(+)
+
+diff --git a/support/export/cache.c b/support/export/cache.c
+--- a/support/export/cache.c
++++ b/support/export/cache.c
+@@ -1112,3 +1112,5 @@ static struct nl_sock *nl_sock_setup(void)
+ 	nl_socket_set_buffer_size(sock, NL_BUFFER_SIZE, NL_BUFFER_SIZE);
++#ifdef NETLINK_EXT_ACK
+ 	setsockopt(nl_socket_get_fd(sock), SOL_NETLINK, NETLINK_EXT_ACK,
+ 		   &val, sizeof(val));
++#endif
+diff --git a/support/export/cache_flush.c b/support/export/cache_flush.c
+--- a/support/export/cache_flush.c
++++ b/support/export/cache_flush.c
+@@ -78,3 +78,5 @@ static int cache_nl_flush(void)
+ 	}
++#ifdef NETLINK_EXT_ACK
+ 	setsockopt(nl_socket_get_fd(sock), SOL_NETLINK, NETLINK_EXT_ACK,
+ 		   &val, sizeof(val));
++#endif
+diff --git a/utils/nfsdctl/nfsdctl.c b/utils/nfsdctl/nfsdctl.c
+--- a/utils/nfsdctl/nfsdctl.c
++++ b/utils/nfsdctl/nfsdctl.c
+@@ -438,3 +438,5 @@ static struct nl_sock *netlink_sock_open(void)
+ 	nl_socket_set_buffer_size(sock, BUFFER_SIZE, BUFFER_SIZE);
++#ifdef NETLINK_EXT_ACK
+ 	setsockopt(nl_socket_get_fd(sock), SOL_NETLINK, NETLINK_EXT_ACK,
+ 		   &ret, sizeof(ret));
++#endif
+-- 
+2.49.0

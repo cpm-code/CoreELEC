@@ -429,12 +429,20 @@ setup_toolchain() {
   fi
   export MAKEFLAGS
 
+  local HOST_BUILD_CC="${TOOLCHAIN}/bin/host-gcc"
+  local HOST_BUILD_CXX="${TOOLCHAIN}/bin/host-g++"
+
+  if [ ! -x "${HOST_BUILD_CC}" -o ! -x "${HOST_BUILD_CXX}" ]; then
+    HOST_BUILD_CC="${LOCAL_CC}"
+    HOST_BUILD_CXX="${LOCAL_CXX}"
+  fi
+
   case "$1:$2" in
     target:meson|init:meson)
       export DESTIMAGE="target"
       export AWK="gawk"
-      export CC="$TOOLCHAIN/bin/host-gcc"
-      export CXX="$TOOLCHAIN/bin/host-g++"
+      export CC="${HOST_BUILD_CC}"
+      export CXX="${HOST_BUILD_CXX}"
       export CPP="cpp"
       export LD="ld"
       export AS="as"
@@ -511,8 +519,8 @@ setup_toolchain() {
           fi
         fi
       fi
-      export HOST_CC="$TOOLCHAIN/bin/host-gcc"
-      export HOST_CXX="$TOOLCHAIN/bin/host-g++"
+      export HOST_CC="${HOST_BUILD_CC}"
+      export HOST_CXX="${HOST_BUILD_CXX}"
       export HOSTCC="$HOST_CC"
       export HOSTCXX="$HOST_CXX"
       export CC_FOR_BUILD="$HOST_CC"
@@ -542,8 +550,8 @@ setup_toolchain() {
           export CXX="${LOCAL_CCACHE} ${CXX}";
         fi
       else
-        export CC="$TOOLCHAIN/bin/host-gcc"
-        export CXX="$TOOLCHAIN/bin/host-g++"
+        export CC="${HOST_BUILD_CC}"
+        export CXX="${HOST_BUILD_CXX}"
       fi
       export CPP="cpp"
       export LD="ld"

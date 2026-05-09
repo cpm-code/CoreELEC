@@ -3,16 +3,17 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="gcc"
-PKG_VERSION="15.2.0"
-PKG_SHA256="438fd996826b0c82485a29da03a72d71d6e3541a83ec702df4271f6fe025d24e"
+PKG_VERSION="16.1.0"
+PKG_SHA256="50efb4d94c3397aff3b0d61a5abd748b4dd31d9d3f2ab7be05b171d36a510f79"
 PKG_LICENSE="GPL-2.0-or-later"
 PKG_SITE="https://gcc.gnu.org/"
-PKG_URL="https://ftpmirror.gnu.org/gcc/${PKG_NAME}-${PKG_VERSION}/${PKG_NAME}-${PKG_VERSION}.tar.xz"
+PKG_URL="https://ftpmirror.gnu.org/gnu/gcc/${PKG_NAME}-${PKG_VERSION}/${PKG_NAME}-${PKG_VERSION}.tar.xz"
 PKG_DEPENDS_BOOTSTRAP="ccache:host autoconf:host binutils:host gmp:host mpfr:host mpc:host zstd:host"
 PKG_DEPENDS_TARGET="toolchain"
 PKG_DEPENDS_HOST="ccache:host autoconf:host binutils:host gmp:host mpfr:host mpc:host zstd:host glibc libxcrypt"
 PKG_DEPENDS_INIT="toolchain"
 PKG_LONGDESC="This package contains the GNU Compiler Collection."
+PKG_BUILD_FLAGS="-cfg-libs:host"
 
 if [ "${MOLD_SUPPORT}" = "yes" ]; then
   PKG_DEPENDS_HOST+=" mold:host"
@@ -21,9 +22,11 @@ fi
 case ${TARGET_ARCH} in
   arm | aarch64 | riscv64)
     OPTS_LIBATOMIC="--enable-libatomic"
+    OPTS_STATIC="--enable-static"
     ;;
   *)
     OPTS_LIBATOMIC="--disable-libatomic"
+    OPTS_STATIC="--disable-static"
     ;;
 esac
 
@@ -74,7 +77,7 @@ PKG_CONFIGURE_OPTS_HOST="${GCC_COMMON_CONFIGURE_OPTS} \
                          --enable-decimal-float \
                          --enable-tls \
                          --enable-shared \
-                         --disable-static \
+                         ${OPTS_STATIC} \
                          --enable-long-long \
                          --enable-threads=posix \
                          --disable-libstdcxx-pch \

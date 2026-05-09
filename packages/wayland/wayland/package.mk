@@ -26,7 +26,9 @@ PKG_MESON_OPTS_TARGET="-Dlibraries=true \
                        -Ddtd_validation=false"
 
 post_makeinstall_host() {
+  mkdir -p ${SYSROOT_PREFIX}/usr/lib/pkgconfig
   cp ${TOOLCHAIN}/lib/pkgconfig/wayland-scanner.pc ${SYSROOT_PREFIX}/usr/lib/pkgconfig/
+
   mkdir -p ${SYSROOT_PREFIX}/usr/share/wayland
-    cp ${TOOLCHAIN}/share/wayland/wayland.xml ${SYSROOT_PREFIX}/usr/share/wayland/
+  cp ${TOOLCHAIN}/share/wayland/wayland.xml ${SYSROOT_PREFIX}/usr/share/wayland/
 }

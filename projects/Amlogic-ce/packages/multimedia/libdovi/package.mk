@@ -18,9 +18,13 @@ pre_make_target() {
   CARGO_TARGET_DIR_NAME="${TARGET_NAME}"
   CARGO_STATICLIB="${PKG_BUILD}/.${TARGET_NAME}/target/${CARGO_TARGET_DIR_NAME}/release/libdolby_vision.a"
   CARGO_HEADER="${PKG_BUILD}/.${TARGET_NAME}/target/${CARGO_TARGET_DIR_NAME}/release/rpu_parser.h"
+  export RUSTC_BOOTSTRAP="1"
+  case " ${RUSTFLAGS} " in
+    *" -Zunstable-options "*) ;;
+    *) export RUSTFLAGS="${RUSTFLAGS:+${RUSTFLAGS} }-Zunstable-options" ;;
+  esac
   CARGO_PKG_VERSION="$(sed -n 's/^version = "\(.*\)"/\1/p' ${CARGO_CRATE_DIR}/Cargo.toml | head -n 1)"
-  CARGO_FETCH_OPTS="--manifest-path ${CARGO_CRATE_DIR}/Cargo.toml \
-                    --target ${CARGO_TARGET}"
+  CARGO_FETCH_OPTS="--manifest-path ${CARGO_CRATE_DIR}/Cargo.toml"
   CARGO_BASE_OPTS="--manifest-path ${CARGO_CRATE_DIR}/Cargo.toml \
                    --target ${CARGO_TARGET} \
                    --features capi"

@@ -1,0 +1,13 @@
+--- a/sshconnect2.c
++++ b/sshconnect2.c
+@@ -1532,9 +1532,7 @@ load_identity_file(Identity *id)
+ 	struct stat st;
+ 
+ 	if (stat(id->filename, &st) == -1) {
+-		do_log2(id->userprovided ?
+-		    SYSLOG_LEVEL_INFO : SYSLOG_LEVEL_DEBUG3,
+-		    "no such identity: %s: %s", id->filename, strerror(errno));
++		debug3("no such identity: %s", id->filename);
+ 		return NULL;
+ 	}
+ 	snprintf(prompt, sizeof prompt,

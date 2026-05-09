@@ -166,6 +166,8 @@ pre_make_target() {
 }
 
 make_target() {
+  local kernel_make_jobs=""
+
   # arm64 target does not support creating uImage.
   # Build Image first, then wrap it using u-boot's mkimage.
   if [[ "$TARGET_KERNEL_ARCH" = "arm64" && "$KERNEL_TARGET" = uImage* ]]; then
@@ -176,7 +178,13 @@ make_target() {
     KERNEL_TARGET="${KERNEL_TARGET/uImage/Image}"
   fi
 
-  kernel_make modules
+  # The 4.9 Amlogic tree can drop generated intermediates under modern parallel
+  # make, so keep its module passes serialized.
+  if [ "$LINUX" = "amlogic-4.9" ]; then
+    kernel_make_jobs="-j1"
+  fi
+
+  kernel_make $kernel_make_jobs modules
   kernel_make INSTALL_MOD_PATH=$INSTALL/$(get_kernel_overlay_dir) modules_install
   rm -f $INSTALL/$(get_kernel_overlay_dir)/lib/modules/*/build
   rm -f $INSTALL/$(get_kernel_overlay_dir)/lib/modules/*/source
@@ -206,7 +214,7 @@ make_target() {
   # the modules target is required to get a proper Module.symvers
   # file with symbols from built-in and external modules.
   # Without that it'll contain only the symbols from the kernel
-  kernel_make $KERNEL_TARGET $KERNEL_MAKE_EXTRACMD modules
+  kernel_make $kernel_make_jobs $KERNEL_TARGET $KERNEL_MAKE_EXTRACMD modules
 
   # collect all device tree in 'coreelec' subfolders
   DTB_PATH="arch/$TARGET_KERNEL_ARCH/boot/dts/amlogic"
